@@ -1,0 +1,11 @@
+
+# Ignore everything
+*
+
+# Except for html, js, and css
+!*.html
+!*.js
+!*.css
+
+# And this file, obviously
+# !.gitignore
