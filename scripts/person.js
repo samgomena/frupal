@@ -1,5 +1,3 @@
-// Testing js file for frupal framework
-
 class Person {
   constructor(name, location, energy, money) {
     this.name = name;
@@ -16,6 +14,7 @@ class Person {
             +`Money: ${this.money}\n`;
   }
 
+  // FIXME: Move this method into the map class as getPlayerLocation
   getLocation() {
     return {
       x: this.location.x,

@@ -2,6 +2,7 @@ class Display {
   constructor(person) {
     this.person = person;
     this.displayEl = document.createElement("div");
+    // Location, Energy, Money nodes.
     this.lNode = document.createTextNode("Current Location: (0,0)");
     this.eNode = document.createTextNode("Energy: 100");
     this.mNode = document.createTextNode("Whiffles: 100");
