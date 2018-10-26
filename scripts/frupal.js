@@ -4,28 +4,29 @@ import Display from "./display";
 let Hero = new Person("Ben", {x:0,y:0}, 100, 100); 
 let HUD = new Display(Hero);
 
+// FIXME: Find a place to put the dead status check.
 // FIXME: We can probably sweep this elsewhere.
 function goUp() {
   Hero.goUp();
-  Hero.consumeEnergy();
+  Hero.consumeEnergy(1);
   HUD.update();
 }
 
 function goDown() {
   Hero.goDown();
-  Hero.consumeEnergy();
+  Hero.consumeEnergy(1);
   HUD.update();
 }
 
 function goLeft() {
   Hero.goLeft();
-  Hero.consumeEnergy();
+  Hero.consumeEnergy(1);
   HUD.update();
 }
 
 function goRight() {
   Hero.goRight();
-  Hero.consumeEnergy();
+  Hero.consumeEnergy(1);
   HUD.update();
 }
 

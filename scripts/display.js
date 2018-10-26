@@ -18,10 +18,16 @@ class Display {
 
   update() {
     const location = this.person.getLocation();
-    let locationText = `Current Location: (${location.x}, ${location.y})`;
+    const money = this.person.getMoney();
+    const energy = this.person.getEnergy();
+
+    const locationText = `Current Location: (${location.x}, ${location.y})`;
+    const moneyText = `Whiffles: ${money}`;
+    const energyText = `Energy: ${energy}`;
+
     this.lNode.replaceData(0, 50, locationText);
-    this.eNode.replaceData(0, 50, this.person.getEnergy());
-    this.mNode.replaceData(0, 50, this.person.getMoney());
+    this.eNode.replaceData(0, 50, energyText);
+    this.mNode.replaceData(0, 50, moneyText);
   }
 }
 
