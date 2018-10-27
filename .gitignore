@@ -1,4 +1,3 @@
-
 # Ignore everything
 *
 
@@ -9,3 +8,4 @@
 
 # And this file, obviously
 # !.gitignore
+#
