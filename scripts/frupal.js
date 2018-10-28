@@ -15,25 +15,43 @@ let map = new Map(DEFAULT_PARAMS);
 function goUp() {
   Hero.goUp();
   Hero.consumeEnergy(1);
-  HUD.update();
+  
+  if(HUD.update())
+    return true;
+  else
+    return false;  // end game
 }
 
 function goDown() {
   Hero.goDown();
   Hero.consumeEnergy(1);
-  HUD.update();
+ 
+  if(HUD.update())
+    return true;
+  else
+    return false;  // end game
 }
 
 function goLeft() {
   Hero.goLeft();
   Hero.consumeEnergy(1);
-  HUD.update();
+
+  if(HUD.update())
+    return true;
+  else
+    return false;  // end game
+
 }
 
 function goRight() {
   Hero.goRight();
   Hero.consumeEnergy(1);
-  HUD.update();
+
+  if(HUD.update())
+    return true;
+  else
+    return false;  // end game
+
 }
 
 function setMoveEvents() {

@@ -17,6 +17,7 @@ class Display {
     this.injectEl.appendChild(this.displayEl);
   }
 
+  //return true to continue game
   update() {
     const location = this.person.getLocation();
     const money = this.person.getMoney();
@@ -30,6 +31,8 @@ class Display {
         this.person.isDead();
 
         //TODO: game should end here
+
+        return false;
     }
 
     
@@ -40,6 +43,8 @@ class Display {
     this.lNode.replaceData(0, 50, locationText);
     this.eNode.replaceData(0, 50, energyText);
     this.mNode.replaceData(0, 50, moneyText);
+
+    return true;
   }
 }
 
