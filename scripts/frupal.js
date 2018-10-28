@@ -12,6 +12,7 @@ let map = new Map(DEFAULT_PARAMS);
  FIXME: Not sure if map should keep track of player movement, or if the
  player should update the map in regards to its position.
 */
+
 function goUp() {
   Hero.goUp();
   Hero.consumeEnergy(1);
