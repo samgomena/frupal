@@ -46,6 +46,10 @@ class Person {
     ++this.location.x;
   }
 
+  isDead() {
+    this.dead = true;
+  }
+
   // consumeEnergy should eventually take a tile type
   // as an argument to decide how much energy is lost
   // during movement.

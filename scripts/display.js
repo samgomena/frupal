@@ -22,6 +22,17 @@ class Display {
     const money = this.person.getMoney();
     const energy = this.person.getEnergy();
 
+    //check that energy hasn't run out
+    if(!energy) {
+    
+        //pop up box
+        alert("You have run out of energy :(");
+        this.person.isDead();
+
+        //TODO: game should end here
+    }
+
+    
     const locationText = `Current Location: (${location.x}, ${location.y})`;
     const moneyText = `Whiffles: ${money}`;
     const energyText = `Energy: ${energy}`;
