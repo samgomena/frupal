@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "parcel serve index.html --port 8080",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html --public-url ./"
   },
   "repository": {
     "type": "git",
