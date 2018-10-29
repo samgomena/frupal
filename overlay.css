@@ -27,6 +27,16 @@
 .overlay a:hover, .overlay a:focus {
     color: #f1f1f1;
 }
+.overlay input {
+    position: relative;
+    padding: 5px;
+    margin: 8px;
+}
+.overlay textarea {
+    position: relative;
+    padding: 5px;
+    margin: 8px;
+}
 .game {
     position: relative;
     text-align: center;

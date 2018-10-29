@@ -17,18 +17,9 @@ class Tile {
 }
 
 // Eventually getEvent() will be modified to return special items or messages to the player.
-class Default extends Tile {
+class Meadow extends Tile {
     constructor(obstacle) {
         super(obstacle, [0, 255, 0], 1, 1)
-    }
-    getEvent() {
-        return this.cost
-    }
-}
-
-class Gem extends Tile {
-    constructor(obstacle) {
-        super(obstacle, [255, 0, 255], 0, 1)
     }
     getEvent() {
         return this.cost
@@ -46,6 +37,15 @@ class Water extends Tile {
 
 class Swamp extends Tile {
     constructor(obstacle) {
+        super(obstacle, [90, 90, 0], 4, 1)
+    }
+    getEvent() {
+        return this.cost
+    }
+}
+
+class Bog extends Tile {
+    constructor(obstacle) {
         super(obstacle, [90, 90, 0], 3, 1)
     }
     getEvent() {
@@ -53,7 +53,7 @@ class Swamp extends Tile {
     }
 }
 
-class Hill extends Tile {
+class Forest extends Tile {
     constructor(obstacle) {
         super(obstacle, [152, 251, 152], 2, 1)
     }
