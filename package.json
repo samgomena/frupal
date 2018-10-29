@@ -23,5 +23,8 @@
     "cssnano": "^4.1.7",
     "node-sass": "^4.9.4",
     "sass-lint": "^1.12.1"
+  },
+  "dependencies": {
+    "parcel": "^1.10.3"
   }
 }
