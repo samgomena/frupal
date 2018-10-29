@@ -1,11 +1,29 @@
-<!-- Testing html file for frupal framework --> 
+<!-- Frupal html file--> 
 
 <html>
     <head>
         <script type="module" src="main.js"></script>
+        <link rel="stylesheet" href="overlay.css">
     </head>
     <body>
-        <h1> Frupal </h1>
-        <div id="display"></div>
+        <h1>Frupal</h1>
+
+        <!-- display div is handled by the display class -->
+        <div id="display" class="game"></div>
+
+        <!-- menu div is an overlay that represents the game start menu -->
+        <div id="menu" class="overlay">
+            <div class="overlay-content">
+                <a href="javascript:void(0)" onClick="closeNav()">Start</a>
+                <a href="javascript:void(0)">Options</a> <!-- not yet implemented -->
+            </div>
+        </div>
+
+        <!-- closes the overlay -->
+        <script>
+            function closeNav() {
+                document.getElementById("menu").style.display = "none"
+            }
+        </script>
     </body>
 </html>

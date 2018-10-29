@@ -1,3 +1,5 @@
+// main.js ties everything together and is called from main.html
+
 import Person from "./person.js"
 import Display from "./display.js"
 

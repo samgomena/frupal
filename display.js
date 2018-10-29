@@ -1,3 +1,5 @@
+// Display class for frupal, should manage most events being displayed to the screen.
+
 class Display {
     constructor(person) {
         this.displayEl = document.createElement("p")

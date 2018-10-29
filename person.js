@@ -1,4 +1,4 @@
-// Testing js file for frupal framework
+// Person class manages the character played in frupal
 
 class Person {
     constructor(name, location, energy, money) {
