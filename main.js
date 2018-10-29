@@ -1,10 +1,11 @@
 // main.js ties everything together and is called from main.html
-
 import Person from "./person.js"
 import Display from "./display.js"
+import Overlay from "./overlay.js"
 
 var Hero = new Person("Ben", {x:0,y:0}, 100, 100) 
 var HUD = new Display(Hero)
+var Menu = new Overlay()
 
 HUD.up.addEventListener("click", function(){
     Hero.goUp()

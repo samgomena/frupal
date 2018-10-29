@@ -17,9 +17,17 @@ class Person {
     getLocation() {return this.location}
     getEnergy() {return this.energy}
     getMoney() {return this.money}
-    goUp() {--this.location.y}
+    goUp() {
+        if(!this.location.x)
+            return
+        --this.location.y
+    }
     goDown() {++this.location.y}
-    goLeft() {--this.location.x}
+    goLeft() {
+        if(!this.location.x)
+            return
+        --this.location.x
+    }
     goRight() {++this.location.x}
 
     // consumeEnergy should eventually take a tile type
