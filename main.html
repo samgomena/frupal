@@ -27,32 +27,7 @@
                 <input type="text" placeholder="Money" name="in"> <br>           <!-- money -->
                 <textarea placeholder="Items" name="in"></textarea> <br>         <!-- items -->
                 <textarea placeholder="Tiles" name="in"></textarea> <br>         <!-- tiles -->
-                <input name="receiveData" type="button" onClick="writeStorage()" value="Create">
             </div>
-            <a href="javascript:void(0)" onClick="closeNav('options')" style="position:absolute; top:0px; right:0px;">&times</a>
         </div>
-
-        <script>
-            // Write customized input data to local storage
-            function writeStorage() {
-                let input = document.getElementsByName("in")
-                let map  = input[0].value
-                let size  = input[1].value
-                let loc  = input[2].value
-                let energy = input[3].value
-                let money = input[4].value
-                let items = input[5].value
-                let tiles = input[6].value
-                localStorage.setItem(map, JSON.stringify([size,loc,energy,money,items,tiles]))
-            }
-
-            // The two following functions manage closing and opening overlays
-            function closeNav(toClose) {
-                document.getElementById(toClose).style.display = "none"
-            }
-            function openNav(toOpen) {
-                document.getElementById(toOpen).style.display = "block"
-            }
-        </script>
     </body>
 </html>
