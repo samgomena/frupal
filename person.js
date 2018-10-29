@@ -6,18 +6,17 @@ class Person {
         this.location = location
         this.energy = energy
         this.money = money
+        this.dead = false
     }
-    printInfo() {
+    printStatus() {
         return `Name: ${this.name}\n`
             +`Location: (${this.location.x},${this.location.y})\n`
             +`Energy: ${this.energy}\n`
             +`Money: ${this.money}\n`
     }
-    getLocation() {
-        return "Current Location: ("+this.location.x+","+this.location.y+")"
-    }
-    getEnergy() {return "Energy: " + this.energy}
-    getMoney() {return "Whiffles: " + this.money}
+    getLocation() {return this.location}
+    getEnergy() {return this.energy}
+    getMoney() {return this.money}
     goUp() {--this.location.y}
     goDown() {++this.location.y}
     goLeft() {--this.location.x}
@@ -26,6 +25,11 @@ class Person {
     // consumeEnergy should eventually take a tile type
     // as an argument to decide how much energy is lost
     // during movement.
-    consumeEnergy() {--this.energy}
+    consumeEnergy(lost) {
+        if(!this.energy)
+            this.dead = true
+        this.energy -= lost
+    }
 }
 
+export default Person
