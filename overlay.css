@@ -7,14 +7,16 @@
     top: 0;
     left: 0;
     background-color: rgb(0,0,0);
-    background-color: rgba(0, 0, 0, 1);
+    background-color: rgba(250, 235, 215, 1);
+    overflow: auto;
 }
 .overlay-content {
-    position: relative;
+    position: fixed;
     top: 25%;
     width: 100%;
     text-align: center;
     margin-top: 30px;
+    overflow: auto;
 }
 .overlay a {
     padding: 8px;
@@ -25,17 +27,28 @@
     transition: 0.3s;
 }
 .overlay a:hover, .overlay a:focus {
-    color: #f1f1f1;
+    color: #cd5c5c;
 }
 .overlay input {
     position: relative;
     padding: 5px;
     margin: 8px;
+    border: 2px solid rgba(238, 233, 233, 1);
+    transition: 0.3s;
+}
+.overlay input:hover, .overlay input:focus {
+    border: 2px solid rgba(205, 92, 92, 0.7);
 }
 .overlay textarea {
     position: relative;
+    width: 183px;
     padding: 5px;
     margin: 8px;
+    border: 2px solid rgba(238, 233, 233, 1);
+    transition: 0.3s;
+}
+.overlay textarea:hover, .overlay textarea:focus {
+    border: 2px solid rgba(205, 92, 92, 0.7);
 }
 .game {
     position: relative;
@@ -43,5 +56,20 @@
 }
 h1 {
     text-align: center;
+    font-size: 36px;
+    color: #818181;
     padding-top: 50px;
+}
+h2 {
+    text-align: center;
+    font-size: 36px;
+    color: #818181;
+    padding-top: 170px;
+}
+body {
+    background-color: #FAEBD7;
+}
+p {
+    font-size: 18px;
+    color: #818181;
 }

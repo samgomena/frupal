@@ -21,16 +21,18 @@
 
         <!-- options div is an overlay that represents the customization menu -->
         <div id="options" class="overlay" style="display:none;">
+            <h2>Options</h2>
             <div id="form" class="overlay-content">
-                <input type="text" name="in"> <br>   <!-- map name -->
-                <input type="text" name="in"> <br>   <!-- map size -->
-                <input type="text" name="in"> <br>   <!-- player location -->
-                <input type="text" name="in"> <br>   <!-- energy -->
-                <input type="text" name="in"> <br>   <!-- money -->
-                <textarea name="in"></textarea> <br> <!-- items -->
-                <textarea name="in"></textarea> <br> <!-- tiles -->
+                <input type="text" placeholder="Map Name" name="in"> <br>        <!-- map name -->
+                <input type="text" placeholder="Map Size" name="in"> <br>        <!-- map size -->
+                <input type="text" placeholder="Player Location" name="in"> <br> <!-- player location -->
+                <input type="text" placeholder="Energy" name="in"> <br>          <!-- energy -->
+                <input type="text" placeholder="Money" name="in"> <br>           <!-- money -->
+                <textarea placeholder="Items" name="in"></textarea> <br>         <!-- items -->
+                <textarea placeholder="Tiles" name="in"></textarea> <br>         <!-- tiles -->
                 <input name="receiveData" type="button" onClick="writeCookie()" value="Create">
             </div>
+            <a href="javascript:void(0)" onClick="closeNav('options')" style="position:absolute; top:0px; right:0px;">&times</a>
         </div>
 
         <script>
