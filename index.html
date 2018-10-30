@@ -1,10 +1,29 @@
-<!-- Testing html file for frupal framework --> 
-
 <html>
     <head>
         <script defer src="./scripts/frupal.js"></script>
     </head>
     <body>
+        <!-- display div is handled by the display class -->
+        <div id="display" class="game"></div>
+
+        <!-- menu div is an overlay that represents the game start menu -->
+        <div id="menu" class="overlay">
+            <div id="sub" class="overlay-content"></div>
+        </div>
+
+        <!-- options div is an overlay that represents the customization menu -->
+        <div id="options" class="overlay" style="display:none;">
+            <h2>Options</h2>
+            <div id="form" class="overlay-content">
+                <input type="text" placeholder="Map Name" name="in"> <br>        <!-- map name -->
+                <input type="text" placeholder="Map Size" name="in"> <br>        <!-- map size -->
+                <input type="text" placeholder="Player Location" name="in"> <br> <!-- player location -->
+                <input type="text" placeholder="Energy" name="in"> <br>          <!-- energy -->
+                <input type="text" placeholder="Money" name="in"> <br>           <!-- money -->
+                <textarea placeholder="Items" name="in"></textarea> <br>         <!-- items -->
+                <textarea placeholder="Tiles" name="in"></textarea> <br>         <!-- tiles -->
+            </div>
+        </div>
         <h1> Frupal </h1>
         <div id="display"></div>
         <button id="up">Up</button>
