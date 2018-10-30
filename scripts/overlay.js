@@ -1,6 +1,7 @@
 // Overlay class file, should handle start and option screens
 
 function createOverlay() {
+  // TODO: Make these elements static in the html.
   let start = document.createElement("div");
   let close = document.createElement("div");
   let options = document.createElement("div");
