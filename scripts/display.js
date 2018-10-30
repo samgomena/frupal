@@ -17,6 +17,7 @@ class Display {
     this.injectEl.appendChild(this.displayEl);
   }
 
+
   //return true to continue game
   update() {
     const location = this.person.getLocation();
@@ -35,7 +36,7 @@ class Display {
         return false;
     }
 
-    
+
     const locationText = `Current Location: (${location.x}, ${location.y})`;
     const moneyText = `Whiffles: ${money}`;
     const energyText = `Energy: ${energy}`;

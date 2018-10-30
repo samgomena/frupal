@@ -1,6 +1,8 @@
 import Person from "./person";
 import Display from "./display";
 import { Map, DEFAULT_PARAMS } from "./map";
+import createOverlay from "./overlay";
+import "../styles/main.scss";
 
 let Hero = new Person("Ben", {x:0,y:0}, 100, 100); 
 let HUD = new Display(Hero);
@@ -41,7 +43,6 @@ function goLeft() {
     return true;
   else
     return false;  // end game
-
 }
 
 function goRight() {
@@ -52,7 +53,6 @@ function goRight() {
     return true;
   else
     return false;  // end game
-
 }
 
 function setMoveEvents() {
@@ -62,10 +62,14 @@ function setMoveEvents() {
   let leftEl = document.getElementById("left");
   let rightEl = document.getElementById("right");
 
+  // TODO: Make a master Events thing to let events pass through.
+
   upEl.addEventListener("click", () => goUp());
   downEl.addEventListener("click", () => goDown());
   leftEl.addEventListener("click", () => goLeft());
   rightEl.addEventListener("click", () => goRight());
 }
 
+
+createOverlay();
 setMoveEvents();
