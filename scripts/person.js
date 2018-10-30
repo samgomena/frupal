@@ -16,10 +16,8 @@ class Person {
 
   // FIXME: Move this method into the map class as getPlayerLocation
   getLocation() {
-    return {
-      x: this.location.x,
-      y: this.location.y
-    };
+    return this.location;
+
   }
 
   getEnergy() {
@@ -60,3 +58,4 @@ class Person {
 }
 
 export default Person;
+
