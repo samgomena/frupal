@@ -17,10 +17,25 @@ class Display {
     this.injectEl.appendChild(this.displayEl);
   }
 
+
+  //return true to continue game
   update() {
     const location = this.person.getLocation();
     const money = this.person.getMoney();
     const energy = this.person.getEnergy();
+
+    //check that energy hasn't run out
+    if(!energy) {
+    
+        //pop up box
+        alert("You have run out of energy :(");
+        this.person.isDead();
+
+        //TODO: game should end here
+
+        return false;
+    }
+
 
     const locationText = `Current Location: (${location.x}, ${location.y})`;
     const moneyText = `Whiffles: ${money}`;
@@ -29,6 +44,8 @@ class Display {
     this.lNode.replaceData(0, 50, locationText);
     this.eNode.replaceData(0, 50, energyText);
     this.mNode.replaceData(0, 50, moneyText);
+
+    return true;
   }
 }
 

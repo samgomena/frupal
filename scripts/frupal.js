@@ -14,28 +14,45 @@ let map = new Map(DEFAULT_PARAMS);
  FIXME: Not sure if map should keep track of player movement, or if the
  player should update the map in regards to its position.
 */
+
 function goUp() {
   Hero.goUp();
   Hero.consumeEnergy(1);
-  HUD.update();
+  
+  if(HUD.update())
+    return true;
+  else
+    return false;  // end game
 }
 
 function goDown() {
   Hero.goDown();
   Hero.consumeEnergy(1);
-  HUD.update();
+ 
+  if(HUD.update())
+    return true;
+  else
+    return false;  // end game
 }
 
 function goLeft() {
   Hero.goLeft();
   Hero.consumeEnergy(1);
-  HUD.update();
+
+  if(HUD.update())
+    return true;
+  else
+    return false;  // end game
 }
 
 function goRight() {
   Hero.goRight();
   Hero.consumeEnergy(1);
-  HUD.update();
+
+  if(HUD.update())
+    return true;
+  else
+    return false;  // end game
 }
 
 function setMoveEvents() {
@@ -46,11 +63,13 @@ function setMoveEvents() {
   let rightEl = document.getElementById("right");
 
   // TODO: Make a master Events thing to let events pass through.
+
   upEl.addEventListener("click", () => goUp());
   downEl.addEventListener("click", () => goDown());
   leftEl.addEventListener("click", () => goLeft());
   rightEl.addEventListener("click", () => goRight());
 }
+
 
 createOverlay();
 setMoveEvents();
