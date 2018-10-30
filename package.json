@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "serve": "parcel serve index.html --port 8080",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html",
+    "build-pub": "parcel watch index.html --out-dir"
   },
   "repository": {
     "type": "git",
@@ -23,5 +24,8 @@
     "cssnano": "^4.1.7",
     "node-sass": "^4.9.4",
     "sass-lint": "^1.12.1"
+  },
+  "dependencies": {
+    "parcel": "^1.10.3"
   }
 }
