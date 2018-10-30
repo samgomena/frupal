@@ -1,0 +1,28 @@
+{
+  "name": "frupal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "serve": "parcel serve index.html --port 8080",
+    "build": "parcel build index.html",
+    "build-pub": "parcel watch index.html --out-dir"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AaronCs/frupal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AaronCs/frupal/issues"
+  },
+  "homepage": "https://github.com/AaronCs/frupal#readme",
+  "devDependencies": {
+    "cssnano": "^4.1.7",
+    "node-sass": "^4.9.4",
+    "sass-lint": "^1.12.1"
+  }
+}

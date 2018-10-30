@@ -1,0 +1,83 @@
+.overlay {
+  background-color: rgba(250, 235, 215, 1);
+  display: block;
+  height: 100%;
+  left: 0;
+  overflow: auto;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+
+  a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+  }
+}
+
+.overlay-content {
+  margin-top: 30px;
+  overflow: auto;
+  position: fixed;
+  text-align: center;
+  top: 25%;
+  width: 100%;
+}
+
+.overlay a:hover, .overlay a:focus {
+  color: #cd5c5c;
+}
+.overlay input {
+  position: relative;
+  padding: 5px;
+  margin: 8px;
+  border: 2px solid rgba(238, 233, 233, 1);
+  transition: 0.3s;
+}
+.overlay input:hover, .overlay input:focus {
+  border: 2px solid rgba(205, 92, 92, 0.7);
+}
+.overlay textarea {
+  position: relative;
+  width: 183px;
+  padding: 5px;
+  margin: 8px;
+  border: 2px solid rgba(238, 233, 233, 1);
+  transition: 0.3s;
+}
+
+.overlay textarea:hover, .overlay textarea:focus {
+  border: 2px solid rgba(205, 92, 92, 0.7);
+}
+
+.game {
+  position: relative;
+  text-align: center;
+}
+
+h1 {
+  text-align: center;
+  font-size: 36px;
+  color: #818181;
+  padding-top: 50px;
+}
+
+h2 {
+  text-align: center;
+  font-size: 36px;
+  color: #818181;
+  padding-top: 170px;
+}
+
+body {
+  background-color: #FAEBD7;
+}
+
+p {
+  font-size: 18px;
+  color: #818181;
+}
