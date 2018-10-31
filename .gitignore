@@ -3,9 +3,14 @@
 
 # Except for html, js, and css
 !*.html
+!**/*.html
+
 !*.js
+!**/*.js
+
 !*.css
+!**/*.css
 
 # And this file, obviously
-# !.gitignore
-#
+!.gitignore
+
