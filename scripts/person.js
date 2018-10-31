@@ -29,11 +29,11 @@ class Person {
   }
 
   goUp() {
-    --this.location.y;
+    ++this.location.y;
   }
 
   goDown() {
-    ++this.location.y;
+    --this.location.y;
   }
 
   goLeft() {
