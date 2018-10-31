@@ -8,8 +8,11 @@
 !*.js
 !**/*.js
 
-!*.css
-!**/*.css
+!*.scss
+!**/*.scss
+
+!package.json
+!README.md
 
 # And this file, obviously
 !.gitignore
