@@ -20,21 +20,26 @@ let map = new Map(DEFAULT_PARAMS);
 function moveEvent(moveId, energy) {
   switch(moveId) {
   case "up":
+  case "w":
     Hero.goUp();
     break;
   case "down":
+  case "s":
     Hero.goDown();
     break;
   case "left":
+  case "a":
     Hero.goLeft();
     break;
   case "right":
+  case "d":
     Hero.goRight();
     break;
   default:
     throw new Error("Not an event!");
   }
-
+  
+  // Eventually get energy from a getEnergy function.
   Hero.consumeEnergy(energy);
 
   if(HUD.update()) {
@@ -54,12 +59,24 @@ function setMoveEvents() {
 
   // TODO: Make a master Events thing to let events pass through.
 
-  // TODO: Eventually replace 1 with a function callback which grabs tile energy cost
+  // TODO: Eventually replace 1 with a function which grabs tile energy cost
   // As in allow the moveEvent function to call the getTileEnergy function inside of itself.
   upEl.addEventListener("click", () => moveEvent("up", 1));
   downEl.addEventListener("click", () => moveEvent("down", 1));
   leftEl.addEventListener("click", () => moveEvent("left", 1));
   rightEl.addEventListener("click", () => moveEvent("right", 1));
+
+  // e stands for event
+  document.addEventListener("keypress", (e) => {
+    // TODO: May want to debounce?
+    const keyName = e.key;
+    const validKeys = ["w", "a", "s", "d"];
+    if(validKeys.find((el) => {
+      return el === keyName;
+    })) {
+      moveEvent(keyName, 1);
+    }
+  });
 }
 
 
