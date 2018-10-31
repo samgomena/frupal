@@ -8,6 +8,8 @@ let Hero = new Person("Ben", {x:0,y:0}, 100, 100);
 let HUD = new Display(Hero);
 let map = new Map(DEFAULT_PARAMS);
 
+// TODO: Change the name of this file to something like "main"
+
 // FIXME: Find a place to put the dead status check.
 // FIXME: We can probably sweep this elsewhere.
 /*
@@ -15,44 +17,37 @@ let map = new Map(DEFAULT_PARAMS);
  player should update the map in regards to its position.
 */
 
-function goUp() {
-  Hero.goUp();
-  Hero.consumeEnergy(1);
+function moveEvent(moveId, energy) {
+  switch(moveId) {
+  case "up":
+  case "w":
+    Hero.goUp();
+    break;
+  case "down":
+  case "s":
+    Hero.goDown();
+    break;
+  case "left":
+  case "a":
+    Hero.goLeft();
+    break;
+  case "right":
+  case "d":
+    Hero.goRight();
+    break;
+  default:
+    throw new Error("Not an event!");
+  }
   
-  if(HUD.update())
+  // Eventually get energy from a getEnergy function.
+  Hero.consumeEnergy(energy);
+
+  if(HUD.update()) {
     return true;
-  else
-    return false;  // end game
-}
-
-function goDown() {
-  Hero.goDown();
-  Hero.consumeEnergy(1);
- 
-  if(HUD.update())
-    return true;
-  else
-    return false;  // end game
-}
-
-function goLeft() {
-  Hero.goLeft();
-  Hero.consumeEnergy(1);
-
-  if(HUD.update())
-    return true;
-  else
-    return false;  // end game
-}
-
-function goRight() {
-  Hero.goRight();
-  Hero.consumeEnergy(1);
-
-  if(HUD.update())
-    return true;
-  else
-    return false;  // end game
+  }
+  else {
+    return false;
+  }
 }
 
 function setMoveEvents() {
@@ -64,10 +59,24 @@ function setMoveEvents() {
 
   // TODO: Make a master Events thing to let events pass through.
 
-  upEl.addEventListener("click", () => goUp());
-  downEl.addEventListener("click", () => goDown());
-  leftEl.addEventListener("click", () => goLeft());
-  rightEl.addEventListener("click", () => goRight());
+  // TODO: Eventually replace 1 with a function which grabs tile energy cost
+  // As in allow the moveEvent function to call the getTileEnergy function inside of itself.
+  upEl.addEventListener("click", () => moveEvent("up", 1));
+  downEl.addEventListener("click", () => moveEvent("down", 1));
+  leftEl.addEventListener("click", () => moveEvent("left", 1));
+  rightEl.addEventListener("click", () => moveEvent("right", 1));
+
+  // e stands for event
+  document.addEventListener("keypress", (e) => {
+    // TODO: May want to debounce?
+    const keyName = e.key;
+    const validKeys = ["w", "a", "s", "d"];
+    if(validKeys.find((el) => {
+      return el === keyName;
+    })) {
+      moveEvent(keyName, 1);
+    }
+  });
 }
 
 
