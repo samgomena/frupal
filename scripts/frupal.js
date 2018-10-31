@@ -7,6 +7,7 @@ import "../styles/main.scss";
 let Hero = new Person("Ben", {x:0,y:0}, 100, 100); 
 let HUD = new Display(Hero);
 let map = new Map(DEFAULT_PARAMS);
+// TODO: Change the name of this file to something like "main"
 
 // FIXME: Find a place to put the dead status check.
 // FIXME: We can probably sweep this elsewhere.
