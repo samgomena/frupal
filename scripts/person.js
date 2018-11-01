@@ -28,20 +28,9 @@ class Person {
     return this.money;
   }
 
-  goUp() {
-    --this.location.y;
-  }
-
-  goDown() {
-    ++this.location.y;
-  }
-
-  goLeft() {
-    --this.location.x;
-  }
-
-  goRight() {
-    ++this.location.x;
+  updateStatus(newLoc, energyCost) {
+    this.location = newLoc;
+    this.energy -= energyCost;
   }
 
   isDead() {

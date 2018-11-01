@@ -4,3 +4,22 @@ html,
 body {
   margin: 0;
 }
+
+.movement__button {
+  display: flex;
+  flex-direction: column;
+  height: 100px;
+  justify-content: space-between;
+
+  button {
+    display: inline-block;
+    margin: 0 auto;
+    width: 25%;
+  }
+}
+
+.movement__left-right {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
