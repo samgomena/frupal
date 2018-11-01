@@ -5,42 +5,40 @@ import createOverlay from "./overlay";
 import "../styles/main.scss";
 
 let Hero = new Person("Ben", {x:0,y:0}, 100, 100); 
-let HUD = new Display(Hero);
 let map = new Map(DEFAULT_PARAMS);
+let HUD = new Display(Hero, map);
 
 // TODO: Change the name of this file to something like "main"
 
-// FIXME: Find a place to put the dead status check.
 // FIXME: We can probably sweep this elsewhere.
-/*
- FIXME: Not sure if map should keep track of player movement, or if the
- player should update the map in regards to its position.
-*/
+function moveEvent(moveId) {
+  const up = { x: 0, y: 1 };
+  const down = { x: 0, y: -1 };
+  const left = { x: -1, y: 0 };
+  const right = { x: 1, y: 0 };
 
-function moveEvent(moveId, energy) {
   switch(moveId) {
   case "up":
   case "w":
-    Hero.goUp();
+    map.movePlayer(up);
     break;
   case "down":
   case "s":
-    Hero.goDown();
+    map.movePlayer(down);
     break;
   case "left":
   case "a":
-    Hero.goLeft();
+    map.movePlayer(left);
     break;
   case "right":
   case "d":
-    Hero.goRight();
+    map.movePlayer(right);
     break;
   default:
     throw new Error("Not an event!");
   }
   
-  // Eventually get energy from a getEnergy function.
-  Hero.consumeEnergy(energy);
+  Hero.updateStatus(map.getPlayerLoc(), map.getTileCost());
 
   if(HUD.update()) {
     return true;
@@ -61,10 +59,10 @@ function setMoveEvents() {
 
   // TODO: Eventually replace 1 with a function which grabs tile energy cost
   // As in allow the moveEvent function to call the getTileEnergy function inside of itself.
-  upEl.addEventListener("click", () => moveEvent("up", 1));
-  downEl.addEventListener("click", () => moveEvent("down", 1));
-  leftEl.addEventListener("click", () => moveEvent("left", 1));
-  rightEl.addEventListener("click", () => moveEvent("right", 1));
+  upEl.addEventListener("click", () => moveEvent("up"));
+  downEl.addEventListener("click", () => moveEvent("down"));
+  leftEl.addEventListener("click", () => moveEvent("left"));
+  rightEl.addEventListener("click", () => moveEvent("right"));
 
   // e stands for event
   document.addEventListener("keypress", (e) => {
@@ -78,6 +76,7 @@ function setMoveEvents() {
     }
   });
 }
+
 
 
 createOverlay();

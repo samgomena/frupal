@@ -1,17 +1,24 @@
 class Display {
-  constructor(person) {
+  constructor(person, map) {
+    this.map = map;
     this.person = person;
     this.displayEl = document.createElement("div");
+
+    const terrain = this.map.getPlayerLocInfo();
     // Location, Energy, Money nodes.
-    this.lNode = document.createTextNode("Current Location: (0,0)");
+    // FIXME: Make it look prettier?
+    this.lNode = document.createTextNode(`Current Location: (${this.map.playerLoc.x}, ${this.map.playerLoc.y})`);
     this.eNode = document.createTextNode("Energy: 100");
     this.mNode = document.createTextNode("Whiffles: 100");
+    this.tNode = document.createTextNode(`Terrain: ${terrain}`);
 
     this.displayEl.appendChild(this.lNode);
     this.displayEl.appendChild(document.createElement("br"));
     this.displayEl.appendChild(this.eNode);
     this.displayEl.appendChild(document.createElement("br"));
     this.displayEl.appendChild(this.mNode);
+    this.displayEl.appendChild(document.createElement("br"));
+    this.displayEl.appendChild(this.tNode);
 
     this.injectEl = document.getElementById("display");
     this.injectEl.appendChild(this.displayEl);
@@ -20,30 +27,34 @@ class Display {
 
   //return true to continue game
   update() {
-    const location = this.person.getLocation();
+    const location = this.map.getPlayerLoc();
+    const terrain = this.map.getPlayerLocInfo();
     const money = this.person.getMoney();
     const energy = this.person.getEnergy();
 
     //check that energy hasn't run out
+    // FIXME: Display should not control if game ends.
     if(!energy) {
     
-        //pop up box
-        alert("You have run out of energy :(");
-        this.person.isDead();
+      //pop up box
+      alert("You have run out of energy :(");
+      this.person.isDead();
 
-        //TODO: game should end here
+      //TODO: game should end here
 
-        return false;
+      return false;
     }
 
 
     const locationText = `Current Location: (${location.x}, ${location.y})`;
     const moneyText = `Whiffles: ${money}`;
     const energyText = `Energy: ${energy}`;
+    const terrainText = `Terrain: ${terrain}`;
 
     this.lNode.replaceData(0, 50, locationText);
     this.eNode.replaceData(0, 50, energyText);
     this.mNode.replaceData(0, 50, moneyText);
+    this.tNode.replaceData(0, 50, terrainText);
 
     return true;
   }
