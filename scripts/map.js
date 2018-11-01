@@ -14,7 +14,8 @@ export class Map {
       cost: 1,
       obstacle: undefined,
       color: "#32CD32",
-      hidden: true
+      hidden: true,
+      item: undefined
     };
     for(let i = 0; i < this.params.max; i++) {
       let row = [];

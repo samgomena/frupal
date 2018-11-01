@@ -10,5 +10,6 @@ export default class Tile {
     this.color = config.color;
     this.cost = config.cost;
     this.hidden = config.hidden;
+    this.item = config.item;
   }
 }
