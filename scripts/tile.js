@@ -4,11 +4,11 @@
 // datatype used for our map.
 
 export default class Tile {
-  constructor(terrain, obstacle, color, cost, hidden) { 
-    this.terrain = terrain;
-    this.obstacle = obstacle;
-    this.color = color;
-    this.cost = cost;
-    this.hidden = hidden;
+  constructor(config) {
+    this.terrain = config.terrain;
+    this.obstacle = config.obstacle;
+    this.color = config.color;
+    this.cost = config.cost;
+    this.hidden = config.hidden;
   }
 }
