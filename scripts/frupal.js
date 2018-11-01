@@ -10,13 +10,7 @@ let HUD = new Display(Hero, map);
 
 // TODO: Change the name of this file to something like "main"
 
-// FIXME: Find a place to put the dead status check.
 // FIXME: We can probably sweep this elsewhere.
-/*
- FIXME: Not sure if map should keep track of player movement, or if the
- player should update the map in regards to its position.
-*/
-
 function moveEvent(moveId) {
   const up = { x: 0, y: 1 };
   const down = { x: 0, y: -1 };
