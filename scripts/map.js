@@ -47,20 +47,20 @@ export class Map {
     this.playerLoc.x += movement.x;
     this.playerLoc.y += movement.y;
 
-    if(this.playerLoc.x > this.params.max) {
+    if(this.playerLoc.x >= this.params.max) {
       this.playerLoc.x = 0;
     }
 
     if(this.playerLoc.x < 0) {
-      this.playerLoc.x = this.params.max;
+      this.playerLoc.x = this.params.max - 1;
     }
 
-    if(this.playerLoc.y > this.params.max) {
+    if(this.playerLoc.y >= this.params.max) {
       this.playerLoc.y = 0;
     }
 
     if(this.playerLoc.y < 0) {
-      this.playerLoc.y = this.params.max;
+      this.playerLoc.y = this.params.max - 1;
     }
   }
 }
