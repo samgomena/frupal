@@ -48,10 +48,12 @@ class Display {
     const locationText = `Current Location: (${location.x}, ${location.y})`;
     const moneyText = `Whiffles: ${money}`;
     const energyText = `Energy: ${energy}`;
+    const terrainText = `Terrain: ${terrain}`;
 
     this.lNode.replaceData(0, 50, locationText);
     this.eNode.replaceData(0, 50, energyText);
     this.mNode.replaceData(0, 50, moneyText);
+    this.tNode.replaceData(0, 50, terrainText);
 
     return true;
   }
