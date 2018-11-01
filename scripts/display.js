@@ -33,6 +33,7 @@ class Display {
     const energy = this.person.getEnergy();
 
     //check that energy hasn't run out
+    // FIXME: Display should not control if game ends.
     if(!energy) {
     
       //pop up box
