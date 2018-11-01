@@ -43,7 +43,6 @@ export class Map {
   }
 
   movePlayer(movement) {
-    // FIXME: Error when player moves to upper or lower bounds.
     this.playerLoc.x += movement.x;
     this.playerLoc.y += movement.y;
 
