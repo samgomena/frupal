@@ -6,7 +6,7 @@ class Display {
 
     const terrain = this.map.getPlayerLocInfo();
     // Location, Energy, Money nodes.
-    // TODO: All this is not needed, remove later.
+    // FIXME: Make it look prettier?
     this.lNode = document.createTextNode(`Current Location: (${this.map.playerLoc.x}, ${this.map.playerLoc.y})`);
     this.eNode = document.createTextNode("Energy: 100");
     this.mNode = document.createTextNode("Whiffles: 100");
