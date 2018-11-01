@@ -22,7 +22,7 @@ export class Map {
         row.push(new Tile(defaultTile));
       }
       this.map.push(row);
-      console.log(row[i].terrain);
+      // console.log(row[i].terrain);
     }
   }
 
