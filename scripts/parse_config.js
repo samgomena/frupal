@@ -1,4 +1,6 @@
-const default_config =
+"use strict";
+
+let default_config =
 `Sample Frupal Game Map
 25
 #####################

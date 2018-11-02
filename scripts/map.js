@@ -1,11 +1,13 @@
 import Tile from "./tile";
 
 export class Map {
-  constructor(params) {
-    this.map = [];
-    this.params = params;
-    this.playerLoc = params.playerLoc;
-    this.populate();
+  constructor(map_init) {
+    this.map = map_init;
+    this.height = map_init.height;
+    this.width = map_init.width;
+    this.tile_size = 64; // Magic for now
+
+    // this.populate();
   }
 
   populate() {
@@ -17,6 +19,7 @@ export class Map {
       hidden: true,
       item: undefined
     };
+
     for(let i = 0; i < this.params.max; i++) {
       let row = [];
       for(let j = 0; j < this.params.max; j++) {

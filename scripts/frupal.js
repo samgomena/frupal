@@ -1,14 +1,27 @@
 import Person from "./person";
 import Display from "./display";
-import { Map, DEFAULT_PARAMS } from "./map";
+import parse_config from "./parse_config";
+import Game from "./game"
+import { DEFAULT_PARAMS, Map } from "./map";
 import createOverlay from "./overlay";
 import "../styles/main.scss";
 
-let Hero = new Person("Ben", {x:0,y:0}, 100, 100); 
-let map = new Map(DEFAULT_PARAMS);
-let HUD = new Display(Hero, map);
+let game_config = parse_config.parse(parse_config.default_config);
+let map = game_config.map;
+let hero_init = game_config.player;
 
-// TODO: Change the name of this file to something like "main"
+setTitle(game_config.title);
+// createOverlay();
+setMoveEvents();
+
+
+let context = document.getElementById('demo').getContext('2d');
+let hero = new Person("Ernesto", hero_init.pos, hero_init.energy, hero_init.whiffles, hero_init.items);
+
+let game = new Game(context, map, hero);
+game.run();
+
+let HUD = new Display(hero, map);
 
 // FIXME: We can probably sweep this elsewhere.
 function moveEvent(moveId) {
@@ -70,7 +83,10 @@ function setMoveEvents() {
   });
 }
 
+function setTitle(title) {
+    document.getElementById("game-title").innerHTML = title;
+}
 
 
-createOverlay();
-setMoveEvents();
+
+
