@@ -1,9 +1,14 @@
 class Person {
-  constructor(name, location, energy, money) {
+  constructor(name, location, energy, money, items) {
     this.name = name;
+    this.width = 64;
+    this.height = 64;
+    this.x = location.x;
+    this.y = location.y;
     this.location = location;
     this.energy = energy;
     this.money = money;
+    this.items = items;
     this.dead = false;
   }
 
@@ -41,7 +46,7 @@ class Person {
   // as an argument to decide how much energy is lost
   // during movement.
   consumeEnergy(lost) {
-    if(this.energy == 0) this.dead = true;
+    if(this.energy === 0) this.dead = true;
     this.energy -= lost;
   }
 }

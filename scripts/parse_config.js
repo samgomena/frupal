@@ -1,4 +1,4 @@
-const map_file =
+const default_config =
 `Sample Frupal Game Map
 25
 #####################
@@ -77,10 +77,11 @@ const MAP_ITEM_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
 function parse(game_config) {
     const GAME = {};
     GAME.map = {};
+    GAME.map.tile_size = 64; // Magic for now
     GAME.map.layers = [];
     GAME.map.objects = [];
     GAME.player = {};
-    GAME.player.tools = {};
+    GAME.player.items = {};
 
     let split_map_file = game_config.split("\n");
 
@@ -114,7 +115,7 @@ function parse(game_config) {
     while (!split_map_file[0].match(delimiter_regex)) {
         let player_item = split_map_file.splice(0, 1)[0];
         // Update player's tool object with tool count
-        GAME.player.tools.hasOwnProperty(player_item) ? GAME.player.tools[player_item]++ : GAME.player.tools[player_item] = 1;
+        GAME.player.items.hasOwnProperty(player_item) ? GAME.player.items[player_item]++ : GAME.player.items[player_item] = 1;
     }
 
     // Remove closing delimiter
@@ -173,4 +174,8 @@ function parse(game_config) {
     return GAME;
 }
 
-console.log(parse(map_file));
+// console.log(parse(default_config));
+export default {
+    default_config: default_config,
+    parse: parse,
+};
