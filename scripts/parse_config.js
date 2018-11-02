@@ -13,24 +13,70 @@ Pretty Rock
 12,12,1,1,None
 13,12,0,1,Tree
 15,13,0,4,Royal Diamonds
-14,12,0,2,None`;
+14, 12, 0, 2, None`;
 
 const TERRAIN_MAP = {
-    0: "MEADOW",
-    1: "FOREST",
-    2: "WATER",
-    3: "WALL",
-    4: "BOG",
-    5: "SWAMP",
+    0: {
+        name: "MEADOW",
+        cost: 1,
+        color: "#32CD32",
+    },
+    1: {
+        name: "FOREST",
+        cost: 1,
+        color: "#0c854e",
+    },
+    2: {
+        name: "WATER",
+        cost: 1,
+        color: "#218aff",
+    },
+    3: {
+        name: "WALL",
+        cost: 1,
+        color: "#a7a0a5",
+    },
+    4: {
+        name: "BOG",
+        cost: 2,
+        color: "#5b4a4d",
+    },
+    5: {
+        name: "SWAMP",
+        cost: 2,
+        color: "#475b41",
+    },
 };
 
 const NUM_REGEX = /(\d+)/;
 const COORD_REGEX = /(\d+),\s*(\d+)/;
 const MAP_ITEM_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
 
+/**
+ *
+ * This function expects `game_config` to be in the following format:
+ *
+ *  A Game Title        - The games title
+ *  5                   - The width and height of the game board
+ *  ########            - An opening delimiter
+ *  1, 1                - The starting location of the player
+ *  10                  - The starting energy of the player
+ *  100                 - The starting money of the player
+ *  Item 1              - An item the player starts with
+ *  Item 2              - Can be any string; case sensitive; duplicates allowed
+ *  ########            - A closing delimiter; characters must match starting delimiter
+ *  1,1,1,1,Obstacle 1  - An obstacle/item placed on the map in the form x,y,visibility,terrain id,name;
+ *  2,2,0,1,Obstacle 2  - All values must be present; spaces are allowed and at least one must be 'Royal Diamonds'
+ *  3, 3, 0, 1, Royal Diamonds
+ *
+ *
+ * @param game_config A map 'file' to parse
+ * @returns Object An object containing the parsed data
+ */
 function parse(game_config) {
     const GAME = {};
     GAME.map = {};
+    GAME.map.layers = [];
     GAME.map.objects = [];
     GAME.player = {};
     GAME.player.tools = {};
@@ -42,6 +88,8 @@ function parse(game_config) {
 
     GAME.title = game_title;
     GAME.map.width = GAME.map.height = +board_size;
+    // Control layer
+    GAME.map.layers.push(new Array(+board_size * +board_size));
 
     let delimiter = first_delimiter.charAt(0);
 
@@ -96,6 +144,13 @@ function parse(game_config) {
             name: name === 'None' ? "" : name,
         });
     });
+
+    // Populate map layer with map objects
+    let obstacle_layer = new Array(+board_size * +board_size);
+    GAME.map.objects.forEach(map_object => {
+        obstacle_layer[map_object.x * map_object.y] = map_object;
+    });
+    GAME.map.layers.push(obstacle_layer);
 
 
     // Perform checks
