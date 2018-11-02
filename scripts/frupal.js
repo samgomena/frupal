@@ -19,18 +19,22 @@ function moveEvent(moveId) {
 
   switch(moveId) {
   case "up":
+  case "ArrowUp":
   case "w":
     map.movePlayer(up);
     break;
   case "down":
+  case "ArrowDown":
   case "s":
     map.movePlayer(down);
     break;
   case "left":
+  case "ArrowLeft":
   case "a":
     map.movePlayer(left);
     break;
   case "right":
+  case "ArrowRight":
   case "d":
     map.movePlayer(right);
     break;
@@ -40,40 +44,29 @@ function moveEvent(moveId) {
   
   Hero.updateStatus(map.getPlayerLoc(), map.getTileCost());
 
-  if(HUD.update()) {
-    return true;
-  }
-  else {
-    return false;
-  }
+  return HUD.update();
 }
 
 function setMoveEvents() {
-  // FIXME: A bit clunky, but whatever.
-  let upEl = document.getElementById("up");
-  let downEl = document.getElementById("down");
-  let leftEl = document.getElementById("left");
-  let rightEl = document.getElementById("right");
 
-  // TODO: Make a master Events thing to let events pass through.
-
-  // TODO: Eventually replace 1 with a function which grabs tile energy cost
-  // As in allow the moveEvent function to call the getTileEnergy function inside of itself.
-  upEl.addEventListener("click", () => moveEvent("up"));
-  downEl.addEventListener("click", () => moveEvent("down"));
-  leftEl.addEventListener("click", () => moveEvent("left"));
-  rightEl.addEventListener("click", () => moveEvent("right"));
+  // Get up, down, left, right, elements and attach click events to them
+  ["up", "down", "left", "right"].forEach(direction => {
+      document.getElementById(direction).addEventListener("click", () => {
+        moveEvent(direction);
+      });
+  });
 
   // e stands for event
-  document.addEventListener("keypress", (e) => {
+  document.addEventListener("keydown", (e) => {
     // TODO: May want to debounce?
+    // TODO: May want to use keyCode instead of button name
     const keyName = e.key;
-    const validKeys = ["w", "a", "s", "d"];
-    if(validKeys.find((el) => {
-      return el === keyName;
-    })) {
-      moveEvent(keyName, 1);
+    const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+
+    if(validKeys.indexOf(keyName) !== -1) {
+        moveEvent(keyName, 1);
     }
+
   });
 }
 
