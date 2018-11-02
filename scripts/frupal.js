@@ -15,8 +15,8 @@ setTitle(game_config.title);
 setMoveEvents();
 
 
-let context = document.getElementById('demo').getContext('2d');
-let hero = new Person("Ernesto", hero_init.pos, hero_init.energy, hero_init.whiffles, hero_init.items);
+let context = document.getElementById('demo');
+let hero = new Person(hero_init, map);
 
 let game = new Game(context, map, hero);
 game.run();
@@ -55,14 +55,14 @@ function moveEvent(moveId) {
     throw new Error("Not an event!");
   }
   
-  Hero.updateStatus(map.getPlayerLoc(), map.getTileCost());
+  hero.updateStatus(map.getPlayerLoc(), map.getTileCost());
 
   return HUD.update();
 }
 
 function setMoveEvents() {
 
-  // Get up, down, left, right, elements and attach click events to them
+  // Define up, down, left, right, elements and attach click events to them
   ["up", "down", "left", "right"].forEach(direction => {
       document.getElementById(direction).addEventListener("click", () => {
         moveEvent(direction);

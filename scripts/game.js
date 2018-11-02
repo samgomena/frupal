@@ -34,34 +34,40 @@ class Camera {
 
 export default class Game {
     constructor(context, map, hero) {
-        this.ctx = context;
+        this.ctx = context.getContext('2d');
         this.map = map;
 
         this.hero = hero;
-        this.camera = new Camera(this.map, 512, 512);
-        this.camera.follow(this.hero);
+        // this.camera = new Camera(this.map, 512, 512);
+        // this.camera.follow(this.hero);
 
+
+        context.width = (this.map.tile_size * this.map.width);
+        context.height = (this.map.tile_size * this.map.height);
+
+        console.log((this.map.tile_size * this.map.width), (this.map.tile_size * this.map.height));
         this.run();
     }
 
     run() {
         this._previousElapsed = 0;
-        window.requestAnimationFrame(this.tick);
+        window.requestAnimationFrame(this.tick.bind(this));
     };
 
 
-    update(delta) {
+    update() {
         // handle hero movement with arrow keys
         let dirx = 0;
         let diry = 0;
 
         // TODO: Move hero here
 
-        // this.hero.move(delta, dirx, diry);
-        this.camera.update();
+        this.hero.move(dirx, diry);
+        // this.camera.update();
     };
 
     tick(elapsed) {
+
 
         // clear previous frame
         this.ctx.clearRect(0, 0, 512, 512);
@@ -71,16 +77,27 @@ export default class Game {
         delta = Math.min(delta, 0.25); // maximum delta of 250 ms
         this._previousElapsed = elapsed;
 
-        this.update(delta);
+        this.update();
         this.render();
-        window.requestAnimationFrame(this.tick);
+        window.requestAnimationFrame(this.tick.bind(this));
     }
 
     render() {
         this.ctx.beginPath();
+        // this.ctx.arc(
+        //     this.hero.x * this.map.tile_size - this.hero.width / 2,
+        //     this.hero.y * this.map.tile_size - this.hero.height / 2,
+        //     32,
+        //     0,
+        //     2 * Math.PI,
+        //     false
+        // );
+        // console.log(this.hero.x, this.hero.y);
         this.ctx.arc(
-            this.hero.screenX - this.hero.width / 2,
-            this.hero.screenY - this.hero.height / 2,
+            // this.hero.x * (this.hero.width / 2),
+            // this.hero.y * (this.hero.height / 2),
+            this.hero.x * (this.map.tile_size - this.hero.width) / 2,
+            this.hero.y * (this.map.tile_size - this.hero.height) / 2,
             32,
             0,
             2 * Math.PI,
@@ -96,19 +113,18 @@ export default class Game {
         let height = this.map.height * this.map.tile_size;
         let x, y;
 
-        // Just use one loop
-        for(let step_x = 0, step_y = 0; step_x < this.map.height; ++step_x, ++step_y) {
-            x = -(this.camera.x);
-            y = step_x * this.map.tile_size - this.camera.y;
+        for(let step_x = 0, step_y = 0; step_x <= this.map.height; ++step_x, ++step_y) {
+            // x = -(this.camera.x);
+            y = step_x * this.map.tile_size;// - this.camera.y;
             this.ctx.beginPath();
-            this.ctx.moveTo(x, y);
+            this.ctx.moveTo(step_x, y);
             this.ctx.lineTo(width, y);
             this.ctx.stroke();
 
-            x = step_y * this.map.tile_size - this.camera.x;
-            y = -(this.camera.y);
+            x = step_y * this.map.tile_size;// - this.camera.x;
+            // y = -(this.camera.y);
             this.ctx.beginPath();
-            this.ctx.moveTo(x, y);
+            this.ctx.moveTo(x, step_y);
             this.ctx.lineTo(x, height);
             this.ctx.stroke();
         }
