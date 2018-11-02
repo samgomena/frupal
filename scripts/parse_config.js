@@ -32,8 +32,8 @@ function parse(game_config) {
     const GAME = {};
     GAME.map = {};
     GAME.map.objects = [];
-    GAME.hero = {};
-    GAME.hero.tools = {};
+    GAME.player = {};
+    GAME.player.tools = {};
 
     let split_map_file = game_config.split("\n");
 
@@ -50,29 +50,33 @@ function parse(game_config) {
 
     // Destruct regex match groups into x, y coordinate variables
     let [, hero_start_x, hero_start_y] = split_map_file.splice(0, 1)[0].match(COORD_REGEX);
-    GAME.hero.pos = {
+    GAME.player.pos = {
         x: +hero_start_x,
         y: +hero_start_y,
     };
 
     let [, hero_energy] = split_map_file.splice(0, 1)[0].match(NUM_REGEX);
-    GAME.hero.energy = +hero_energy;
+    GAME.player.energy = +hero_energy;
 
     let [, hero_whiffles] = split_map_file.splice(0, 1)[0].match(NUM_REGEX);
-    GAME.hero.whiffles = +hero_whiffles;
+    GAME.player.whiffles = +hero_whiffles;
 
     // Loop until we see the delimiter again
     while (!split_map_file[0].match(delimiter_regex)) {
-        let hero_item = split_map_file.splice(0, 1)[0];
-        // Update hero's tool object with tool count
-        GAME.hero.tools.hasOwnProperty(hero_item) ? GAME.hero.tools[hero_item]++ : GAME.hero.tools[hero_item] = 1;
+        let player_item = split_map_file.splice(0, 1)[0];
+        // Update player's tool object with tool count
+        GAME.player.tools.hasOwnProperty(player_item) ? GAME.player.tools[player_item]++ : GAME.player.tools[player_item] = 1;
     }
 
     // Remove closing delimiter
     split_map_file.splice(0, 1);
 
-    // Loop through everything after the delimiter
+    // Loop through map items after the delimiter
     split_map_file.forEach(map_item => {
+
+        if(!MAP_ITEM_REGEX.test(map_item)) {
+            throw Error(`'${map_item}' is not a valid syntax for a map items`)
+        }
 
         let [, x, y, visibility, terrain, name] = map_item.match(MAP_ITEM_REGEX) || [];
 
@@ -95,14 +99,17 @@ function parse(game_config) {
 
 
     // Perform checks
-    if(GAME.hero.pos.x > GAME.map.width || GAME.hero.pos.y > GAME.map.height) {
-        throw Error(`Starting position of (${GAME.hero.pos.x}, ${GAME.hero.pos.y}) is out of bounds.`);
+
+    // Throw if player's starting location is off the map
+    if(GAME.player.pos.x > GAME.map.width || GAME.player.pos.y > GAME.map.height) {
+        throw Error(`Starting position of (${GAME.player.pos.x}, ${GAME.player.pos.y}) is out of bounds.`);
     }
 
     let contains_diamonds = Boolean(GAME.map.objects.filter(board_object => {
         return board_object.name === "Royal Diamonds";
     }).length);
 
+    // Throw if no diamonds
     if(!contains_diamonds) {
         throw Error(`The map does not contain the royal diamonds.`);
     }
