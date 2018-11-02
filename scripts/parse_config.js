@@ -10,9 +10,9 @@ Axe
 Shears
 Pretty Rock
 #####################
-12,12,1,1,None
-13,12,0,1,Tree
-15,13,0,4,Royal Diamonds
+12, 12, 1, 1, None
+13, 12, 0, 1, Tree
+15, 13, 0, 4, Royal Diamonds
 14, 12, 0, 2, None`;
 
 const TERRAIN_MAP = {
@@ -56,19 +56,20 @@ const MAP_ITEM_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
  *
  * This function expects `game_config` to be in the following format:
  *
- *  A Game Title        - The games title
- *  5                   - The width and height of the game board
- *  ########            - An opening delimiter
- *  1, 1                - The starting location of the player
- *  10                  - The starting energy of the player
- *  100                 - The starting money of the player
- *  Item 1              - An item the player starts with
- *  Item 2              - Can be any string; case sensitive; duplicates allowed
- *  ########            - A closing delimiter; characters must match starting delimiter
- *  1,1,1,1,Obstacle 1  - An obstacle/item placed on the map in the form x,y,visibility,terrain id,name;
- *  2,2,0,1,Obstacle 2  - All values must be present; spaces are allowed and at least one must be 'Royal Diamonds'
- *  3, 3, 0, 1, Royal Diamonds
+ *  A Game Title                - The games title
+ *  5                           - The width and height of the game board
+ *  ########                    - An opening delimiter
+ *  1, 1                        - The starting location of the player
+ *  10                          - The starting energy of the player
+ *  100                         - The starting money of the player
+ *  Item 1                      - An item the player starts with
+ *  Item 2                      - Can be any string; case sensitive; duplicates allowed
+ *  ########                    - A closing delimiter; characters must match starting delimiter
+ *  1,1,1,1,Obstacle 1          - An obstacle/item placed on the map in the form x,y,visibility,terrain id,name;
+ *  2,2,0,1,Obstacle 2          - All values must be present; spaces are allowed
+ *  3, 3, 0, 1, Royal Diamonds  - At least one item must be 'Royal Diamonds'
  *
+ * This will throw an error if it encounters an incorrectly formatted game config.
  *
  * @param game_config A map 'file' to parse
  * @returns Object An object containing the parsed data
