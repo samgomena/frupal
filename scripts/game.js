@@ -42,10 +42,12 @@ export default class Game {
         this.fps = fps;
 
         this.hero = hero;
+        this.hero_move_queue = [];
+
         // this.camera = new Camera(this.map, 512, 512);
         // this.camera.follow(this.hero);
 
-        // this.setMoveEvents();
+        this.setMoveEvents();
 
         canvas.width = (this.map.tile_size * this.map.width);
         canvas.height = (this.map.tile_size * this.map.height);
@@ -57,8 +59,8 @@ export default class Game {
     }
 
     moveEvent(moveId) {
-        const up = { x: 0, y: 1 };
-        const down = { x: 0, y: -1 };
+        const up = { x: 0, y: -1 };
+        const down = { x: 0, y: 1 };
         const left = { x: -1, y: 0 };
         const right = { x: 1, y: 0 };
 
@@ -66,30 +68,30 @@ export default class Game {
             case "up":
             case "ArrowUp":
             case "w":
-                this.hero.move(up);
+                // this.hero.move(up);
+                this.hero_move_queue.push(up);
                 break;
             case "down":
             case "ArrowDown":
             case "s":
-                this.hero.move(down);
+                // this.hero.move(down);
+                this.hero_move_queue.push(down);
                 break;
             case "left":
             case "ArrowLeft":
             case "a":
-                this.hero.move(left);
+                // this.hero.move(left);
+                this.hero_move_queue.push(left);
                 break;
             case "right":
             case "ArrowRight":
             case "d":
-                this.hero.move(right);
+                // this.hero.move(right);
+                this.hero_move_queue.push(right);
                 break;
             default:
                 throw new Error("Not an event!");
         }
-
-        // hero.updateStatus(map.getPlayerLoc(), map.getTileCost());
-
-        // return HUD.update();
     }
 
     setMoveEvents() {
@@ -140,25 +142,15 @@ export default class Game {
 
 
     update() {
-        let dirx = 0;
-        let diry = 0;
-
-        // TODO: Move hero here
-
         // this.ctx.save();
-
-        this.hero.move(dirx, diry);
-        // this.camera.update();
+        this.hero_move_queue.forEach(movement => {
+            this.hero.move(movement.x, movement.y);
+        });
     };
 
     tick(elapsed) {
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // // compute delta time in seconds -- also cap it
-        // let delta = (elapsed - this._previousElapsed) / 1000.0;
-        // delta = Math.min(delta, 0.25); // maximum delta of 250 ms
-        // this._previousElapsed = elapsed;
 
         this.update();
         this.render();

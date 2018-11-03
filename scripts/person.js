@@ -51,7 +51,56 @@ class Person {
     this.dead = true;
   }
 
-  // consumeEnergy should eventually take a tile type
+    movePlayer(movement) {
+        this.playerLoc.x += movement.x;
+        this.playerLoc.y += movement.y;
+
+        if(this.playerLoc.x >= this.params.max) {
+            this.playerLoc.x = 0;
+        }
+
+        if(this.playerLoc.x < 0) {
+            this.playerLoc.x = this.params.max - 1;
+        }
+
+        if(this.playerLoc.y >= this.params.max) {
+            this.playerLoc.y = 0;
+        }
+
+        if(this.playerLoc.y < 0) {
+            this.playerLoc.y = this.params.max - 1;
+        }
+    }
+
+  moveX(dir_x) {
+    this.x += dir_x;
+
+    if(this.x >= this.map.width) {
+        this.x = 0;
+    }
+
+    if(this.x < 0) {
+        this.x = this.map.width - 1;
+    }
+  }
+
+  moveY(dir_y) {
+      this.y += dir_y;
+
+      if(this.y >= this.map.width) {
+          this.y = 0;
+      }
+
+      if(this.y < 0) {
+          this.y = this.map.width - 1;
+      }
+  }
+
+
+
+
+
+    // consumeEnergy should eventually take a tile type
   // as an argument to decide how much energy is lost
   // during movement.
   consumeEnergy(lost) {
@@ -60,8 +109,13 @@ class Person {
   }
 
   move(step_x, step_y) {
-      this.x += step_x * this.map.tile_size;
-      this.y += step_y * this.map.tile_size;
+      // this.x += step_x * this.map.tile_size;
+      // this.y += step_y * this.map.tile_size;
+      this.moveX(step_x);
+      this.moveY(step_y);
+
+      // this.x += step_x;
+      // this.y += step_y;
   };
 }
 
