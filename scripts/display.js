@@ -34,17 +34,19 @@ class Display {
 
     //check that energy hasn't run out
     // FIXME: Display should not control if game ends.
-    if(!energy) {
+    if(energy <= 0) {
     
       //pop up box
       alert("You have run out of energy :(");
       this.hero.isDead();
 
+      // Reload the game to default
+      window.location.reload(true);
+
       //TODO: game should end here
 
       return false;
     }
-
 
     const locationText = `Current Location: (${location.x}, ${location.y})`;
     const moneyText = `Whiffles: ${money}`;

@@ -2,7 +2,7 @@ class Person {
   constructor(hero_init, map) {
     this.name = "I made this up";
     this.width = 64; // Magic for now
-    this.height = 64; // Magic for now
+    this.height = 64;
     this.x = hero_init.pos.x;
     this.y = hero_init.pos.y;
     this.location = hero_init.pos;
@@ -12,21 +12,20 @@ class Person {
 
     this.map = map;
     this.dead = false;
+
+    // Player's possible movements
+    this.up = { x: 0, y: -1 };
+    this.down = { x: 0, y: 1 };
+    this.left = { x: -1, y: 0 };
+    this.right = { x: 1, y: 0 };
+
   }
 
   printStatus() {
     return `Name: ${this.name}\n`
-            +`Location: (${this.location.x},${this.location.y})\n`
+            +`Location: (${this.x}, ${this.y})\n`
             +`Energy: ${this.energy}\n`
             +`Money: ${this.money}\n`;
-  }
-
-  // FIXME: Move this method into the map class as getPlayerLocation
-  getLocation() {
-    return {
-        x: this.x,
-        y: this.y
-    };
   }
 
   getEnergy() {
@@ -61,6 +60,11 @@ class Person {
     this.dead = true;
   }
 
+    /**
+    * This function moves a player `dir_x` units in the x direction.
+    *
+    * @param dir_x The number of movements to take in the x direction
+    */
   moveX(dir_x) {
     this.x += dir_x;
 
@@ -72,9 +76,14 @@ class Person {
         this.x = this.map.width - 1;
     }
 
-    this.energy -= this.getPlayerLocCost();
+    this.consumeEnergy(this.getPlayerLocCost());
   }
 
+    /**
+     * This function moves a player `dir_y` units in the y direction.
+     *
+     * @param dir_y The number of movements to take in the y direction
+     */
   moveY(dir_y) {
       this.y += dir_y;
 
@@ -86,7 +95,7 @@ class Person {
           this.y = this.map.width - 1;
       }
 
-      this.energy -= this.getPlayerLocCost();
+      this.consumeEnergy(this.getPlayerLocCost());
   }
 
     // consumeEnergy should eventually take a tile type
@@ -97,6 +106,12 @@ class Person {
     this.energy -= lost;
   }
 
+    /**
+     * This function calls move updates for the x and y directions.
+     *
+     * @param step_x The number of movements to take in the x direction
+     * @param step_y The number of movements to take in the y direction
+     */
   move(step_x, step_y) {
 
     // These should probably be pure
