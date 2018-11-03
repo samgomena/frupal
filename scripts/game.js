@@ -33,10 +33,13 @@ class Camera {
 }
 
 export default class Game {
-    constructor(canvas, map, hero) {
+    constructor(canvas, map, hero, fps=5) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.map = map;
+
+        // Setting fps > 10 has serious performance implications
+        this.fps = fps;
 
         this.hero = hero;
         // this.camera = new Camera(this.map, 512, 512);
@@ -61,11 +64,12 @@ export default class Game {
 
         // So we need to calculate the proper scaled width
         // that should work well with every resolution
-        let ratio = this.canvas.width/this.canvas.height;
+        let ratio = this.canvas.width / this.canvas.height;
         let width = height * ratio;
 
-        this.canvas.style.width = width+'px';
-        this.canvas.style.height = height+'px';
+        // Update canvas element's bitmap resolution
+        this.canvas.style.width = `${width}px`;
+        this.canvas.style.height = `${height}px`;
 
         window.display.w = width;
         window.display.h = height;
@@ -74,20 +78,19 @@ export default class Game {
     run() {
         this._previousElapsed = 0;
         // window.requestAnimationFrame(this.tick);
-        window.setTimeout(this.tick.bind(this), 1000/5);
+
+        // Bind `tick` to `Game` so `this` is not `window`; set fps to 200 ms
+        window.setTimeout(this.tick.bind(this), 1000/this.fps);
     };
 
 
     update() {
-        // handle hero movement with arrow keys
         let dirx = 0;
         let diry = 0;
 
         // TODO: Move hero here
 
         // this.ctx.save();
-        // clear previous frame
-
 
         this.hero.move(dirx, diry);
         // this.camera.update();
@@ -105,25 +108,13 @@ export default class Game {
         this.update();
         this.render();
 
-
-        // window.requestAnimationFrame(this.tick);
         window.setTimeout(this.tick.bind(this), 1000/5);
     }
 
     render() {
+
         this.ctx.beginPath();
-        // this.ctx.arc(
-        //     this.hero.x * this.map.tile_size - this.hero.width / 2,
-        //     this.hero.y * this.map.tile_size - this.hero.height / 2,
-        //     32,
-        //     0,
-        //     2 * Math.PI,
-        //     false
-        // );
-        // console.log(this.hero.x, this.hero.y);
         this.ctx.arc(
-            // this.hero.x * (this.hero.width / 2),
-            // this.hero.y * (this.hero.height / 2),
             (this.hero.x * this.map.tile_size) - (this.hero.width / 2),
             (this.hero.y * this.map.tile_size) - (this.hero.height / 2),
 
