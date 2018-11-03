@@ -152,6 +152,16 @@ function parse(game_config) {
 
     // Populate map layer with map objects
     let obstacle_layer = new Array(+board_size * +board_size);
+
+    // Fill obstacle layer with default values
+    obstacle_layer.fill({
+        x: NaN,
+        y: NaN,
+        visible: false,
+        terrain: TERRAIN_MAP[0],
+        name: 'None',
+    });
+
     GAME.map.objects.forEach(map_object => {
         obstacle_layer[map_object.x * map_object.y] = map_object;
     });

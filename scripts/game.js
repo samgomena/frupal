@@ -2,7 +2,7 @@
 
 
 export default class Game {
-    constructor(canvas, map, hero, fps=5) {
+    constructor(canvas, map, hero, display, fps=5) {
         this.canvas = canvas;
         this.ctx = canvas.getContext('2d');
         this.map = map;
@@ -12,6 +12,8 @@ export default class Game {
 
         this.hero = hero;
         this.hero_move_queue = [];
+
+        this.display = display;
 
         this.setMoveEvents();
 
@@ -67,7 +69,7 @@ export default class Game {
         });
 
         // e stands for event
-        document.addEventListener("keypress", e => {
+        document.addEventListener("keydown", e => {
             const keyName = e.key;
             const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
@@ -94,16 +96,12 @@ export default class Game {
     }
 
     run() {
-        this._previousElapsed = 0;
-        // window.requestAnimationFrame(this.tick);
-
         // Bind `tick` to `Game` so `this` is not `window`
         window.setTimeout(this.tick.bind(this), 1000/this.fps);
     };
 
 
     update() {
-        // this.ctx.save();
         this.hero_move_queue.forEach(movement => {
             this.hero.move(movement.x, movement.y);
             // Meh...
@@ -111,11 +109,11 @@ export default class Game {
         });
     };
 
-    tick(elapsed) {
-
+    tick() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         this.update();
+        this.display.update();
         this.render();
 
         window.setTimeout(this.tick.bind(this), 1000/5);

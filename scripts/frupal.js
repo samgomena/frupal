@@ -17,11 +17,12 @@ setTitle(game_config.title);
 
 let context = document.getElementById('demo');
 let hero = new Person(hero_init, map);
+let display = new Display(hero, map);
 
-let game = new Game(context, map, hero);
+let game = new Game(context, map, hero, display);
 game.run();
 
-let HUD = new Display(hero, map);
+
 
 // function moveEvent(moveId) {
 //     const up = { x: 0, y: 1 };

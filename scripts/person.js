@@ -23,7 +23,10 @@ class Person {
 
   // FIXME: Move this method into the map class as getPlayerLocation
   getLocation() {
-    return this.location;
+    return {
+        x: this.x,
+        y: this.y
+    };
   }
 
   getEnergy() {
@@ -38,9 +41,16 @@ class Person {
       return this.map.layers[1][this.x * this.y].terrain.name;
   }
 
+  getPlayerLocCost() {
+    return this.map.layers[1][this.x * this.y].terrain.cost;
+  }
+
   getPlayerLoc() {
-      return this.location;
-    }
+    return {
+      x: this.x,
+      y: this.y
+    };
+  }
 
   updateStatus(newLoc, energyCost) {
     this.location = newLoc;
@@ -50,27 +60,6 @@ class Person {
   isDead() {
     this.dead = true;
   }
-
-    // movePlayer(movement) {
-    //     this.playerLoc.x += movement.x;
-    //     this.playerLoc.y += movement.y;
-    //
-    //     if(this.playerLoc.x >= this.params.max) {
-    //         this.playerLoc.x = 0;
-    //     }
-    //
-    //     if(this.playerLoc.x < 0) {
-    //         this.playerLoc.x = this.params.max - 1;
-    //     }
-    //
-    //     if(this.playerLoc.y >= this.params.max) {
-    //         this.playerLoc.y = 0;
-    //     }
-    //
-    //     if(this.playerLoc.y < 0) {
-    //         this.playerLoc.y = this.params.max - 1;
-    //     }
-    // }
 
   moveX(dir_x) {
     this.x += dir_x;
@@ -82,6 +71,8 @@ class Person {
     if(this.x < 0) {
         this.x = this.map.width - 1;
     }
+
+    this.energy -= this.getPlayerLocCost();
   }
 
   moveY(dir_y) {
@@ -94,6 +85,8 @@ class Person {
       if(this.y < 0) {
           this.y = this.map.width - 1;
       }
+
+      this.energy -= this.getPlayerLocCost();
   }
 
     // consumeEnergy should eventually take a tile type
@@ -110,8 +103,6 @@ class Person {
     this.moveX(step_x);
     this.moveY(step_y);
 
-      // this.x += step_x;
-      // this.y += step_y;
   };
 }
 
