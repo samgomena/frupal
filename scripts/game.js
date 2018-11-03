@@ -1,36 +1,5 @@
 "use strict";
 
-class Camera {
-    constructor(map, width, height) {
-        this.x = 0;
-        this.y = 0;
-        this.width = width;
-        this.height = height;
-        this.maxX = map.width * map.tile_size - width;
-        this.maxY = map.height * map.tile_size - height;
-    }
-
-    follow(sprite) {
-        this.following = sprite;
-        sprite.screenX = 0;
-        sprite.screenY = 0;
-    };
-
-    update() {
-        // assume followed sprite should be placed at the center of the screen
-        // whenever possible
-        this.following.screenX = this.width / 2;
-        this.following.screenY = this.height / 2;
-
-        // make the camera follow the sprite
-        this.x = this.following.x - this.width / 2;
-        this.y = this.following.y - this.height / 2;
-        // clamp values
-        this.x = Math.max(0, Math.min(this.x, this.maxX));
-        this.y = Math.max(0, Math.min(this.y, this.maxY));
-
-    };
-}
 
 export default class Game {
     constructor(canvas, map, hero, fps=5) {
@@ -38,14 +7,11 @@ export default class Game {
         this.ctx = canvas.getContext('2d');
         this.map = map;
 
-        // Setting fps > 10 has serious performance implications
+        // Setting fps > 10 causes serious overallocation of resources
         this.fps = fps;
 
         this.hero = hero;
         this.hero_move_queue = [];
-
-        // this.camera = new Camera(this.map, 512, 512);
-        // this.camera.follow(this.hero);
 
         this.setMoveEvents();
 
@@ -68,27 +34,24 @@ export default class Game {
             case "up":
             case "ArrowUp":
             case "w":
-                // this.hero.move(up);
                 this.hero_move_queue.push(up);
                 break;
             case "down":
             case "ArrowDown":
             case "s":
-                // this.hero.move(down);
                 this.hero_move_queue.push(down);
-                break;
-            case "left":
-            case "ArrowLeft":
-            case "a":
-                // this.hero.move(left);
-                this.hero_move_queue.push(left);
                 break;
             case "right":
             case "ArrowRight":
             case "d":
-                // this.hero.move(right);
                 this.hero_move_queue.push(right);
                 break;
+            case "left":
+            case "ArrowLeft":
+            case "a":
+                this.hero_move_queue.push(left);
+                break;
+
             default:
                 throw new Error("Not an event!");
         }
@@ -104,7 +67,7 @@ export default class Game {
         });
 
         // e stands for event
-        document.addEventListener("keydown", e => {
+        document.addEventListener("keypress", e => {
             const keyName = e.key;
             const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
@@ -115,12 +78,10 @@ export default class Game {
     }
 
     sizeUpBoard() {
-        // Our canvas must cover full height of screen
-        // regardless of the resolution
+        // Canvas height fills screen regardless of resolution
         let height = window.innerHeight;
 
-        // So we need to calculate the proper scaled width
-        // that should work well with every resolution
+        // Scale resolution
         let ratio = this.canvas.width / this.canvas.height;
         let width = height * ratio;
 
@@ -136,7 +97,7 @@ export default class Game {
         this._previousElapsed = 0;
         // window.requestAnimationFrame(this.tick);
 
-        // Bind `tick` to `Game` so `this` is not `window`; set fps to 200 ms
+        // Bind `tick` to `Game` so `this` is not `window`
         window.setTimeout(this.tick.bind(this), 1000/this.fps);
     };
 
@@ -145,6 +106,8 @@ export default class Game {
         // this.ctx.save();
         this.hero_move_queue.forEach(movement => {
             this.hero.move(movement.x, movement.y);
+            // Meh...
+            this.hero_move_queue.shift();
         });
     };
 
