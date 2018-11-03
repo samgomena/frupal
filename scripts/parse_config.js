@@ -1,22 +1,5 @@
 "use strict";
 
-let default_config =
-`Sample Frupal Game Map
-25
-#####################
-12,12
-103
-1000
-Axe
-Axe
-Shears
-Pretty Rock
-#####################
-12, 12, 1, 1, None
-13, 12, 0, 1, Tree
-15, 13, 0, 4, Royal Diamonds
-14, 12, 0, 2, None`;
-
 const TERRAIN_MAP = {
     0: {
         name: "MEADOW",
@@ -53,6 +36,24 @@ const TERRAIN_MAP = {
 const NUM_REGEX = /(\d+)/;
 const COORD_REGEX = /(\d+),\s*(\d+)/;
 const MAP_ITEM_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
+
+let default_config =
+    `Sample Frupal Game Map
+25
+#####################
+12,12
+103
+1000
+Axe
+Axe
+Shears
+Pretty Rock
+#####################
+12, 12, 1, 1, None
+13, 12, 0, 1, Tree
+15, 13, 0, 4, Royal Diamonds
+14, 12, 0, 2, None`;
+
 
 /**
  *

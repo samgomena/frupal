@@ -33,8 +33,9 @@ class Camera {
 }
 
 export default class Game {
-    constructor(context, map, hero) {
-        this.ctx = context.getContext('2d');
+    constructor(canvas, map, hero) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
         this.map = map;
 
         this.hero = hero;
@@ -42,16 +43,38 @@ export default class Game {
         // this.camera.follow(this.hero);
 
 
-        context.width = (this.map.tile_size * this.map.width);
-        context.height = (this.map.tile_size * this.map.height);
+        canvas.width = (this.map.tile_size * this.map.width);
+        canvas.height = (this.map.tile_size * this.map.height);
 
         console.log((this.map.tile_size * this.map.width), (this.map.tile_size * this.map.height));
-        this.run();
+        // this.run();
+        this.drawGrid();
+
+        window.addEventListener('load', this.sizeUpBoard.bind(this), false);
+        window.addEventListener('resize', this.sizeUpBoard.bind(this), false);
+    }
+
+    sizeUpBoard() {
+        // Our canvas must cover full height of screen
+        // regardless of the resolution
+        let height = window.innerHeight;
+
+        // So we need to calculate the proper scaled width
+        // that should work well with every resolution
+        let ratio = this.canvas.width/this.canvas.height;
+        let width = height * ratio;
+
+        this.canvas.style.width = width+'px';
+        this.canvas.style.height = height+'px';
+
+        window.display.w = width;
+        window.display.h = height;
     }
 
     run() {
         this._previousElapsed = 0;
-        window.requestAnimationFrame(this.tick.bind(this));
+        // window.requestAnimationFrame(this.tick);
+        window.setTimeout(this.tick.bind(this), 1000/5);
     };
 
 
@@ -62,15 +85,17 @@ export default class Game {
 
         // TODO: Move hero here
 
+        // this.ctx.save();
+        // clear previous frame
+
+
         this.hero.move(dirx, diry);
         // this.camera.update();
     };
 
     tick(elapsed) {
 
-
-        // clear previous frame
-        this.ctx.clearRect(0, 0, 512, 512);
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         // compute delta time in seconds -- also cap it
         let delta = (elapsed - this._previousElapsed) / 1000.0;
@@ -79,7 +104,10 @@ export default class Game {
 
         this.update();
         this.render();
-        window.requestAnimationFrame(this.tick.bind(this));
+
+
+        // window.requestAnimationFrame(this.tick);
+        window.setTimeout(this.tick.bind(this), 1000/5);
     }
 
     render() {
@@ -96,14 +124,16 @@ export default class Game {
         this.ctx.arc(
             // this.hero.x * (this.hero.width / 2),
             // this.hero.y * (this.hero.height / 2),
-            this.hero.x * (this.map.tile_size - this.hero.width) / 2,
-            this.hero.y * (this.map.tile_size - this.hero.height) / 2,
+            (this.hero.x * this.map.tile_size) - (this.hero.width / 2),
+            (this.hero.y * this.map.tile_size) - (this.hero.height / 2),
+
             32,
             0,
             2 * Math.PI,
             false
         );
         this.ctx.stroke();
+        // this.ctx.restore();
 
         this.drawGrid();
     };
@@ -113,16 +143,18 @@ export default class Game {
         let height = this.map.height * this.map.tile_size;
         let x, y;
 
-        for(let step_x = 0, step_y = 0; step_x <= this.map.height; ++step_x, ++step_y) {
-            // x = -(this.camera.x);
-            y = step_x * this.map.tile_size;// - this.camera.y;
+        // Draw horizontal grid lines
+        for (let step_x = 0; step_x <= this.map.height; ++step_x) {
+            y = step_x * this.map.tile_size;
             this.ctx.beginPath();
             this.ctx.moveTo(step_x, y);
             this.ctx.lineTo(width, y);
             this.ctx.stroke();
+        }
 
-            x = step_y * this.map.tile_size;// - this.camera.x;
-            // y = -(this.camera.y);
+        // Draw vertical grid lines
+        for (let step_y = 0; step_y <= this.map.width; ++step_y) {
+            x = step_y * this.map.tile_size;
             this.ctx.beginPath();
             this.ctx.moveTo(x, step_y);
             this.ctx.lineTo(x, height);
