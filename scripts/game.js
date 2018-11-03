@@ -45,16 +45,71 @@ export default class Game {
         // this.camera = new Camera(this.map, 512, 512);
         // this.camera.follow(this.hero);
 
+        // this.setMoveEvents();
 
         canvas.width = (this.map.tile_size * this.map.width);
         canvas.height = (this.map.tile_size * this.map.height);
 
-        console.log((this.map.tile_size * this.map.width), (this.map.tile_size * this.map.height));
-        // this.run();
-        this.drawGrid();
+        console.log("Canvas width, height =", (this.map.tile_size * this.map.width), (this.map.tile_size * this.map.height));
 
         window.addEventListener('load', this.sizeUpBoard.bind(this), false);
         window.addEventListener('resize', this.sizeUpBoard.bind(this), false);
+    }
+
+    moveEvent(moveId) {
+        const up = { x: 0, y: 1 };
+        const down = { x: 0, y: -1 };
+        const left = { x: -1, y: 0 };
+        const right = { x: 1, y: 0 };
+
+        switch(moveId) {
+            case "up":
+            case "ArrowUp":
+            case "w":
+                this.hero.move(up);
+                break;
+            case "down":
+            case "ArrowDown":
+            case "s":
+                this.hero.move(down);
+                break;
+            case "left":
+            case "ArrowLeft":
+            case "a":
+                this.hero.move(left);
+                break;
+            case "right":
+            case "ArrowRight":
+            case "d":
+                this.hero.move(right);
+                break;
+            default:
+                throw new Error("Not an event!");
+        }
+
+        // hero.updateStatus(map.getPlayerLoc(), map.getTileCost());
+
+        // return HUD.update();
+    }
+
+    setMoveEvents() {
+
+        // Define up, down, left, right, elements and attach click events to them
+        ["up", "down", "left", "right"].forEach(direction => {
+            document.getElementById(direction).addEventListener("click", () => {
+                this.moveEvent(direction);
+            });
+        });
+
+        // e stands for event
+        document.addEventListener("keydown", e => {
+            const keyName = e.key;
+            const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+
+            if(validKeys.indexOf(keyName) !== -1) {
+                this.moveEvent(keyName, 1);
+            }
+        });
     }
 
     sizeUpBoard() {
@@ -100,10 +155,10 @@ export default class Game {
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // compute delta time in seconds -- also cap it
-        let delta = (elapsed - this._previousElapsed) / 1000.0;
-        delta = Math.min(delta, 0.25); // maximum delta of 250 ms
-        this._previousElapsed = elapsed;
+        // // compute delta time in seconds -- also cap it
+        // let delta = (elapsed - this._previousElapsed) / 1000.0;
+        // delta = Math.min(delta, 0.25); // maximum delta of 250 ms
+        // this._previousElapsed = elapsed;
 
         this.update();
         this.render();
@@ -117,7 +172,6 @@ export default class Game {
         this.ctx.arc(
             (this.hero.x * this.map.tile_size) - (this.hero.width / 2),
             (this.hero.y * this.map.tile_size) - (this.hero.height / 2),
-
             32,
             0,
             2 * Math.PI,

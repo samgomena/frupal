@@ -60,20 +60,9 @@ class Person {
   }
 
   move(step_x, step_y) {
-      // move hero
       this.x += step_x * this.map.tile_size;
       this.y += step_y * this.map.tile_size;
-
-      // check if we walked into a non-walkable tile
-      // this._collide(dirx, diry);
-
-      // // clamp values
-      // let maxX = this.map.width * this.map.tile_size;
-      // let maxY = this.map.height * this.map.tile_size;
-      // this.x = Math.max(0, Math.min(this.x, maxX));
-      // this.y = Math.max(0, Math.min(this.y, maxY));
   };
-
 }
 
 export default Person;
