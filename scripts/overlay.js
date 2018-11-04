@@ -11,7 +11,7 @@ function createOverlay() {
 
   start.innerHTML = "Start";
   start.setAttribute("style", "cursor:pointer");
-  start.id = "update"
+  start.id = "update";
   start.addEventListener("click", function(){
     document.getElementById("menu").style.display = "none";
   });
@@ -21,6 +21,7 @@ function createOverlay() {
   options.addEventListener("click", function(){
     document.getElementById("options").style.display = "block";
   });
+
   document.getElementById("sub").appendChild(start);
   document.getElementById("sub").appendChild(options);
 
@@ -47,31 +48,31 @@ function createOverlay() {
     document.getElementById("options").style.display = "none";
   });
   
-	chooseBtn.setAttribute("style", "display:inline-block")
-	chooseBtn.addEventListener("click", function(){
-		while(choose.firstChild){
-			choose.removeChild(choose.firstChild)
-		}
-		if(choose.style.display == "none"){
-			for(let i = 0; i < localStorage.length; ++i) {
-				if(localStorage.key(i) == "currentMap")
-					continue
-				let mapLoad = document.createElement("a")
-				mapLoad.innerHTML = localStorage.key(i)
-				mapLoad.addEventListener("click", function(){
-					localStorage.setItem("currentMap", localStorage.getItem(localStorage.key(i)))
-					alert(localStorage.key(i) + " has been loaded.")
-				})
-				choose.appendChild(mapLoad);
-			}
-			choose.style.display = "inline-block"
-		}
-		else
-			choose.style.display = "none"
-	})
-	chooseBtn.addEventListener("mouseleave", function(){
-		choose.style.display = "none"
-	})
+  chooseBtn.setAttribute("style", "display:inline-block");
+  chooseBtn.addEventListener("click", function(){
+    while(choose.firstChild){
+      choose.removeChild(choose.firstChild);
+    }
+    if(choose.style.display == "none"){
+      for(let i = 0; i < localStorage.length; ++i) {
+        if(localStorage.key(i) == "currentMap")
+          continue;
+        let mapLoad = document.createElement("a");
+        mapLoad.innerHTML = localStorage.key(i);
+        mapLoad.addEventListener("click", function(){
+          localStorage.setItem("currentMap", localStorage.getItem(localStorage.key(i)));
+          alert(localStorage.key(i) + " has been loaded.");
+        });
+        choose.appendChild(mapLoad);
+      }
+      choose.style.display = "inline-block";
+    }
+    else
+      choose.style.display = "none";
+  });
+  chooseBtn.addEventListener("mouseleave", function(){
+    choose.style.display = "none";
+  });
  
   document.getElementById("form").appendChild(submit);
   document.getElementById("options").appendChild(close);
