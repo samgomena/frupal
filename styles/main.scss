@@ -10,11 +10,13 @@ body {
   flex-direction: column;
   height: 100px;
   justify-content: center;
+  column-gap: normal;
 
   button {
     display: inline-block;
     margin: 0 auto;
     width: 5%;
+    border-radius: 12px;
   }
 }
 
