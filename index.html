@@ -1,15 +1,16 @@
 <html>
     <head>
-        <script defer src="./scripts/frupal.js"></script>
+        <title id="game-title"></title>
+
     </head>
     <body>
         <!-- display div is handled by the display class -->
         <div id="display" class="game"></div>
 
         <!-- menu div is an overlay that represents the game start menu -->
-        <div id="menu" class="overlay">
-            <div id="sub" class="overlay-content"></div>
-        </div>
+        <!--<div id="menu" class="overlay">-->
+            <!--<div id="sub" class="overlay-content"></div>-->
+        <!--</div>-->
 
         <!-- options div is an overlay that represents the customization menu -->
         <div id="options" class="overlay" style="display:none;">
@@ -30,7 +31,6 @@
 			</div>
         </div>
         <h1> Frupal </h1>
-        <div id="display"></div>
         <div class="movement__button">
             <button id="up">North</button>
             <div class="movement__left-right">
@@ -39,5 +39,10 @@
             </div>
             <button id="down">South</button>
         </div>
+
+        <!--<div>-->
+            <canvas id="demo" style="background: #ddd;"></canvas>
+        <!--</div>-->
+        <script defer src="./scripts/frupal.js"></script>
     </body>
 </html>
