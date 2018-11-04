@@ -28,10 +28,16 @@
 				</button>
 			</div>
         </div>
+
+
+
+      <div class = "row">
         <div class="game">
             <!-- display div is handled by the display class -->
+        <div class = "column"> </div>
+        <div class = "column">
+          <h1> Frupal </h1>
             <div id="display" class="game-display"></div>
-            <h1> Frupal </h1>
             <div class="movement__button">
                 <button id="up">North</button>
                 <div class="movement__left-right">
@@ -40,8 +46,14 @@
                 </div>
                 <button id="down">South</button>
             </div>
+          </div>
+          <div class = "column">
             <canvas id="demo" style="background: #ddd;"></canvas>
+          </div>
         </div>
+      </div>
+
+
         <script defer src="./scripts/frupal.js"></script>
     </body>
 </html>
