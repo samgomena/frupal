@@ -6,13 +6,18 @@ function createOverlay() {
   let close = document.createElement("div");
   let options = document.createElement("div");
   let submit = document.createElement("input");
+  let choose = document.getElementById("myDropdown");
+  let chooseBtn = document.getElementById("dropbtn");
 
   start.innerHTML = "Start";
+  start.setAttribute("style", "cursor:pointer");
+  start.id = "update"
   start.addEventListener("click", function(){
     document.getElementById("menu").style.display = "none";
   });
 
   options.innerHTML = "Options";
+  options.setAttribute("style", "cursor:pointer");
   options.addEventListener("click", function(){
     document.getElementById("options").style.display = "block";
   });
@@ -31,17 +36,43 @@ function createOverlay() {
     let money = input[4].value;
     let items = input[5].value;
     let tiles = input[6].value;
-    // FIXME: Fix this JSON object.
-    localStorage.setItem(map, JSON.stringify([size,loc,energy,money,items,tiles]));
+    // Using stringify for formatting purposes.
+    localStorage.setItem(map, JSON.stringify([map,size,loc,energy,money,items,tiles]));
   });
 
   close.innerHTML = "&times";
   close.setAttribute("href", "javascript:void(0)");
-  close.setAttribute("style", "position:absolute;top:0px;right:0px;");
+  close.setAttribute("style", "position:absolute;top:0px;right:0px;cursor:pointer;");
   close.addEventListener("click", function(){
     document.getElementById("options").style.display = "none";
   });
-
+  
+	chooseBtn.setAttribute("style", "display:inline-block")
+	chooseBtn.addEventListener("click", function(){
+		while(choose.firstChild){
+			choose.removeChild(choose.firstChild)
+		}
+		if(choose.style.display == "none"){
+			for(let i = 0; i < localStorage.length; ++i) {
+				if(localStorage.key(i) == "currentMap")
+					continue
+				let mapLoad = document.createElement("a")
+				mapLoad.innerHTML = localStorage.key(i)
+				mapLoad.addEventListener("click", function(){
+					localStorage.setItem("currentMap", localStorage.getItem(localStorage.key(i)))
+					alert(localStorage.key(i) + " has been loaded.")
+				})
+				choose.appendChild(mapLoad);
+			}
+			choose.style.display = "inline-block"
+		}
+		else
+			choose.style.display = "none"
+	})
+	chooseBtn.addEventListener("mouseleave", function(){
+		choose.style.display = "none"
+	})
+ 
   document.getElementById("form").appendChild(submit);
   document.getElementById("options").appendChild(close);
 }
