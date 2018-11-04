@@ -1,84 +1,51 @@
 import Person from "./person";
 import Display from "./display";
-import { Map, DEFAULT_PARAMS } from "./map";
+import parse_config from "./parse_config";
+import Game from "./game";
 import createOverlay from "./overlay";
+import { Map, DEFAULT_PARAMS } from "./map";
 import "../styles/main.scss";
-
-let Hero = new Person("Ben", {x:0,y:0}, 100, 100); 
-let HUD = new Display(Hero);
-let map = new Map(DEFAULT_PARAMS);
-
-// TODO: Change the name of this file to something like "main"
-
-// FIXME: Find a place to put the dead status check.
-// FIXME: We can probably sweep this elsewhere.
-/*
- FIXME: Not sure if map should keep track of player movement, or if the
- player should update the map in regards to its position.
-*/
-
-function moveEvent(moveId, energy) {
-  switch(moveId) {
-  case "up":
-  case "w":
-    Hero.goUp();
-    break;
-  case "down":
-  case "s":
-    Hero.goDown();
-    break;
-  case "left":
-  case "a":
-    Hero.goLeft();
-    break;
-  case "right":
-  case "d":
-    Hero.goRight();
-    break;
-  default:
-    throw new Error("Not an event!");
-  }
-  
-  // Eventually get energy from a getEnergy function.
-  Hero.consumeEnergy(energy);
-
-  if(HUD.update()) {
-    return true;
-  }
-  else {
-    return false;
-  }
-}
-
-function setMoveEvents() {
-  // FIXME: A bit clunky, but whatever.
-  let upEl = document.getElementById("up");
-  let downEl = document.getElementById("down");
-  let leftEl = document.getElementById("left");
-  let rightEl = document.getElementById("right");
-
-  // TODO: Make a master Events thing to let events pass through.
-
-  // TODO: Eventually replace 1 with a function which grabs tile energy cost
-  // As in allow the moveEvent function to call the getTileEnergy function inside of itself.
-  upEl.addEventListener("click", () => moveEvent("up", 1));
-  downEl.addEventListener("click", () => moveEvent("down", 1));
-  leftEl.addEventListener("click", () => moveEvent("left", 1));
-  rightEl.addEventListener("click", () => moveEvent("right", 1));
-
-  // e stands for event
-  document.addEventListener("keypress", (e) => {
-    // TODO: May want to debounce?
-    const keyName = e.key;
-    const validKeys = ["w", "a", "s", "d"];
-    if(validKeys.find((el) => {
-      return el === keyName;
-    })) {
-      moveEvent(keyName, 1);
-    }
-  });
-}
-
-
+// Don't move this, Overlay must be created before Map and before update event listener.
 createOverlay();
-setMoveEvents();
+
+// Parse the game config
+let game_config = parse_config.parse(parse_config.default_config);
+
+// TODO: Use map class instead of raw config
+let map = game_config.map;
+let hero_init = game_config.player;
+
+// Sets text in the browser tab
+setTitle(game_config.title);
+// This triggers map refresh, has to come after call to overlay above.
+var update = document.getElementById("update");
+update.addEventListener("click", function(){
+  if(!localStorage.key("currentMap"))
+    return;
+  let paramList = Array.from(JSON.parse(localStorage.getItem("currentMap")));
+  for(let i = 0; i < paramList.length; ++i){ // For the person linking paramList and DEFAULT_PARAMS up.
+    console.log(i + ": " + paramList[i]);
+  }
+  // ...
+  // Whoever is working on the map, connect the array of parameters (paramList)
+  // to the DEFAULT_PARAM thing so that a new map can be generated upon pressing
+  // the start button. 
+  // ...
+  map = new Map(DEFAULT_PARAMS); // Reset
+});
+
+// Grab the canvas element
+let context = document.getElementById("demo");
+let hero = new Person(hero_init, map);
+let display = new Display(hero, map);
+
+let game = new Game(context, map, hero, display);
+game.run();
+
+/**
+ * This function sets the windows title element to `title`
+ * @param title Text to set the window title to
+ */
+function setTitle(title) {
+  document.getElementById("game-title").innerHTML = title;
+}
