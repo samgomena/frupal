@@ -1,16 +1,14 @@
 <html>
     <head>
-        <title id="game-title"></title>
+        <title id="game-title">Frupal</title>
 
     </head>
     <body>
-        <!-- display div is handled by the display class -->
-        <div id="display" class="game"></div>
 
         <!-- menu div is an overlay that represents the game start menu -->
-        <!--<div id="menu" class="overlay">-->
-            <!--<div id="sub" class="overlay-content"></div>-->
-        <!--</div>-->
+        <div id="menu" class="overlay">
+            <div id="sub" class="overlay-content"></div>
+        </div>
 
         <!-- options div is an overlay that represents the customization menu -->
         <div id="options" class="overlay" style="display:none;">
@@ -30,19 +28,20 @@
 				</button>
 			</div>
         </div>
-        <h1> Frupal </h1>
-        <div class="movement__button">
-            <button id="up">North</button>
-            <div class="movement__left-right">
-                <button id="left">West</button>
-                <button id="right">East</button>
+        <div class="game">
+            <!-- display div is handled by the display class -->
+            <div id="display" class="game-display"></div>
+            <h1> Frupal </h1>
+            <div class="movement__button">
+                <button id="up">North</button>
+                <div class="movement__left-right">
+                    <button id="left">West</button>
+                    <button id="right">East</button>
+                </div>
+                <button id="down">South</button>
             </div>
-            <button id="down">South</button>
-        </div>
-
-        <!--<div>-->
             <canvas id="demo" style="background: #ddd;"></canvas>
-        <!--</div>-->
+        </div>
         <script defer src="./scripts/frupal.js"></script>
     </body>
 </html>
