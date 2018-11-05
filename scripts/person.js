@@ -76,7 +76,6 @@ class Person {
       this.x = this.map.width;
     }
 
-    this.consumeEnergy(this.getPlayerLocCost());
   }
 
   /**
@@ -96,7 +95,6 @@ class Person {
       this.y = this.map.width;
     }
 
-    this.consumeEnergy(this.getPlayerLocCost());
   }
 
   // consumeEnergy should eventually take a tile type
@@ -118,7 +116,7 @@ class Person {
     // These should probably be pure
     this.moveX(step_x);
     this.moveY(step_y);
-
+    this.consumeEnergy(this.getPlayerLocCost());
   }
 }
 

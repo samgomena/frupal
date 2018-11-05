@@ -7,7 +7,6 @@ import { loseGame } from "./endGame";
  */
 export default class Game {
   constructor(canvas, map, hero, display, fps=5) {
-    console.log(map);
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.map = map;
