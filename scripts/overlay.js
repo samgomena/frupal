@@ -2,6 +2,7 @@
 
 function createOverlay() {
   // TODO: Make these elements static in the html.
+  document.getElementById("end").style.display = "none";
   let start = document.createElement("div");
   let close = document.createElement("div");
   let options = document.createElement("div");

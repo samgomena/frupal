@@ -1,3 +1,5 @@
+import loseGame from "./endGame";
+
 class Display {
   constructor(person, map) {
     this.map = map;
@@ -43,6 +45,7 @@ class Display {
       // Reload the game to default
       window.location.reload(true);
 
+      loseGame();
       //TODO: game should end here
 
       return false;
