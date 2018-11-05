@@ -1,18 +1,22 @@
 <html>
     <head>
         <title id="game-title">Frupal</title>
-
+        <script defer src="./scripts/frupal.js"></script>
     </head>
     <body>
 
         <!-- menu div is an overlay that represents the game start menu -->
         <div id="menu" class="overlay">
-            <div id="sub" class="overlay-content"></div>
+            <div id="sub" class="overlay-content">
+                <div id="start">Start</div>
+                <div id="close">&times</div>
+            </div>
         </div>
 
         <!-- options div is an overlay that represents the customization menu -->
         <div id="options" class="overlay" style="display:none;">
             <h2>Options</h2>
+            <button id="update">Update</button>
             <div id="form" class="overlay-content">
                 <input type="text" placeholder="Map Name" name="in"> <br>        <!-- map name -->
                 <input type="text" placeholder="Map Size" name="in"> <br>        <!-- map size -->
@@ -52,8 +56,5 @@
           </div>
         </div>
       </div>
-
-
-        <script defer src="./scripts/frupal.js"></script>
     </body>
 </html>

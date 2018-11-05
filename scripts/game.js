@@ -1,4 +1,5 @@
 "use strict";
+import { loseGame } from "./endGame";
 
 /**
  * This class is responsible for initializing the height and width of the canvas element that serves as the
@@ -32,7 +33,6 @@ export default class Game {
   }
 
   moveEvent(moveId) {
-
     switch(moveId) {
     case "up":
     case "ArrowUp":
@@ -129,9 +129,16 @@ export default class Game {
      */
   update() {
     this.hero_move_queue.forEach(movement => {
-      this.hero.move(movement.x, movement.y);
-      // Meh...
-      this.hero_move_queue.shift();
+      if(this.hero.getEnergy() > 0) {
+        this.hero.move(movement.x, movement.y);
+        this.hero_move_queue.shift();
+      }
+      else {
+        alert("You have run out of energy :(");
+        this.hero.isDead();
+        loseGame();
+        window.location.reload(true);
+      }
     });
   }
 
