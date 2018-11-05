@@ -157,7 +157,7 @@ export function parse(game_config) {
 export function setGameData(gameData) {
   // console.log("GAME DATA ", gameData);
   // Populate map layer with map objects
-  let obstacle_layer = new Array(+gameData.board_size * +gameData.board_size);
+  let obstacle_layer = new Array((gameData.board_size + 1) * (gameData.board_size + 1));
 
   // Fill obstacle layer with default values
   obstacle_layer.fill({
