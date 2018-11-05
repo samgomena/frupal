@@ -169,9 +169,11 @@ export function setGameData(gameData) {
   });
 
   gameData.map.objects.forEach(map_object => {
-    obstacle_layer[map_object.x * map_object.y] = Object.assign(
+    let tile = obstacle_layer[map_object.x * map_object.y];
+    tile = Object.assign(
+      {},
       obstacle_layer[map_object.x * map_object.y],
-      map_object
+      map_object,
     )
   });
   gameData.map.layers = obstacle_layer;

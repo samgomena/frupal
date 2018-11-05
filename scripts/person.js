@@ -88,6 +88,7 @@ class Person {
     this.y += dir_y;
 
     if(this.y > this.map.width) {
+      // FIXME: Should this not be 0?
       this.y = 1;
     }
 
