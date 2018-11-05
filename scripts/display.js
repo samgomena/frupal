@@ -3,13 +3,13 @@ import loseGame from "./endGame";
 class Display {
   constructor(person, map) {
     this.map = map;
-    this.person = person;
+    this.hero = person;
     this.displayEl = document.createElement("div");
 
-    const terrain = this.map.getPlayerLocInfo();
+    const terrain = this.hero.getPlayerLocInfo();
     // Location, Energy, Money nodes.
     // FIXME: Make it look prettier?
-    this.lNode = document.createTextNode(`Current Location: (${this.map.playerLoc.x}, ${this.map.playerLoc.y})`);
+    this.lNode = document.createTextNode(`Current Location: (${this.hero.x}, ${this.hero.y})`);
     this.eNode = document.createTextNode("Energy: 100");
     this.mNode = document.createTextNode("Whiffles: 100");
     this.tNode = document.createTextNode(`Terrain: ${terrain}`);
@@ -29,25 +29,27 @@ class Display {
 
   //return true to continue game
   update() {
-    const location = this.map.getPlayerLoc();
-    const terrain = this.map.getPlayerLocInfo();
-    const money = this.person.getMoney();
-    const energy = this.person.getEnergy();
+    const location = this.hero.getPlayerLoc();
+    const terrain = this.hero.getPlayerLocInfo();
+    const money = this.hero.getMoney();
+    const energy = this.hero.getEnergy();
 
     //check that energy hasn't run out
     // FIXME: Display should not control if game ends.
-    if(!energy) {
+    if(energy <= 0) {
     
       //pop up box
-      //alert("You have run out of energy \n\n GAME OVER!");
-      this.person.isDead();
+      alert("You have run out of energy :(");
+      this.hero.isDead();
+
+      // Reload the game to default
+      window.location.reload(true);
 
       loseGame();
       //TODO: game should end here
 
       return false;
     }
-
 
     const locationText = `Current Location: (${location.x}, ${location.y})`;
     const moneyText = `Whiffles: ${money}`;

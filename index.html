@@ -1,10 +1,9 @@
 <html>
     <head>
-        <script defer src="./scripts/frupal.js"></script>
+        <title id="game-title">Frupal</title>
+
     </head>
     <body>
-        <!-- display div is handled by the display class -->
-        <div id="display" class="game"></div>
 
         <!-- menu div is an overlay that represents the game start menu -->
         <div id="menu" class="overlay">
@@ -23,18 +22,26 @@
                 <textarea placeholder="Items" name="in"></textarea> <br>         <!-- items -->
                 <textarea placeholder="Tiles" name="in"></textarea> <br>         <!-- tiles -->
             </div>
+			<div class="dropdown">
+				<button id="dropbtn" class="dropbtn">Choose Map
+				<div id="myDropdown" class="dropdown-content" style="display:none"></div>
+				</button>
+			</div>
         </div>
-        <h1> Frupal </h1>
-        <div id="display"></div>
-        <div class="movement__button">
-            <button id="up">North</button>
-            <div class="movement__left-right">
-                <button id="left">West</button>
-                <button id="right">East</button>
+        <div class="game">
+            <!-- display div is handled by the display class -->
+            <div id="display" class="game-display"></div>
+            <h1> Frupal </h1>
+            <div class="movement__button">
+                <button id="up">North</button>
+                <div class="movement__left-right">
+                    <button id="left">West</button>
+                    <button id="right">East</button>
+                </div>
+                <button id="down">South</button>
             </div>
-            <button id="down">South</button>
+            <canvas id="demo" style="background: #ddd;"></canvas>
         </div>
-        <div id="end" class="overlay"></div>
-
+        <script defer src="./scripts/frupal.js"></script>
     </body>
 </html>

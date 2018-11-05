@@ -1,4 +1,19 @@
-node_modules/
-dist/
-.cache/
-.eslintrc.json
+# Ignore everything
+*
+
+# Except for html, js, and css
+!*.html
+!**/*.html
+
+!*.js
+!**/*.js
+
+!*.scss
+!**/*.scss
+
+!package.json
+!README.md
+
+# And this file, obviously
+!.gitignore
+

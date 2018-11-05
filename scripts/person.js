@@ -1,23 +1,31 @@
 class Person {
-  constructor(name, location, energy, money) {
-    this.name = name;
-    this.location = location;
-    this.energy = energy;
-    this.money = money;
+  constructor(hero_init, map) {
+    this.name = "I made this up";
+    this.width = 64; // Magic for now
+    this.height = 64;
+    this.x = hero_init.pos.x;
+    this.y = hero_init.pos.y;
+    this.location = hero_init.pos;
+    this.energy = hero_init.energy;
+    this.money = hero_init.whiffles;
+    this.items = hero_init.items;
+
+    this.map = map;
     this.dead = false;
+
+    // Player's possible movements
+    this.up = { x: 0, y: -1 };
+    this.down = { x: 0, y: 1 };
+    this.left = { x: -1, y: 0 };
+    this.right = { x: 1, y: 0 };
+
   }
 
   printStatus() {
     return `Name: ${this.name}\n`
-            +`Location: (${this.location.x},${this.location.y})\n`
+            +`Location: (${this.x}, ${this.y})\n`
             +`Energy: ${this.energy}\n`
             +`Money: ${this.money}\n`;
-  }
-
-  // FIXME: Move this method into the map class as getPlayerLocation
-  getLocation() {
-    return this.location;
-
   }
 
   getEnergy() {
@@ -26,6 +34,21 @@ class Person {
 
   getMoney() {
     return this.money;
+  }
+
+  getPlayerLocInfo() {
+    return this.map.layers[1][this.x * this.y].terrain.name;
+  }
+
+  getPlayerLocCost() {
+    return this.map.layers[1][this.x * this.y].terrain.cost;
+  }
+
+  getPlayerLoc() {
+    return {
+      x: this.x,
+      y: this.y
+    };
   }
 
   updateStatus(newLoc, energyCost) {
@@ -37,12 +60,64 @@ class Person {
     this.dead = true;
   }
 
+  /**
+    * This function moves a player `dir_x` units in the x direction.
+    *
+    * @param dir_x The number of movements to take in the x direction
+    */
+  moveX(dir_x) {
+    this.x += dir_x;
+
+    if(this.x >= this.map.width) {
+      this.x = 0;
+    }
+
+    if(this.x < 0) {
+      this.x = this.map.width - 1;
+    }
+
+    this.consumeEnergy(this.getPlayerLocCost());
+  }
+
+  /**
+     * This function moves a player `dir_y` units in the y direction.
+     *
+     * @param dir_y The number of movements to take in the y direction
+     */
+  moveY(dir_y) {
+    this.y += dir_y;
+
+    if(this.y >= this.map.width) {
+      this.y = 0;
+    }
+
+    if(this.y < 0) {
+      this.y = this.map.width - 1;
+    }
+
+    this.consumeEnergy(this.getPlayerLocCost());
+  }
+
   // consumeEnergy should eventually take a tile type
   // as an argument to decide how much energy is lost
   // during movement.
   consumeEnergy(lost) {
-    if(this.energy == 0) this.dead = true;
+    if(this.energy === 0) this.dead = true;
     this.energy -= lost;
+  }
+
+  /**
+     * This function calls move updates for the x and y directions.
+     *
+     * @param step_x The number of movements to take in the x direction
+     * @param step_y The number of movements to take in the y direction
+     */
+  move(step_x, step_y) {
+
+    // These should probably be pure
+    this.moveX(step_x);
+    this.moveY(step_y);
+
   }
 }
 
