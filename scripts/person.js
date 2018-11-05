@@ -68,12 +68,12 @@ class Person {
   moveX(dir_x) {
     this.x += dir_x;
 
-    if(this.x >= this.map.width) {
-      this.x = 0;
+    if(this.x > this.map.width) {
+      this.x = 1;
     }
 
-    if(this.x < 0) {
-      this.x = this.map.width - 1;
+    if(this.x < 1) {
+      this.x = this.map.width;
     }
 
     this.consumeEnergy(this.getPlayerLocCost());
@@ -87,12 +87,12 @@ class Person {
   moveY(dir_y) {
     this.y += dir_y;
 
-    if(this.y >= this.map.width) {
-      this.y = 0;
+    if(this.y > this.map.width) {
+      this.y = 1;
     }
 
-    if(this.y < 0) {
-      this.y = this.map.width - 1;
+    if(this.y < 1) {
+      this.y = this.map.width;
     }
 
     this.consumeEnergy(this.getPlayerLocCost());
@@ -103,7 +103,7 @@ class Person {
   // during movement.
   consumeEnergy(lost) {
     if(this.energy === 0) this.dead = true;
-    this.energy -= lost;
+      this.energy -= lost;
   }
 
   /**
