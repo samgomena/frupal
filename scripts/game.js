@@ -7,6 +7,7 @@ import { loseGame } from "./endGame";
  */
 export default class Game {
   constructor(canvas, map, hero, display, fps=5) {
+    console.log(map);
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.map = map;
@@ -129,6 +130,7 @@ export default class Game {
   update() {
     this.hero_move_queue.forEach(movement => {
       if(this.hero.getEnergy() > 0) {
+        console.log(this.hero.getPlayerLocInfo());
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
       }
