@@ -34,7 +34,10 @@ function loseGame() {
 
 
   end.addEventListener('mousedown', function() {
-    location.reload();
+    //location.reload();
+
+  document.getElementById("end").style.display = "none";
+  document.getElementById("menu").style.display = "block";
   });
 }
 
