@@ -38,7 +38,7 @@ class Display {
       return false;
     }
 
-    const locationText = `Current Location: (${location.x + 1}, ${location.y + 1})`;
+    const locationText = `Current Location: (${location.x}, ${location.y})`;
     const moneyText = `Whiffles: ${money}`;
     const energyText = `Energy: ${energy}`;
     const terrainText = `Terrain: ${terrain}`;

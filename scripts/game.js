@@ -5,7 +5,6 @@ import { loseGame } from "./endGame";
  * This class is responsible for initializing the height and width of the canvas element that serves as the
  * game board. It also binds event listeners to the keys responsible for moving the hero around the map.
  */
-// FIXME: Character does not show up in the bottom row of the canvas.
 export default class Game {
   constructor(canvas, map, hero, display, fps=5) {
     this.canvas = canvas;
@@ -151,11 +150,12 @@ export default class Game {
     this.ctx.arc(
       (this.hero.x * this.map.tile_size) - (this.hero.width / 2),
       (this.hero.y * this.map.tile_size) - (this.hero.height / 2),
-      32,
+      31,
       0,
       2 * Math.PI,
       false
     );
+    this.ctx.fill();
     this.ctx.stroke();
     // this.ctx.restore();
 
@@ -173,6 +173,7 @@ export default class Game {
     let x, y;
 
     // Draw horizontal grid lines
+    //Uses range 0 - map.height inclusive to draw borders (#cells + 1)
     for (let step_x = 0; step_x <= this.map.height; ++step_x) {
       y = step_x * this.map.tile_size;
       this.ctx.beginPath();
@@ -182,6 +183,7 @@ export default class Game {
     }
 
     // Draw vertical grid lines
+    //Uses range 0 - map.width inclusive to draw borders (#cells + 1)
     for (let step_y = 0; step_y <= this.map.width; ++step_y) {
       x = step_y * this.map.tile_size;
       this.ctx.beginPath();

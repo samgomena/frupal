@@ -69,10 +69,10 @@ class Person {
     this.x += dir_x;
 
     if(this.x > this.map.width) {
-      this.x = 0;
+      this.x = 1;
     }
 
-    if(this.x < 0) {
+    if(this.x < 1) {
       this.x = this.map.width;
     }
 
@@ -88,10 +88,10 @@ class Person {
     this.y += dir_y;
 
     if(this.y > this.map.width) {
-      this.y = 0;
+      this.y = 1;
     }
 
-    if(this.y < 0) {
+    if(this.y < 1) {
       this.y = this.map.width;
     }
 
@@ -103,7 +103,7 @@ class Person {
   // during movement.
   consumeEnergy(lost) {
     if(this.energy === 0) this.dead = true;
-    this.energy -= lost;
+      this.energy -= lost;
   }
 
   /**
