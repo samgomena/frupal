@@ -9,12 +9,14 @@ body {
   display: flex;
   flex-direction: column;
   height: 100px;
-  justify-content: space-between;
+  justify-content: center;
+  column-gap: normal;
 
   button {
     display: inline-block;
     margin: 0 auto;
-    width: 25%;
+    width: 50%;
+    border-radius: 12px;
   }
 }
 
@@ -22,4 +24,13 @@ body {
   display: flex;
   justify-content: center;
   width: 100%;
+}
+
+.column {
+  float: left;
+  padding: 10px;
+}
+
+.game {
+  display: none;
 }

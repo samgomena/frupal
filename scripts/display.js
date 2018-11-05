@@ -35,16 +35,6 @@ class Display {
     //check that energy hasn't run out
     // FIXME: Display should not control if game ends.
     if(energy <= 0) {
-    
-      //pop up box
-      alert("You have run out of energy :(");
-      this.hero.isDead();
-
-      // Reload the game to default
-      window.location.reload(true);
-
-      //TODO: game should end here
-
       return false;
     }
 
@@ -59,6 +49,10 @@ class Display {
     this.tNode.replaceData(0, 50, terrainText);
 
     return true;
+  }
+
+  reset() {
+    // TODO: Reset display.
   }
 }
 

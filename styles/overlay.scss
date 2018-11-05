@@ -25,21 +25,25 @@
   text-align: center;
   top: 25%;
   width: 100%;
+
 }
 
 .overlay div:hover, .overlay div:focus {
   color: #cd5c5c;
 }
+
 .overlay input {
-  position: relative;
-  padding: 5px;
-  margin: 8px;
   border: 2px solid rgba(238, 233, 233, 1);
+  margin: 8px;
+  padding: 5px;
+  position: relative;
   transition: 0.3s;
 }
+
 .overlay input:hover, .overlay input:focus {
   border: 2px solid rgba(205, 92, 92, 0.7);
 }
+
 .overlay textarea {
   position: relative;
   width: 183px;
@@ -59,54 +63,56 @@
 }
 
 .dropbtn {
-    background-color: #d27979;
-    color: black;
-    padding: 16px;
-    font-size: 16px;
-    border: none;
+  background-color: #d27979;
+  color: black;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
 	display: inline-block;
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .dropbtn:hover, .dropbtn:focus {
-    background-color: rgb(214, 143, 143);
+  background-color: rgb(214, 143, 143);
 }
 
 .dropdown {
-    position: relative;
-    display: inline-block;
+  position: relative;
+  display: inline-block;
 }
 
 .dropdown-content {
-    display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
 }
 
 .dropdown-content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: inline-sblock;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: inline-sblock;
 }
 
-.dropdown a:hover {background-color: #ddd;}
+.dropdown a:hover {
+  background-color: #ddd;
+}
 
 h1 {
   text-align: center;
   font-size: 36px;
   color: #818181;
-  padding-top: 50px;
+  padding-top: 1px;
 }
 
 h2 {
   text-align: center;
   font-size: 36px;
   color: #818181;
-  padding-top: 170px;
+  padding-top: 25px;
 }
 
 body {
@@ -116,4 +122,8 @@ body {
 p {
   font-size: 18px;
   color: #818181;
+}
+
+#start {
+  cursor: pointer;
 }
