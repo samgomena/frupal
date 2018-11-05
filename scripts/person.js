@@ -37,11 +37,11 @@ class Person {
   }
 
   getPlayerLocInfo() {
-    return this.map.layers[1][this.x * this.y].terrain.name;
+    return this.map.layers[this.x * this.y].terrain.name;
   }
 
   getPlayerLocCost() {
-    return this.map.layers[1][this.x * this.y].terrain.cost;
+    return this.map.layers[this.x * this.y].terrain.cost;
   }
 
   getPlayerLoc() {

@@ -4,40 +4,40 @@ const TERRAIN_MAP = {
   0: {
     name: "MEADOW",
     cost: 1,
-    color: "#32CD32",
+    color: "#32CD32"
   },
   1: {
     name: "FOREST",
     cost: 1,
-    color: "#0c854e",
+    color: "#0c854e"
   },
   2: {
     name: "WATER",
-    cost: 1,
-    color: "#218aff",
+    cost: 0,
+    color: "#218aff"
   },
   3: {
     name: "WALL",
     cost: 1,
-    color: "#a7a0a5",
+    color: "#a7a0a5"
   },
   4: {
     name: "BOG",
     cost: 2,
-    color: "#5b4a4d",
+    color: "#5b4a4d"
   },
   5: {
     name: "SWAMP",
     cost: 2,
-    color: "#475b41",
-  },
+    color: "#475b41"
+  }
 };
 
 const NUM_REGEX = /(\d+)/;
 const COORD_REGEX = /(\d+),\s*(\d+)/;
 const MAP_ITEM_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
 
-let default_config =
+export const DEFAULT_CONFIG =
     `Sample Frupal Game Map
 25
 #####################
@@ -77,11 +77,10 @@ Pretty Rock
  * @param game_config A map 'file' to parse
  * @returns Object An object containing the parsed data
  */
-function parse(game_config) {
+export function parse(game_config) {
   const GAME = {};
   GAME.map = {};
   GAME.map.tile_size = 64; // Magic for now
-  GAME.map.layers = [];
   GAME.map.objects = [];
   GAME.player = {};
   GAME.player.items = {};
@@ -91,10 +90,12 @@ function parse(game_config) {
   // Unpack and truncate first three items
   let [game_title, board_size, first_delimiter] = split_map_file.splice(0, 3);
 
+  GAME.board_size = board_size;
+
   GAME.title = game_title;
   GAME.map.width = GAME.map.height = +board_size;
   // Control layer
-  GAME.map.layers.push(new Array(+board_size * +board_size));
+  GAME.map.layers = new Array(+board_size * +board_size);
 
   let delimiter = first_delimiter.charAt(0);
 
@@ -105,7 +106,7 @@ function parse(game_config) {
   let [, hero_start_x, hero_start_y] = split_map_file.splice(0, 1)[0].match(COORD_REGEX);
   GAME.player.pos = {
     x: +hero_start_x,
-    y: +hero_start_y,
+    y: +hero_start_y
   };
 
   let [, hero_energy] = split_map_file.splice(0, 1)[0].match(NUM_REGEX);
@@ -146,36 +147,44 @@ function parse(game_config) {
       y: +y,
       visible: Boolean(+visibility),
       terrain: TERRAIN_MAP[terrain],
-      name: name === "None" ? "" : name,
+      name: name === "None" ? "" : name
     });
   });
 
+  return GAME;
+}
+
+export function setGameData(gameData) {
+  // console.log("GAME DATA ", gameData);
   // Populate map layer with map objects
-  let obstacle_layer = new Array(+board_size * +board_size);
+  let obstacle_layer = new Array(+gameData.board_size * +gameData.board_size);
 
   // Fill obstacle layer with default values
   obstacle_layer.fill({
-    x: NaN,
-    y: NaN,
+    x: undefined,
+    y: undefined,
     visible: false,
     terrain: TERRAIN_MAP[0],
-    name: "None",
+    name: "None"
   });
 
-  GAME.map.objects.forEach(map_object => {
-    obstacle_layer[map_object.x * map_object.y] = map_object;
+  gameData.map.objects.forEach(map_object => {
+    obstacle_layer[map_object.x * map_object.y] = {
+      ...obstacle_layer[map_object.x * map_object.y],
+      ...map_object
+    }
   });
-  GAME.map.layers.push(obstacle_layer);
+  gameData.map.layers = obstacle_layer;
 
 
   // Perform checks
 
   // Throw if player's starting location is off the map
-  if(GAME.player.pos.x > GAME.map.width || GAME.player.pos.y > GAME.map.height) {
-    throw Error(`Starting position of (${GAME.player.pos.x}, ${GAME.player.pos.y}) is out of bounds.`);
+  if(gameData.player.pos.x > gameData.map.width || gameData.player.pos.y > gameData.map.height) {
+    throw Error(`Starting position of (${gameData.player.pos.x}, ${gameData.player.pos.y}) is out of bounds.`);
   }
 
-  let contains_diamonds = Boolean(GAME.map.objects.filter(board_object => {
+  let contains_diamonds = Boolean(gameData.map.objects.filter(board_object => {
     return board_object.name === "Royal Diamonds";
   }).length);
 
@@ -183,12 +192,6 @@ function parse(game_config) {
   if(!contains_diamonds) {
     throw Error("The map does not contain the royal diamonds.");
   }
-
-  return GAME;
+  // console.log("GAME DATA ", gameData);
+  return gameData;
 }
-
-// console.log(parse(default_config));
-export default {
-  default_config: default_config,
-  parse: parse,
-};

@@ -21,11 +21,10 @@
 .overlay-content {
   margin-top: 30px;
   overflow: auto;
-  position: fixed;
+  // position: fixed;
   text-align: center;
   top: 25%;
   width: 100%;
-
 }
 
 .overlay div:hover, .overlay div:focus {
