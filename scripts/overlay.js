@@ -5,7 +5,7 @@ function createOverlay() {
   let start = document.getElementById("start");
   let close = document.getElementById("close");
   let options = document.createElement("div");
-  let submit = document.createElement("input");
+  let submit = document.getElementById("submit");
   let choose = document.getElementById("myDropdown");
   let chooseBtn = document.getElementById("dropbtn");
 
@@ -24,20 +24,7 @@ function createOverlay() {
   document.getElementById("sub").appendChild(options);
 
   // Need to add second options overlay here
-  submit.value = "Create";
-  submit.type = "button";
-  submit.addEventListener("click", function(){
-    let input = document.getElementsByName("in");
-    let map  = input[0].value;
-    let size  = input[1].value;
-    let loc  = input[2].value;
-    let energy = input[3].value;
-    let money = input[4].value;
-    let items = input[5].value;
-    let tiles = input[6].value;
-    // Using stringify for formatting purposes.
-    localStorage.setItem(map, JSON.stringify([map,size,loc,energy,money,items,tiles]));
-  });
+  submit.addEventListener("click", handleSubmit);
 
   close.setAttribute("href", "javascript:void(0)");
   close.setAttribute("style", "position:absolute;top:0px;right:0px;cursor:pointer;");
@@ -71,8 +58,46 @@ function createOverlay() {
     choose.style.display = "none";
   });
  
-  document.getElementById("form").appendChild(submit);
   document.getElementById("options").appendChild(close);
+}
+
+function handleSubmit() {
+  // TODO: Validate the form. Ex: make sure player_pos x is not a string.
+  // TODO: Fix all the input array things.
+  let input = document.getElementsByName("in");
+  let size = Number(input[1].value);
+  let mapObjInput = input[7].value.split(";");
+  let mapObjects = [];
+  mapObjInput.forEach((val) => {
+    if(val !== "") {
+      mapObjects.push({
+        x: Number(val.match(/\d+/g)[0]),
+        y: Number(val.match(/\d+/g)[1]),
+        name: val.match(/[a-zA-Z]+/g).join(" ")
+      });
+    }
+  });
+  let config = {
+    board_size: size,
+    title: input[0].value,
+    player: {
+      pos: {
+        x: Number(input[2].value),
+        y: Number(input[3].value)
+      },
+      energy: Number(input[4].value),
+      wiffles: Number(input[5].value),
+      items: input[6].value
+    },
+    map: {
+      // FIXME: These two are redundant. Remove in the future
+      height: size,
+      width: size,
+      objects: mapObjects 
+    }
+  };
+  // Using stringify for formatting purposes.
+  localStorage.setItem(config.title, JSON.stringify(config));
 }
 
 export default createOverlay;
