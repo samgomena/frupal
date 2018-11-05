@@ -1,44 +1,43 @@
 
 
-function winGame() {
-  let theend = document.createElement("div");
+export function winGame() {
+  let theEnd = document.createElement("div");
   let over  = document.createElement("div");
   let again = document.createElement("div");
-  theend.innerHTML = "You just found the jewels! YOU WIN!";
+  theEnd.innerHTML = "You just found the jewels! YOU WIN!";
   over.innerHTML = "Congratulations!";
   again.innerHTML = "Click anywhere to reload.";
-  document.getElementById("end").style.display = "block";
-  document.getElementById("end").appendChild(theend);
+  let end = document.getElementById("end").style.display = "block";
+  document.getElementById("end").appendChild(theEnd);
   document.getElementById("end").appendChild(over);
   document.getElementById("end").appendChild(again);
   end.innerHTML = "You have run out of energy.\n\nGame Over.";
 
 
-  end.addEventListener('mousedown', function() {
+  end.addEventListener("mousedown", function() {
     location.reload();
   });
 }
 
-function loseGame() {
-  let theend = document.createElement("div");
+export function loseGame() {
+  let theEnd = document.createElement("div");
   let over  = document.createElement("div");
   let again = document.createElement("div");
+  let end = document.createElement("div");
+  end.setAttribute("id", "end");
   
-  theend.innerHTML = "You have run out of energy.";
-  over.innerHTML = "Game Over.";
-  again.innerHTML = "Click anywhere to reload.";
-  document.getElementById("end").style.display = "block";
-  document.getElementById("end").appendChild(theend);
-  document.getElementById("end").appendChild(over);
-  document.getElementById("end").appendChild(again);
+  // TODO: Use createTextNode
+  theEnd.createTextNode("You have run out of energy.");
+  over.createTextNode("Game Over.");
+  again.createTextNode("Click anywhere to reload.");
+
+  end.appendChild(theEnd);
+  end.appendChild(over);
+  end.appendChild(again);
 
 
-  end.addEventListener('mousedown', function() {
-    //location.reload();
-
-  document.getElementById("end").style.display = "none";
-  document.getElementById("menu").style.display = "block";
+  end.addEventListener("mousedown", function() {
+    document.getElementById("end").style.display = "none";
+    document.getElementById("menu").style.display = "block";
   });
 }
-
-export default loseGame;

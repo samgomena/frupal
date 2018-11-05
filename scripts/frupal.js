@@ -18,8 +18,9 @@ let hero_init = game_config.player;
 // Sets text in the browser tab
 setTitle(game_config.title);
 // This triggers map refresh, has to come after call to overlay above.
-var update = document.getElementById("update");
-update.addEventListener("click", function(){
+let update = document.getElementById("update");
+update.addEventListener("click", function() {
+  console.log("TEST");
   if(!localStorage.key("currentMap"))
     return;
   let paramList = Array.from(JSON.parse(localStorage.getItem("currentMap")));

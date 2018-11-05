@@ -2,19 +2,16 @@
 
 function createOverlay() {
   // TODO: Make these elements static in the html.
-  document.getElementById("end").style.display = "none";
-  let start = document.createElement("div");
-  let close = document.createElement("div");
+  let start = document.getElementById("start");
+  let close = document.getElementById("close");
   let options = document.createElement("div");
   let submit = document.createElement("input");
   let choose = document.getElementById("myDropdown");
   let chooseBtn = document.getElementById("dropbtn");
 
-  start.innerHTML = "Start";
-  start.setAttribute("style", "cursor:pointer");
-  start.id = "update";
   start.addEventListener("click", function(){
     document.getElementById("menu").style.display = "none";
+    document.getElementsByClassName("game")[0].style.display = "block";
   });
 
   options.innerHTML = "Options";
@@ -42,7 +39,6 @@ function createOverlay() {
     localStorage.setItem(map, JSON.stringify([map,size,loc,energy,money,items,tiles]));
   });
 
-  close.innerHTML = "&times";
   close.setAttribute("href", "javascript:void(0)");
   close.setAttribute("style", "position:absolute;top:0px;right:0px;cursor:pointer;");
   close.addEventListener("click", function(){

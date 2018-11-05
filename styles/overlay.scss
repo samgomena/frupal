@@ -25,21 +25,25 @@
   text-align: center;
   top: 25%;
   width: 100%;
+
 }
 
 .overlay div:hover, .overlay div:focus {
   color: #cd5c5c;
 }
+
 .overlay input {
-  position: relative;
-  padding: 5px;
-  margin: 8px;
   border: 2px solid rgba(238, 233, 233, 1);
+  margin: 8px;
+  padding: 5px;
+  position: relative;
   transition: 0.3s;
 }
+
 .overlay input:hover, .overlay input:focus {
   border: 2px solid rgba(205, 92, 92, 0.7);
 }
+
 .overlay textarea {
   position: relative;
   width: 183px;
@@ -118,4 +122,8 @@ body {
 p {
   font-size: 18px;
   color: #818181;
+}
+
+#start {
+  cursor: pointer;
 }
