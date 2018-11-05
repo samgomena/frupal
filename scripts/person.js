@@ -68,12 +68,12 @@ class Person {
   moveX(dir_x) {
     this.x += dir_x;
 
-    if(this.x >= this.map.width) {
+    if(this.x > this.map.width) {
       this.x = 0;
     }
 
     if(this.x < 0) {
-      this.x = this.map.width - 1;
+      this.x = this.map.width;
     }
 
     this.consumeEnergy(this.getPlayerLocCost());
@@ -87,12 +87,12 @@ class Person {
   moveY(dir_y) {
     this.y += dir_y;
 
-    if(this.y >= this.map.width) {
+    if(this.y > this.map.width) {
       this.y = 0;
     }
 
     if(this.y < 0) {
-      this.y = this.map.width - 1;
+      this.y = this.map.width;
     }
 
     this.consumeEnergy(this.getPlayerLocCost());

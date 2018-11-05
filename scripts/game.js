@@ -169,7 +169,7 @@ export default class Game {
     for (let step_x = 0; step_x <= this.map.height; ++step_x) {
       y = step_x * this.map.tile_size;
       this.ctx.beginPath();
-      this.ctx.moveTo(step_x, y);
+      this.ctx.moveTo(0, y);
       this.ctx.lineTo(width, y);
       this.ctx.stroke();
     }
@@ -178,7 +178,7 @@ export default class Game {
     for (let step_y = 0; step_y <= this.map.width; ++step_y) {
       x = step_y * this.map.tile_size;
       this.ctx.beginPath();
-      this.ctx.moveTo(x, step_y);
+      this.ctx.moveTo(x, 0);
       this.ctx.lineTo(x, height);
       this.ctx.stroke();
     }
