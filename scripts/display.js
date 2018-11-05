@@ -1,3 +1,5 @@
+import loseGame from "./endGame";
+
 class Display {
   constructor(person, map) {
     this.map = map;
@@ -37,9 +39,10 @@ class Display {
     if(!energy) {
     
       //pop up box
-      alert("You have run out of energy :(");
+      //alert("You have run out of energy \n\n GAME OVER!");
       this.person.isDead();
 
+      loseGame();
       //TODO: game should end here
 
       return false;
