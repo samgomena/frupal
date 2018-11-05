@@ -37,13 +37,11 @@ class Person {
   }
 
   getPlayerLocInfo() {
-    //return this.map.layers[1][this.x * this.y].terrain.name;
-    return "meadow";
+    return this.map.layers[this.x * this.y].terrain.name;
   }
 
   getPlayerLocCost() {
-    //return this.map.layers[1][this.x * this.y].terrain.cost;
-    return 1;
+    return this.map.layers[this.x * this.y].terrain.cost;
   }
 
   getPlayerLoc() {
