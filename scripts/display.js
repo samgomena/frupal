@@ -43,7 +43,7 @@ class Display {
     if(energy <= 0) {
       return false;
     }
-    if(item === "jewel") {
+    if(item === "Royal Diamonds") {
 
         alert("You found the jewels!!!!!! You Win!!");
 
