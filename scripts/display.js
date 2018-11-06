@@ -5,6 +5,8 @@ class Display {
     this.displayEl = document.createElement("div");
 
     const terrain = this.hero.getPlayerLocInfo();
+    const item = this.hero.getPlayerLocItem();
+
     // Location, Energy, Money nodes.
     // FIXME: Make it look prettier?
     this.lNode = document.createTextNode(`Current Location: (${this.hero.x}, ${this.hero.y})`);
