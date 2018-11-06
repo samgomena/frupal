@@ -45,7 +45,7 @@ class Person {
   }
   
   getPlayerLocItem() {
-    return this.map.layers[this.x * this.y].terrain.cost;
+    return this.map.layers[this.x * this.y].item;
   }
   getPlayerLoc() {
     return {
