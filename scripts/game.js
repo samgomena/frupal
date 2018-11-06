@@ -119,7 +119,8 @@ export default class Game {
 
     this.update();
     this.display.update();
-    this.render();
+    this.drawGrid();
+    this.drawPlayer();
 
     window.setTimeout(this.tick.bind(this), 1000/5);
   }
@@ -144,24 +145,21 @@ export default class Game {
   }
 
   /**
-     * This function draws the 'hero' (a circle, for now)
+     * This function draws the 'hero' (a circle for now)
      */
-  render() {
-
+  drawPlayer() {
     this.ctx.beginPath();
     this.ctx.arc(
-      (this.hero.x * this.map.tile_size) - (this.hero.width / 2),
-      (this.hero.y * this.map.tile_size) - (this.hero.height / 2),
+      (this.hero.x * this.map.tile_size) + (this.hero.width / 2),
+      (this.hero.y * this.map.tile_size) + (this.hero.height / 2),
       31,
       0,
       2 * Math.PI,
       false
     );
+    this.ctx.fillStyle = "black";
     this.ctx.fill();
     this.ctx.stroke();
-    // this.ctx.restore();
-
-    this.drawGrid();
   }
 
   /**
@@ -192,6 +190,31 @@ export default class Game {
       this.ctx.moveTo(x, 0);
       this.ctx.lineTo(x, height);
       this.ctx.stroke();
+    }
+    
+    this.ctx.font = '30px ariel'
+    for (let cellX = 0; cellX < this.map.height; ++cellX)
+    {
+      for (let cellY = 0; cellY < this.map.width; ++cellY)
+      {
+        let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
+        this.ctx.beginPath();
+        this.ctx.fillStyle = terrain.color;
+        this.ctx.rect(
+          (cellX * this.map.tile_size) + 1,
+          (cellY * this.map.tile_size) + 1,
+          this.map.tile_size - 1,
+          this.map.tile_size - 1);
+        this.ctx.stroke();
+        this.ctx.fill();
+        this.ctx.beginPath();
+        this.ctx.fillStyle = "black";
+        this.ctx.fillText(
+          terrain.name.charAt(0),
+          (cellX * this.map.tile_size) + (this.map.tile_size / 2),
+          (cellY * this.map.tile_size) + (this.map.tile_size / 2));
+        this.ctx.stroke();
+      }
     }
   }
 }
