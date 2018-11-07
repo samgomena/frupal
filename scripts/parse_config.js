@@ -4,32 +4,38 @@ const TERRAIN_MAP = {
   0: {
     name: "MEADOW",
     cost: 1,
-    color: "#32CD32"
+    color: "#32CD32",
+    canEnter: true
   },
   1: {
     name: "FOREST",
     cost: 1,
-    color: "#0c854e"
+    color: "#0c854e",
+    canEnter: true
   },
   2: {
     name: "WATER",
-    cost: 0,
-    color: "#218aff"
+    cost: 1,
+    color: "#218aff",
+    canEnter: false
   },
   3: {
     name: "WALL",
     cost: 1,
-    color: "#a7a0a5"
+    color: "#a7a0a5",
+    canEnter: false
   },
   4: {
     name: "BOG",
     cost: 2,
-    color: "#5b4a4d"
+    color: "#5b4a4d",
+    canEnter: true
   },
   5: {
     name: "SWAMP",
     cost: 2,
-    color: "#475b41"
+    color: "#475b41",
+    canEnter: true
   }
 };
 
@@ -38,7 +44,7 @@ const COORD_REGEX = /(\d+),\s*(\d+)/;
 const MAP_ITEM_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
 
 export const DEFAULT_CONFIG =
-    `Sample Frupal Game Map
+`Sample Frupal Game Map
 25
 #####################
 12,12
@@ -95,7 +101,7 @@ export function parse(game_config) {
   GAME.title = game_title;
   GAME.map.width = GAME.map.height = +board_size;
   // Control layer
-  GAME.map.layers = new Array(+board_size * +board_size);
+  GAME.map.layers = new Array(GAME.map.width * GAME.map.width);
 
   let delimiter = first_delimiter.charAt(0);
 
@@ -103,10 +109,11 @@ export function parse(game_config) {
   let delimiter_regex = new RegExp(`${delimiter}+`);
 
   // Destruct regex match groups into x, y coordinate variables
+  //Subtract 1 to convert into "true" coordinates
   let [, hero_start_x, hero_start_y] = split_map_file.splice(0, 1)[0].match(COORD_REGEX);
   GAME.player.pos = {
-    x: +hero_start_x,
-    y: +hero_start_y
+    x: ((+hero_start_x) - 1),
+    y: ((+hero_start_y) - 1)
   };
 
   let [, hero_energy] = split_map_file.splice(0, 1)[0].match(NUM_REGEX);
@@ -143,8 +150,8 @@ export function parse(game_config) {
     }
 
     GAME.map.objects.push({
-      x: +x,
-      y: +y,
+      x: ((+x) - 1),
+      y: ((+y) - 1),
       visible: Boolean(+visibility),
       terrain: TERRAIN_MAP[terrain],
       name: name === "None" ? "" : name
@@ -167,7 +174,17 @@ export function setGameData(gameData) {
     terrain: TERRAIN_MAP[0],
     name: ""
   });
-  console.log(obstacle_layer);
+
+  for (let i = 0; i < obstacle_layer.length; ++i)
+  {
+    obstacle_layer[i] = {
+      x: undefined,
+      y: undefined,
+      visible: false,
+      terrain: TERRAIN_MAP[0],
+      name: ""
+    }
+  }
 
   /*
   gameData.map.objects.forEach((map_object) => {
@@ -178,14 +195,10 @@ export function setGameData(gameData) {
     )
   });
   */
- for(let i = 0; i < gameData.map.objects.length; ++i) {
-   let index = gameData.map.objects[i].x * gameData.map.objects[i].y;
-   // What
-   // obstacle_layer[index]= Object.assign(obstacle_layer[index], gameData.map.objects[i]);
-   obstacle_layer[index]= gameData.map.objects[i];
-   console.log(obstacle_layer[index]);
- }
-  console.log(obstacle_layer);
+  for(let i = 0; i < gameData.map.objects.length; ++i) {
+    let index = (gameData.map.objects[i].x * gameData.map.width) + gameData.map.objects[i].y;
+    obstacle_layer[index] = gameData.map.objects[i];
+  }
   gameData.map.layers = obstacle_layer;
 
 
@@ -196,12 +209,17 @@ export function setGameData(gameData) {
     throw Error(`Starting position of (${gameData.player.pos.x}, ${gameData.player.pos.y}) is out of bounds.`);
   }
 
-  let contains_diamonds = Boolean(gameData.map.objects.filter(board_object => {
+  let contains_diamonds = gameData.map.objects.filter(board_object => {
     return board_object.name === "Royal Diamonds";
-  }).length);
+  }).length;
 
-    // Throw if no diamonds
-  if(!contains_diamonds) {
+  // Throw if more than 1 diamonds
+  if(contains_diamonds !== 1) {
+    throw Error("The map can only have one royal diamonds item.");
+  }
+
+  // Throw if no diamonds
+  if(!Boolean(contains_diamonds)) {
     throw Error("The map does not contain the royal diamonds.");
   }
   // console.log("GAME DATA ", gameData);

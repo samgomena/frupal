@@ -37,13 +37,16 @@ class Person {
   }
 
   getPlayerLocInfo() {
-    return this.map.layers[this.x * this.y].terrain.name;
+    return this.map.layers[(this.x * this.map.width) + this.y].terrain.name;
   }
 
   getPlayerLocCost() {
-    return this.map.layers[this.x * this.y].terrain.cost;
+    return this.map.layers[(this.x * this.map.width) + this.y].terrain.cost;
   }
-
+  
+  getPlayerLocItem() {
+    return this.map.layers[(this.x * this.map.width) + this.y].name;
+  }
   getPlayerLoc() {
     return {
       x: this.x,
@@ -66,17 +69,21 @@ class Person {
     * @param dir_x The number of movements to take in the x direction
     */
   moveX(dir_x) {
-    this.x += dir_x;
+    if (dir_x === 0)
+      return 0;
+    let moveX = this.x + dir_x;
 
-    if(this.x > this.map.width) {
-      // FIXME: Should this not be 0?
-      this.x = 1;
+    if(moveX >= this.map.width) {
+      moveX = 0;
     }
-
-    if(this.x < 1) {
-      this.x = this.map.width;
+    else if (moveX < 0) {
+      moveX = this.map.width - 1;
     }
+    let terrain = this.map.layers[((moveX) * this.map.width) + this.y].terrain;
 
+    if (terrain.canEnter)
+      this.x = moveX;
+    return terrain.cost;
   }
 
   /**
@@ -85,17 +92,21 @@ class Person {
      * @param dir_y The number of movements to take in the y direction
      */
   moveY(dir_y) {
-    this.y += dir_y;
+    if (dir_y === 0)
+      return 0;
+    let moveY = this.y + dir_y;
 
-    if(this.y > this.map.width) {
-      // FIXME: Should this not be 0?
-      this.y = 1;
+    if(moveY >= this.map.width) {
+      moveY = 0;
     }
-
-    if(this.y < 1) {
-      this.y = this.map.width;
+    else if (moveY < 0) {
+      moveY = this.map.width - 1;
     }
+    let terrain = this.map.layers[((this.x) * this.map.width) + moveY].terrain;
 
+    if (terrain.canEnter)
+      this.y = moveY;
+    return terrain.cost;
   }
 
   // consumeEnergy should eventually take a tile type
@@ -103,7 +114,7 @@ class Person {
   // during movement.
   consumeEnergy(lost) {
     if(this.energy === 0) this.dead = true;
-      this.energy -= lost;
+    this.energy -= lost;
   }
 
   /**
@@ -115,9 +126,9 @@ class Person {
   move(step_x, step_y) {
 
     // These should probably be pure
-    this.moveX(step_x);
-    this.moveY(step_y);
-    this.consumeEnergy(this.getPlayerLocCost());
+    let costX = this.moveX(step_x);
+    let costY = this.moveY(step_y);
+    this.consumeEnergy(costX + costY);
   }
 }
 

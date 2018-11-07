@@ -119,7 +119,8 @@ export default class Game {
 
     this.update();
     this.display.update();
-    this.render();
+    this.drawGrid();
+    this.drawPlayer();
 
     window.setTimeout(this.tick.bind(this), 1000/5);
   }
@@ -133,6 +134,20 @@ export default class Game {
         console.log(this.hero.getPlayerLocInfo());
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
+        
+        let minX = Math.max(0, this.hero.x - 1);        
+        let minY = Math.max(0, this.hero.y - 1);        
+        let maxX = Math.min(this.map.width - 1, this.hero.x + 1);        
+        let maxY = Math.min(this.map.height - 1, this.hero.y + 1);        
+
+        for (let cellX = minX; cellX <= maxX; ++cellX)
+        {
+          for (let cellY = minY; cellY <= maxY; ++cellY)
+          {
+            let tile = this.map.layers[(cellX * this.map.width) + cellY];
+            tile.visible = true;
+          }
+        }
       }
       else {
         alert("You have run out of energy :(");
@@ -144,24 +159,21 @@ export default class Game {
   }
 
   /**
-     * This function draws the 'hero' (a circle, for now)
+     * This function draws the 'hero' (a circle for now)
      */
-  render() {
-
+  drawPlayer() {
     this.ctx.beginPath();
     this.ctx.arc(
-      (this.hero.x * this.map.tile_size) - (this.hero.width / 2),
-      (this.hero.y * this.map.tile_size) - (this.hero.height / 2),
+      (this.hero.x * this.map.tile_size) + (this.hero.width / 2),
+      (this.hero.y * this.map.tile_size) + (this.hero.height / 2),
       31,
       0,
       2 * Math.PI,
       false
     );
+    this.ctx.fillStyle = "black";
     this.ctx.fill();
     this.ctx.stroke();
-    // this.ctx.restore();
-
-    this.drawGrid();
   }
 
   /**
@@ -192,6 +204,36 @@ export default class Game {
       this.ctx.moveTo(x, 0);
       this.ctx.lineTo(x, height);
       this.ctx.stroke();
+    }
+    
+    this.ctx.font = '30px ariel'
+    for (let cellX = 0; cellX < this.map.height; ++cellX)
+    {
+      for (let cellY = 0; cellY < this.map.width; ++cellY)
+      {
+        let visible = this.map.layers[(cellX * this.map.width) + cellY].visible;
+        let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
+        this.ctx.beginPath();
+        this.ctx.fillStyle = visible ? terrain.color : "burlywood";
+        this.ctx.rect(
+          (cellX * this.map.tile_size) + 1,
+          (cellY * this.map.tile_size) + 1,
+          this.map.tile_size - 1,
+          this.map.tile_size - 1);
+        this.ctx.stroke();
+        this.ctx.fill();
+
+        if (visible)
+        {
+          this.ctx.beginPath();
+          this.ctx.fillStyle = "black";
+          this.ctx.fillText(
+            terrain.name.charAt(0),
+            (cellX * this.map.tile_size) + (this.map.tile_size / 2),
+            (cellY * this.map.tile_size) + (this.map.tile_size / 2));
+          this.ctx.stroke();
+        }
+      }
     }
   }
 }
