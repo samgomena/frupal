@@ -4,32 +4,38 @@ const TERRAIN_MAP = {
   0: {
     name: "MEADOW",
     cost: 1,
-    color: "#32CD32"
+    color: "#32CD32",
+    canEnter: true
   },
   1: {
     name: "FOREST",
     cost: 1,
-    color: "#0c854e"
+    color: "#0c854e",
+    canEnter: true
   },
   2: {
     name: "WATER",
-    cost: 0,
-    color: "#218aff"
+    cost: 1,
+    color: "#218aff",
+    canEnter: false
   },
   3: {
     name: "WALL",
     cost: 1,
-    color: "#a7a0a5"
+    color: "#a7a0a5",
+    canEnter: false
   },
   4: {
     name: "BOG",
     cost: 2,
-    color: "#5b4a4d"
+    color: "#5b4a4d",
+    canEnter: true
   },
   5: {
     name: "SWAMP",
     cost: 2,
-    color: "#475b41"
+    color: "#475b41",
+    canEnter: true
   }
 };
 
@@ -38,7 +44,7 @@ const COORD_REGEX = /(\d+),\s*(\d+)/;
 const MAP_ITEM_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
 
 export const DEFAULT_CONFIG =
-    `Sample Frupal Game Map
+`Sample Frupal Game Map
 25
 #####################
 12,12
@@ -167,7 +173,6 @@ export function setGameData(gameData) {
     terrain: TERRAIN_MAP[0],
     name: ""
   });
-  console.log(obstacle_layer);
 
   /*
   gameData.map.objects.forEach((map_object) => {
@@ -178,14 +183,10 @@ export function setGameData(gameData) {
     )
   });
   */
- for(let i = 0; i < gameData.map.objects.length; ++i) {
-   let index = gameData.map.objects[i].x * gameData.map.objects[i].y;
-   // What
-   // obstacle_layer[index]= Object.assign(obstacle_layer[index], gameData.map.objects[i]);
-   obstacle_layer[index]= gameData.map.objects[i];
-   console.log(obstacle_layer[index]);
- }
-  console.log(obstacle_layer);
+  for(let i = 0; i < gameData.map.objects.length; ++i) {
+    let index = gameData.map.objects[i].x * gameData.map.objects[i].y;
+    obstacle_layer[index] = gameData.map.objects[i];
+  }
   gameData.map.layers = obstacle_layer;
 
 
@@ -196,12 +197,17 @@ export function setGameData(gameData) {
     throw Error(`Starting position of (${gameData.player.pos.x}, ${gameData.player.pos.y}) is out of bounds.`);
   }
 
-  let contains_diamonds = Boolean(gameData.map.objects.filter(board_object => {
+  let contains_diamonds = gameData.map.objects.filter(board_object => {
     return board_object.name === "Royal Diamonds";
-  }).length);
+  }).length;
 
-    // Throw if no diamonds
-  if(!contains_diamonds) {
+  // Throw if more than 1 diamonds
+  if(contains_diamonds !== 1) {
+    throw Error("The map can only have one royal diamonds item.");
+  }
+
+  // Throw if no diamonds
+  if(!Boolean(contains_diamonds)) {
     throw Error("The map does not contain the royal diamonds.");
   }
   // console.log("GAME DATA ", gameData);
