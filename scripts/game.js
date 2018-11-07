@@ -108,6 +108,19 @@ export default class Game {
      */
   run() {
     // Bind `tick` to `Game` so `this` is not `window`
+        let minX = Math.max(0, this.hero.x - 1);        
+        let minY = Math.max(0, this.hero.y - 1);        
+        let maxX = Math.min(this.map.width - 1, this.hero.x + 1);        
+        let maxY = Math.min(this.map.height - 1, this.hero.y + 1);        
+
+        for (let cellX = minX; cellX <= maxX; ++cellX)
+        {
+          for (let cellY = minY; cellY <= maxY; ++cellY)
+          {
+            let tile = this.map.layers[(cellX * this.map.width) + cellY];
+            tile.visible = true;
+          }
+        }
     window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
