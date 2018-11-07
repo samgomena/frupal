@@ -43,7 +43,7 @@ class Person {
   getPlayerLocCost() {
     return this.map.layers[this.x * this.y].terrain.cost;
   }
-  
+
   getPlayerLocItem() {
     return this.map.layers[this.x * this.y].name;
   }
@@ -105,8 +105,10 @@ class Person {
   // as an argument to decide how much energy is lost
   // during movement.
   consumeEnergy(lost) {
-    if(this.energy === 0) this.dead = true;
-      this.energy -= lost;
+    if(this.energy === 0)
+	     this.dead = true;
+
+    this.energy -= lost;
   }
 
   /**
@@ -125,4 +127,3 @@ class Person {
 }
 
 export default Person;
-
