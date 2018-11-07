@@ -22,6 +22,8 @@ export default class Game {
 
     this.display = display;
 
+    this.game_loop = null;
+
     // Bind move events
     this.setMoveEvents();
 
@@ -108,8 +110,13 @@ export default class Game {
    */
   run() {
     // Bind `tick` to `Game` so `this` is not `window`
-    window.setTimeout(this.tick.bind(this), 1000/this.fps);
+    this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
+
+  stop() {
+    clearTimeout(this.game_loop);
+  }
+
 
   /**
    * This function is responsible for executing game updates and rendering the updates.
@@ -130,13 +137,14 @@ export default class Game {
    */
   update() {
     this.hero_move_queue.forEach(movement => {
+
       if(this.hero.getEnergy() > 1) {
-        console.log(this.hero.getPlayerLocInfo());
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
         
         let minX = Math.max(0, this.hero.x - 1);        
-        let minY = Math.max(0, this.hero.y - 1);        
+        let minY = Math.max(0, this.hero.y - 1);
+
         let maxX = Math.min(this.map.width - 1, this.hero.x + 1);        
         let maxY = Math.min(this.map.height - 1, this.hero.y + 1);        
 
@@ -152,7 +160,7 @@ export default class Game {
       else {
         alert("You have run out of energy :(");
         this.hero.isDead();
-        //loseGame();
+        this.stop();
         window.location.reload(true);
       }
     });
