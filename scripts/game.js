@@ -153,7 +153,7 @@ export default class Game {
         alert("You have run out of energy :(");
         this.hero.isDead();
         //loseGame();
-        location.reload(true);
+        window.location.reload(true);
       }
     });
   }
