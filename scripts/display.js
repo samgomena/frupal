@@ -47,13 +47,13 @@ class Display {
 
         alert("You found the jewels!!!!!! You Win!!");
 
-        //Reload the game to default      
+        //Reload the game to default
         //window.location.reload(true);
 
         //TODO: game should end here
         //return false;
     }
-    const locationText = `Current Location: (${location.x}, ${location.y})`;
+    const locationText = `Current Location: (${location.x + 1}, ${location.y + 1})`;
     const moneyText = `Whiffles: ${money}`;
     const energyText = `Energy: ${energy}`;
     const terrainText = `Terrain: ${terrain}`;

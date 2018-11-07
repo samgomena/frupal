@@ -37,11 +37,11 @@ class Person {
   }
 
   getPlayerLocInfo() {
-    return this.map.layers[this.x * this.y].terrain.name;
+    return this.map.layers[(this.x * this.map.width) + this.y].terrain.name;
   }
 
   getPlayerLocCost() {
-    return this.map.layers[this.x * this.y].terrain.cost;
+    return this.map.layers[(this.x * this.map.width) + this.y].terrain.cost;
   }
   
   getPlayerLocItem() {
@@ -69,17 +69,22 @@ class Person {
   * @param dir_x The number of movements to take in the x direction
   */
   moveX(dir_x) {
-    this.x += dir_x;
+    if (dir_x === 0)
+      return 0;
 
-    if(this.x > this.map.width) {
-      // FIXME: Should this not be 0?
-      this.x = 1;
+    let terrain = this.map.layers[((this.x + dir_x) * this.map.width) + this.y].terrain;
+
+    if (terrain.canEnter)
+      this.x += dir_x;
+
+    if(this.x >= this.map.width) {
+      this.x = 0;
     }
 
-    if(this.x < 1) {
-      this.x = this.map.width;
+    if(this.x < 0) {
+      this.x = this.map.width - 1;
     }
-
+    return terrain.cost;
   }
 
   /**
@@ -88,17 +93,22 @@ class Person {
    * @param dir_y The number of movements to take in the y direction
    */
   moveY(dir_y) {
-    this.y += dir_y;
+    if (dir_y === 0)
+      return 0;
 
-    if(this.y > this.map.height) {
-      // FIXME: Should this not be 0?
-      this.y = 1;
+    let terrain = this.map.layers[(this.x * this.map.width) + this.y + dir_y].terrain;
+
+    if (terrain.canEnter)
+      this.y += dir_y;
+
+    if(this.y >= this.map.width) {
+      this.y = 0;
     }
 
-    if(this.y < 1) {
-      this.y = this.map.height;
+    if(this.y < 0) {
+      this.y = this.map.width - 1;
     }
-
+    return terrain.cost;
   }
 
   // consumeEnergy should eventually take a tile type
@@ -118,9 +128,9 @@ class Person {
   move(step_x, step_y) {
 
     // These should probably be pure
-    this.moveX(step_x);
-    this.moveY(step_y);
-    this.consumeEnergy(this.getPlayerLocCost());
+    let costX = this.moveX(step_x);
+    let costY = this.moveY(step_y);
+    this.consumeEnergy(costX + costY);
   }
 }
 
