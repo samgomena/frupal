@@ -101,12 +101,12 @@ class Person {
     if (terrain.canEnter)
       this.y += dir_y;
 
-    if(this.y >= this.map.width) {
+    if(this.y >= this.map.height) {
       this.y = 0;
     }
 
     if(this.y < 0) {
-      this.y = this.map.width - 1;
+      this.y = this.map.height - 1;
     }
     return terrain.cost;
   }
