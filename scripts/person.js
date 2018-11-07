@@ -45,7 +45,7 @@ class Person {
   }
   
   getPlayerLocItem() {
-    return this.map.layers[this.x * this.y].name;
+    return this.map.layers[(this.x * this.map.width) + this.y].name;
   }
   getPlayerLoc() {
     return {
@@ -114,7 +114,7 @@ class Person {
   // during movement.
   consumeEnergy(lost) {
     if(this.energy === 0) this.dead = true;
-      this.energy -= lost;
+    this.energy -= lost;
   }
 
   /**
