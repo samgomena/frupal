@@ -130,7 +130,7 @@ export default class Game {
    */
   update() {
     this.hero_move_queue.forEach(movement => {
-      if(this.hero.getEnergy() > 0) {
+      if(this.hero.getEnergy() > 1) {
         console.log(this.hero.getPlayerLocInfo());
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
@@ -152,7 +152,7 @@ export default class Game {
       else {
         alert("You have run out of energy :(");
         this.hero.isDead();
-        loseGame();
+        //loseGame();
         window.location.reload(true);
       }
     });

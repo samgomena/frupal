@@ -48,7 +48,7 @@ class Display {
         alert("You found the jewels!!!!!! You Win!!");
 
         //Reload the game to default
-        //window.location.reload(true);
+        window.location.reload(true);
 
         //TODO: game should end here
         //return false;
