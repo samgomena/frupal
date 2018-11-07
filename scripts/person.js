@@ -45,7 +45,7 @@ class Person {
   }
   
   getPlayerLocItem() {
-    return this.map.layers[this.x * this.y].name;
+    return this.map.layers[(this.x * this.map.width) + this.y].name;
   }
   getPlayerLoc() {
     return {
@@ -71,19 +71,18 @@ class Person {
   moveX(dir_x) {
     if (dir_x === 0)
       return 0;
+    let moveX = this.x + dir_x;
 
-    let terrain = this.map.layers[((this.x + dir_x) * this.map.width) + this.y].terrain;
+    if(moveX >= this.map.width) {
+      moveX = 0;
+    }
+    else if (moveX < 0) {
+      moveX = this.map.width - 1;
+    }
+    let terrain = this.map.layers[((moveX) * this.map.width) + this.y].terrain;
 
     if (terrain.canEnter)
-      this.x += dir_x;
-
-    if(this.x >= this.map.width) {
-      this.x = 0;
-    }
-
-    if(this.x < 0) {
-      this.x = this.map.width - 1;
-    }
+      this.x = moveX;
     return terrain.cost;
   }
 
@@ -95,19 +94,18 @@ class Person {
   moveY(dir_y) {
     if (dir_y === 0)
       return 0;
+    let moveY = this.y + dir_y;
 
-    let terrain = this.map.layers[(this.x * this.map.width) + this.y + dir_y].terrain;
+    if(moveY >= this.map.width) {
+      moveY = 0;
+    }
+    else if (moveY < 0) {
+      moveY = this.map.width - 1;
+    }
+    let terrain = this.map.layers[((this.x) * this.map.width) + moveY].terrain;
 
     if (terrain.canEnter)
-      this.y += dir_y;
-
-    if(this.y >= this.map.height) {
-      this.y = 0;
-    }
-
-    if(this.y < 0) {
-      this.y = this.map.height - 1;
-    }
+      this.y = moveY;
     return terrain.cost;
   }
 
@@ -116,7 +114,7 @@ class Person {
   // during movement.
   consumeEnergy(lost) {
     if(this.energy === 0) this.dead = true;
-      this.energy -= lost;
+    this.energy -= lost;
   }
 
   /**
