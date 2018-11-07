@@ -42,16 +42,17 @@ export const DEFAULT_CONFIG =
 25
 #####################
 12,12
-103
+100
 1000
 Axe
 Axe
 Shears
+Boat
 Pretty Rock
 #####################
 12, 12, 1, 1, None
 13, 12, 0, 1, Tree
-15, 13, 0, 4, Royal Diamonds
+24, 13, 0, 4, Royal Diamonds
 14, 12, 0, 2, None`;
 
 

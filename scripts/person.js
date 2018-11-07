@@ -64,10 +64,10 @@ class Person {
   }
 
   /**
-    * This function moves a player `dir_x` units in the x direction.
-    *
-    * @param dir_x The number of movements to take in the x direction
-    */
+  * This function moves a player `dir_x` units in the x direction.
+  *
+  * @param dir_x The number of movements to take in the x direction
+  */
   moveX(dir_x) {
     this.x += dir_x;
 
@@ -83,20 +83,20 @@ class Person {
   }
 
   /**
-     * This function moves a player `dir_y` units in the y direction.
-     *
-     * @param dir_y The number of movements to take in the y direction
-     */
+   * This function moves a player `dir_y` units in the y direction.
+   *
+   * @param dir_y The number of movements to take in the y direction
+   */
   moveY(dir_y) {
     this.y += dir_y;
 
-    if(this.y > this.map.width) {
+    if(this.y > this.map.height) {
       // FIXME: Should this not be 0?
       this.y = 1;
     }
 
     if(this.y < 1) {
-      this.y = this.map.width;
+      this.y = this.map.height;
     }
 
   }
@@ -110,11 +110,11 @@ class Person {
   }
 
   /**
-     * This function calls move updates for the x and y directions.
-     *
-     * @param step_x The number of movements to take in the x direction
-     * @param step_y The number of movements to take in the y direction
-     */
+   * This function calls move updates for the x and y directions.
+   *
+   * @param step_x The number of movements to take in the x direction
+   * @param step_y The number of movements to take in the y direction
+   */
   move(step_x, step_y) {
 
     // These should probably be pure
