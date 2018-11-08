@@ -2,7 +2,7 @@
 // Generated on Wed Nov 07 2018 20:14:45 GMT-0800 (PST)
 
 module.exports = function(config) {
-  config.set({
+  const __configuration = {
 
     // base path that will be used to resolve all patterns (eg. files, exclude)
     basePath: '',
@@ -65,6 +65,22 @@ module.exports = function(config) {
 
     // Concurrency level
     // how many browser should be started simultaneous
-    concurrency: Infinity
-  })
-}
+    concurrency: Infinity,
+
+    // Launch chrome in headless on travis
+    customLaunchers: {
+      Chrome_travis_ci: {
+          base: 'Chrome',
+          flags: ['--no-sandbox']
+      }
+    },
+
+  };
+
+  // Register chrome headless in travis
+  if(process.env.TRAVIS) {
+    __configuration.browsers.push('Chrome_travis_ci');
+  }
+
+  config.set(__configuration);
+};

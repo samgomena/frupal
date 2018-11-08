@@ -43,7 +43,7 @@ const NUM_REGEX = /(\d+)/;
 const COORD_REGEX = /(\d+),\s*(\d+)/;
 const MAP_ITEM_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
 
-export const DEFAULT_CONFIG =
+const DEFAULT_CONFIG =
 `Sample Frupal Game Map
 25
 #####################
@@ -84,7 +84,7 @@ Pretty Rock
  * @param game_config A map 'file' to parse
  * @returns Object An object containing the parsed data
  */
-export function parse(game_config) {
+function parse(game_config) {
   const GAME = {};
   GAME.map = {};
   GAME.map.tile_size = 64; // Magic for now
@@ -97,7 +97,7 @@ export function parse(game_config) {
   // Unpack and truncate first three items
   let [game_title, board_size, first_delimiter] = split_map_file.splice(0, 3);
 
-  GAME.board_size = board_size;
+  GAME.board_size = +board_size;
 
   GAME.title = game_title;
   GAME.map.width = GAME.map.height = +board_size;
@@ -142,7 +142,7 @@ export function parse(game_config) {
 
     let [, x, y, visibility, terrain, name] = map_item.match(MAP_ITEM_REGEX) || [];
 
-    if (x > board_size || y > board_size) {
+    if (+x > board_size || +y > board_size) {
       throw Error(`Position of ${name} at (${x}, ${y}) is out of bounds.`);
     }
 
@@ -162,7 +162,7 @@ export function parse(game_config) {
   return GAME;
 }
 
-export function setGameData(gameData) {
+function setGameData(gameData) {
 
   let obstacle_layer = new Array((gameData.board_size) * (gameData.board_size));
 
@@ -177,7 +177,6 @@ export function setGameData(gameData) {
     }
   }
 
-
   for(let i = 0; i < gameData.map.objects.length; ++i) {
     let index = (gameData.map.objects[i].x * gameData.map.width) + gameData.map.objects[i].y;
     obstacle_layer[index] = gameData.map.objects[i];
@@ -186,6 +185,8 @@ export function setGameData(gameData) {
 
 
   // Perform checks
+
+  // TODO: Add error checking to ensure jewels aren't at player starting location
 
   // Throw if player's starting location is off the map
   if(gameData.player.pos.x > gameData.map.width || gameData.player.pos.y > gameData.map.height) {
@@ -208,3 +209,9 @@ export function setGameData(gameData) {
   // console.log("GAME DATA ", gameData);
   return gameData;
 }
+
+module.exports = {
+  DEFAULT_CONFIG: DEFAULT_CONFIG,
+  parse: parse,
+  setGameData: setGameData,
+};
