@@ -1,5 +1,7 @@
 # Frupal
 
+[![Build Status](https://travis-ci.com/samgomena/frupal.svg?token=wrqdxNSxDZXR1zjtheDr&branch=sgomena/dev)](https://travis-ci.com/samgomena/frupal)
+
 Frupal Game for CS300
 
 ## Getting Started 
