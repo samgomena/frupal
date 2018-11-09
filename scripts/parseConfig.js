@@ -1,5 +1,6 @@
 "use strict";
-import { TERRAIN_MAP } from "./terrainMap";
+
+let TERRAIN_MAP = require("./terrainMap");
 
 
 const NUM_REGEX = /(\d+)/;
