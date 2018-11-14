@@ -41,7 +41,13 @@ class Display {
     //check that energy hasn't run out
     // FIXME: Display should not control if game ends.
     if(energy <= 0) {
-      return false;
+
+      alert("You have run out of energy.");
+
+      //Reload the game to default
+      window.location.reload(true);
+
+      //return false;
     }
     if(item === "Royal Diamonds") {
 

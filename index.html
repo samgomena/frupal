@@ -16,27 +16,34 @@
         <!-- options div is an overlay that represents the customization menu -->
         <div id="options" class="overlay" style="display:none;">
             <h2>Options</h2>
-			<div class="dropdown">
+
+<!--
+      <div class="dropdown">
 				<button id="dropbtn" class="dropbtn">Choose Map
-				<div id="myDropdown" class="dropdown-content" style="display:none"></div>
+-->
+        <div id="myDropdown" class="dropdown-content" style="display:none"></div>
 				</button>
-			</div>
-            <button id="update">Update</button>
+
+	<!--		</div>
+            <button id="update">Update</button> -->
+
             <div id="form" class="overlay-content">
-                <input type="button" id="submit" value="Create"/>
-                <input type="text" placeholder="Map Name" name="in"/> <br>        <!-- map name -->
-                <input type="text" placeholder="Map Size" name="in"/> <br>        <!-- map size -->
-                <input type="text" placeholder="Player Location X" name="in"/> <br> <!-- player location -->
-                <input type="text" placeholder="Player Location Y" name="in"/> <br> <!-- player location -->
-                <input type="text" placeholder="Energy" name="in"> <br>          <!-- energy -->
-                <input type="text" placeholder="Money" name="in"> <br>           <!-- money -->
-                <textarea placeholder="Items" name="in"></textarea> <br>         <!-- items -->
-                <label for="in">Tiles:</label>
-                <textarea name="in" placeholder="Royal Diamonds: 0,0;"></textarea> <br>         <!-- tiles -->
-            </div>
+                  <input type="text" placeholder="Map Name" name="in"/> <br>        <!-- map name -->
+                  <input type="text" placeholder="Map Size" name="in"/> <br>        <!-- map size -->
+                  <input type="text" placeholder="Player Location X" name="in"/> <br> <!-- player location -->
+                  <input type="text" placeholder="Player Location Y" name="in"/> <br> <!-- player location -->
+                  <input type="text" placeholder="Energy" name="in"> <br>          <!-- energy -->
+                  <input type="text" placeholder="Money" name="in"> <br>           <!-- money -->
+                  <textarea placeholder="Items" name="in"></textarea> <br>         <!-- items -->
+                <div class = "overlay-instruct">
+                  <label for="in">Tiles:</label>
+                </div>
+
+                  <textarea name="in" placeholder="Royal Diamonds: 0,0;"></textarea> <br>         <!-- tiles -->
+<input type="button" id="submit" value="Create"/>
+              </div>
+
         </div>
-
-
 
       <div class = "row">
         <div class="game">
@@ -53,8 +60,8 @@
                 </div>
                 <button id="down">South</button>
             </div>
-          </div>
-          <div class = "game-window">
+        </div>
+          <div class = "column">
             <canvas id="demo" style="background: #ddd;"></canvas>
           </div>
         </div>

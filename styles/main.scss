@@ -28,6 +28,9 @@ body {
 .column {
   float: left;
   padding: 10px;
+  -webkit-column-width: 120px;
+  -moz-column-width: 120px;
+  column-width: 120px;
 }
 
 .game {
