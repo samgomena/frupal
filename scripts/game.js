@@ -148,10 +148,10 @@ export default class Game {
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
         
-        let minX = Math.max(0, this.hero.x - 1);        
-        let minY = Math.max(0, this.hero.y - 1);        
-        let maxX = Math.min(this.map.width - 1, this.hero.x + 1);        
-        let maxY = Math.min(this.map.height - 1, this.hero.y + 1);        
+        let minX = Math.max(0, this.hero.x - this.hero.visibilityRadius);        
+        let minY = Math.max(0, this.hero.y - this.hero.visibilityRadius);        
+        let maxX = Math.min(this.map.width - this.hero.visibilityRadius, this.hero.x + this.hero.visibilityRadius);        
+        let maxY = Math.min(this.map.height - this.hero.visibilityRadius, this.hero.y + this.hero.visibilityRadius);        
 
         for (let cellX = minX; cellX <= maxX; ++cellX)
         {
