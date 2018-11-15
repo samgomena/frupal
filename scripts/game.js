@@ -110,7 +110,6 @@ export default class Game {
    */
   run() {
     // Bind `tick` to `Game` so `this` is not `window`
-
         let minX = Math.max(0, this.hero.x - 1);
         let minY = Math.max(0, this.hero.y - 1);
         let maxX = Math.min(this.map.width - 1, this.hero.x + 1);
@@ -155,12 +154,12 @@ export default class Game {
       if(this.hero.getEnergy() > 1) {
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
-        
-        let minX = Math.max(0, this.hero.x - 1);        
+
+        let minX = Math.max(0, this.hero.x - 1);
         let minY = Math.max(0, this.hero.y - 1);
 
-        let maxX = Math.min(this.map.width - 1, this.hero.x + 1);        
-        let maxY = Math.min(this.map.height - 1, this.hero.y + 1);        
+        let maxX = Math.min(this.map.width - 1, this.hero.x + 1);
+        let maxY = Math.min(this.map.height - 1, this.hero.y + 1);
 
         for (let cellX = minX; cellX <= maxX; ++cellX)
         {
@@ -172,6 +171,8 @@ export default class Game {
         }
       }
       else {
+        //TODO: this code isn't being used??
+
         alert("You have run out of energy :(");
         this.hero.isDead();
         this.stop();
