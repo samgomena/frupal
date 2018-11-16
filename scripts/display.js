@@ -59,6 +59,10 @@ class Display {
         //TODO: game should end here
         //return false;
     }
+    if (item === "Binoculars") {
+      //alert("You found a pair of binoculars!");
+      this.hero.hasBinoculars();
+    }
     const locationText = `Current Location: (${location.x + 1}, ${location.y + 1})`;
     const moneyText = `Whiffles: ${money}`;
     const energyText = `Energy: ${energy}`;

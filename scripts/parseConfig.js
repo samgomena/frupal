@@ -22,7 +22,8 @@ Pretty Rock
 #####################
 12, 12, 1, 1, None
 13, 12, 0, 1, Tree
-24, 13, 0, 4, Royal Diamonds
+15, 13, 0, 4, Royal Diamonds
+11, 11, 0, 0, Binoculars
 14, 12, 0, 2, None`;
 
 

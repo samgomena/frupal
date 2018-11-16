@@ -12,6 +12,7 @@ class Person {
 
     this.map = map;
     this.dead = false;
+    this.visibilityRadius = 1;  //number of squares visible in each direction.
 
     // Player's possible movements
     this.up = { x: 0, y: -1 };
@@ -61,6 +62,10 @@ class Person {
 
   isDead() {
     this.dead = true;
+  }
+
+  hasBinoculars() {
+    this.visibilityRadius = 2;
   }
 
   /**
