@@ -1,6 +1,6 @@
 
 let assert = require('assert');
-let TERRAIN_MAP = require('../scripts/terrainMap');
+let TERRAIN_MAP = require('../scripts/terrainMap').TERRAIN_MAP;
 let config = require('../scripts/parseConfig');
 
 function getRandomArbitrary(min, max) {
@@ -41,8 +41,8 @@ describe("Verify `parse`", function() {
 
     it("Verify terrain constants", function (done) {
 
-       Object.values(TERRAIN_MAP).forEach(tile => {
-           // console.log(tile);
+        Object.values(TERRAIN_MAP).forEach(tile => {
+           console.log(tile);
             ["name", "cost", "color", "canEnter"].forEach(tile_key => {
                 assert(tile.hasOwnProperty(tile_key), `${tile} needs to have ${tile_key}`);
             });

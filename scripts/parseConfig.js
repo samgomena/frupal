@@ -1,6 +1,6 @@
 "use strict";
 
-let TERRAIN_MAP = require("./terrainMap");
+let TERRAIN_MAP = require("./terrainMap").TERRAIN_MAP;
 
 
 const NUM_REGEX = /(\d+)/;
@@ -112,7 +112,7 @@ function parse(game_config) {
     }
 
     if (!TERRAIN_MAP[terrain]) {
-      throw Error(`${terrain} is not a valid terrain value.`);
+      throw Error(`${TERRAIN_MAP[terrain]} is not a valid terrain value.`);
     }
 
     GAME.map.objects.push({
