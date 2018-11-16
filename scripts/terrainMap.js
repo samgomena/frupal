@@ -1,4 +1,4 @@
-export const TERRAIN_MAP = {
+const TERRAIN_MAP = {
   0: {
     name: "MEADOW",
     cost: 1,
@@ -35,4 +35,8 @@ export const TERRAIN_MAP = {
     color: "#475b41",
     canEnter: true
   }
+};
+
+module.exports = {
+  TERRAIN_MAP: TERRAIN_MAP,
 };

@@ -69,10 +69,10 @@ class Person {
   }
 
   /**
-    * This function moves a player `dir_x` units in the x direction.
-    *
-    * @param dir_x The number of movements to take in the x direction
-    */
+  * This function moves a player `dir_x` units in the x direction.
+  *
+  * @param dir_x The number of movements to take in the x direction
+  */
   moveX(dir_x) {
     if (dir_x === 0)
       return 0;
@@ -92,10 +92,10 @@ class Person {
   }
 
   /**
-     * This function moves a player `dir_y` units in the y direction.
-     *
-     * @param dir_y The number of movements to take in the y direction
-     */
+   * This function moves a player `dir_y` units in the y direction.
+   *
+   * @param dir_y The number of movements to take in the y direction
+   */
   moveY(dir_y) {
     if (dir_y === 0)
       return 0;
@@ -123,11 +123,11 @@ class Person {
   }
 
   /**
-     * This function calls move updates for the x and y directions.
-     *
-     * @param step_x The number of movements to take in the x direction
-     * @param step_y The number of movements to take in the y direction
-     */
+   * This function calls move updates for the x and y directions.
+   *
+   * @param step_x The number of movements to take in the x direction
+   * @param step_y The number of movements to take in the y direction
+   */
   move(step_x, step_y) {
 
     // These should probably be pure
