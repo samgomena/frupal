@@ -22,6 +22,8 @@ export default class Game {
 
     this.display = display;
 
+    this.game_loop = null;
+
     // Bind move events
     this.setMoveEvents();
 
@@ -80,8 +82,8 @@ export default class Game {
   }
 
   /**
-     * This function dynamically sets the games canvas element size and bitmap resolution.
-     */
+   * This function dynamically sets the games canvas element size and bitmap resolution.
+   */
   sizeUpBoard() {
     // Canvas height fills screen regardless of resolution
     let height = window.innerHeight;
@@ -99,13 +101,13 @@ export default class Game {
   }
 
   /**
-     * This function is the main entry point for `Game` class.
-     *
-     * It defines the event loop (`setTimeout(...)`) with a callback to the
-     * tick function that's bound to a `game` instance.
-     *
-     * It runs the game loop indefinitely at `this.fps` frames per second.
-     */
+   * This function is the main entry point for `Game` class.
+   *
+   * It defines the event loop (`setTimeout(...)`) with a callback to the
+   * tick function that's bound to a `game` instance.
+   *
+   * It runs the game loop indefinitely at `this.fps` frames per second.
+   */
   run() {
     // Bind `tick` to `Game` so `this` is not `window`
         let minX = Math.max(0, this.hero.x - 1);
@@ -121,12 +123,17 @@ export default class Game {
             tile.visible = true;
           }
         }
-    window.setTimeout(this.tick.bind(this), 1000/this.fps);
+      this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
+  stop() {
+    clearTimeout(this.game_loop);
+  }
+
+
   /**
-     * This function is responsible for executing game updates and rendering the updates.
-     */
+   * This function is responsible for executing game updates and rendering the updates.
+   */
   tick() {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -135,19 +142,19 @@ export default class Game {
     this.drawGrid();
     this.drawPlayer();
 
-    window.setTimeout(this.tick.bind(this), 1000/5);
+    window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
   /**
-     * This function consumes the move events in `hero_move_queue` and executes them sequentially.
-     */
+   * This function consumes the move events in `hero_move_queue` and executes them sequentially.
+   */
   update() {
     this.hero_move_queue.forEach(movement => {
+
       if(this.hero.getEnergy() > 1) {
-        console.log(this.hero.getPlayerLocInfo());
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
-        
+
         let minX = Math.max(0, this.hero.x - this.hero.visibilityRadius);
         let minY = Math.max(0, this.hero.y - this.hero.visibilityRadius);
         let maxX = Math.min(this.map.width - this.hero.visibilityRadius, this.hero.x + this.hero.visibilityRadius);
@@ -167,15 +174,15 @@ export default class Game {
 
         alert("You have run out of energy :(");
         this.hero.isDead();
-        //loseGame();
+        this.stop();
         window.location.reload(true);
       }
     });
   }
 
   /**
-     * This function draws the 'hero' (a circle for now)
-     */
+   * This function draws the 'hero' (a circle for now)
+   */
   drawPlayer() {
     this.ctx.beginPath();
     this.ctx.arc(
@@ -192,10 +199,10 @@ export default class Game {
   }
 
   /**
-     * This function draws the grid on the game's canvas element.
-     *
-     * Each tile on the grid is defined by the maps `tile_size`.
-     */
+   * This function draws the grid on the game's canvas element.
+   *
+   * Each tile on the grid is defined by the maps `tile_size`.
+   */
   drawGrid() {
     let width = this.map.width * this.map.tile_size;
     let height = this.map.height * this.map.tile_size;

@@ -37,9 +37,9 @@ function createOverlay() {
     while(choose.firstChild){
       choose.removeChild(choose.firstChild);
     }
-    if(choose.style.display == "none"){
+    if(choose.style.display === "none"){
       for(let i = 0; i < localStorage.length; ++i) {
-        if(localStorage.key(i) == "currentMap")
+        if(localStorage.key(i) === "currentMap")
           continue;
         let mapLoad = document.createElement("a");
         mapLoad.innerHTML = localStorage.key(i);
