@@ -8,7 +8,6 @@ class Display {
     const item = this.hero.getPlayerLocItem();
 
     // Location, Energy, Money nodes.
-    // FIXME: Make it look prettier?
     this.lNode = document.createTextNode(`Current Location: (${this.hero.x}, ${this.hero.y})`);
     this.eNode = document.createTextNode("Energy: 100");
     this.mNode = document.createTextNode("Whiffles: 100");
