@@ -38,31 +38,6 @@ class Display {
     const energy = this.hero.getEnergy();
     const item = this.hero.getPlayerLocItem();
 
-    //check that energy hasn't run out
-    // FIXME: Display should not control if game ends.
-    if(energy <= 0) {
-
-      alert("You have run out of energy.");
-
-      //Reload the game to default
-      window.location.reload(true);
-
-      //return false;
-    }
-    if(item === "Royal Diamonds") {
-
-      alert("You found the jewels!!!!!! You Win!!");
-
-      //Reload the game to default
-      window.location.reload(true);
-
-      //TODO: game should end here
-      //return false;
-    }
-    if (item === "Binoculars") {
-      //alert("You found a pair of binoculars!");
-      this.hero.hasBinoculars();
-    }
     const locationText = `Current Location: (${location.x + 1}, ${location.y + 1})`;
     const moneyText = `Whiffles: ${money}`;
     const energyText = `Energy: ${energy}`;
