@@ -51,13 +51,13 @@ class Display {
     }
     if(item === "Royal Diamonds") {
 
-        alert("You found the jewels!!!!!! You Win!!");
+      alert("You found the jewels!!!!!! You Win!!");
 
-        //Reload the game to default
-        window.location.reload(true);
+      //Reload the game to default
+      window.location.reload(true);
 
-        //TODO: game should end here
-        //return false;
+      //TODO: game should end here
+      //return false;
     }
     if (item === "Binoculars") {
       //alert("You found a pair of binoculars!");

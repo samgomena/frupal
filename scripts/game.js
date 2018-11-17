@@ -110,20 +110,20 @@ export default class Game {
    */
   run() {
     // Bind `tick` to `Game` so `this` is not `window`
-        let minX = Math.max(0, this.hero.x - 1);
-        let minY = Math.max(0, this.hero.y - 1);
-        let maxX = Math.min(this.map.width - 1, this.hero.x + 1);
-        let maxY = Math.min(this.map.height - 1, this.hero.y + 1);
+    let minX = Math.max(0, this.hero.x - 1);
+    let minY = Math.max(0, this.hero.y - 1);
+    let maxX = Math.min(this.map.width - 1, this.hero.x + 1);
+    let maxY = Math.min(this.map.height - 1, this.hero.y + 1);
 
-        for (let cellX = minX; cellX <= maxX; ++cellX)
-        {
-          for (let cellY = minY; cellY <= maxY; ++cellY)
-          {
-            let tile = this.map.layers[(cellX * this.map.width) + cellY];
-            tile.visible = true;
-          }
-        }
-      this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
+    for (let cellX = minX; cellX <= maxX; ++cellX)
+    {
+      for (let cellY = minY; cellY <= maxY; ++cellY)
+      {
+        let tile = this.map.layers[(cellX * this.map.width) + cellY];
+        tile.visible = true;
+      }
+    }
+    this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
   stop() {
@@ -228,7 +228,7 @@ export default class Game {
       this.ctx.stroke();
     }
 
-    this.ctx.font = '30px ariel'
+    this.ctx.font = "30px ariel";
     for (let cellX = 0; cellX < this.map.height; ++cellX)
     {
       for (let cellY = 0; cellY < this.map.width; ++cellY)

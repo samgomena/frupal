@@ -140,7 +140,7 @@ function setGameData(gameData) {
       visible: false,
       terrain: TERRAIN_MAP[0],
       name: ""
-    }
+    };
   }
 
   for(let i = 0; i < gameData.map.objects.length; ++i) {
@@ -169,7 +169,7 @@ function setGameData(gameData) {
   }
 
   // Throw if no diamonds
-  if(!Boolean(contains_diamonds)) {
+  if(!contains_diamonds) {
     throw Error("The map does not contain the royal diamonds.");
   }
   // console.log("GAME DATA ", gameData);
