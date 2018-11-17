@@ -34,6 +34,12 @@ const TERRAIN_MAP = {
     cost: 2,
     color: "#475b41",
     canEnter: true
+  },
+  6: {
+    name: "DIAMONDS",
+    cost: 1,
+    color: "#DC143C",
+    canEnter: true
   }
 };
 
