@@ -10,6 +10,7 @@ export default class Game {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.map = map;
+    this.newTile = true;
 
     // Setting fps > 10 causes serious overallocation of resources
     this.fps = fps;
@@ -34,6 +35,7 @@ export default class Game {
   }
 
   moveEvent(moveId) {
+    this.newTile = true;
     switch(moveId) {
     case "up":
     case "ArrowUp":
@@ -138,6 +140,13 @@ export default class Game {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.update();
+
+    if(this.newTile) {
+      // Makes sure the player's tile is not constantly checked.
+      this.tileCheck();
+      this.newTile = false;
+    }
+
     this.display.update();
     this.drawGrid();
     this.drawPlayer();
@@ -145,35 +154,34 @@ export default class Game {
     window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
+  tileCheck() {
+    /*
+      Checks the tile that the hero is on.
+    */
+    const item = this.hero.getPlayerLocItem();
+
+    if(item === "Royal Diamonds") {
+
+      alert("You found the jewels!!!!!! You Win!!");
+
+      //Reload the game to default
+      window.location.reload(true);
+
+      //TODO: game should end here
+    }
+    if (item === "Binoculars") {
+      console.log("You found a pair of binoculars!");
+      this.hero.hasBinoculars();
+    }
+
+  }
+
   /**
    * This function consumes the move events in `hero_move_queue` and executes them sequentially.
    */
   update() {
     this.hero_move_queue.forEach(movement => {
-      const energy = this.hero.getEnergy();
-      const item = this.hero.getPlayerLocItem();
-      if(energy <= 0) {
-        alert("You have run out of energy.");
-
-        this.hero.isDead();
-        this.stop();
-        //Reload the game to default
-        window.location.reload(true);
-      }
-      if(item === "Royal Diamonds") {
-
-        alert("You found the jewels!!!!!! You Win!!");
-
-        //Reload the game to default
-        window.location.reload(true);
-
-        //TODO: game should end here
-      }
-      if (item === "Binoculars") {
-        console.log("You found a pair of binoculars!");
-        this.hero.hasBinoculars();
-      }     
-      if(this.hero.getEnergy() > 1) {
+      if (this.hero.getEnergy() > 1) {
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
 
@@ -190,6 +198,14 @@ export default class Game {
             tile.visible = true;
           }
         }
+      }
+      else {
+        alert("You have run out of energy.");
+
+        this.hero.isDead();
+        this.stop();
+        //Reload the game to default
+        window.location.reload(true);
       }
     });
   }
