@@ -4,7 +4,7 @@ export function setGameData(gameData) {
   // console.log("GAME DATA ", gameData);
   // Populate map layer with map objects
   let obstacle_layer = new Array((gameData.board_size) * (gameData.board_size));
-  console.log(obstacle_layer);
+  // console.log(obstacle_layer);
 
   for (let i = 0; i < obstacle_layer.length; ++i)
   {

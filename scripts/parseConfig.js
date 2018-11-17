@@ -180,5 +180,5 @@ module.exports = {
   TERRAIN_MAP: TERRAIN_MAP,
   DEFAULT_CONFIG: DEFAULT_CONFIG,
   parse: parse,
-  setGameData: setGameData,
+  setGameData: setGameData
 };

@@ -12,7 +12,7 @@ class Person {
 
     this.map = map;
     this.dead = false;
-    this.visibilityRadius = 1;  //number of squares visible in each direction.
+    this.visibilityRadius = 1;  // number of squares visible in each direction.
 
     // Player's possible movements
     this.up = { x: 0, y: -1 };
@@ -38,6 +38,7 @@ class Person {
   }
 
   getPlayerLocInfo() {
+    // Calculates the tile position using black magic. Ask Dan for explanation.
     return this.map.layers[(this.x * this.map.width) + this.y].terrain.name;
   }
 
@@ -48,16 +49,12 @@ class Person {
   getPlayerLocItem() {
     return this.map.layers[(this.x * this.map.width) + this.y].name;
   }
+
   getPlayerLoc() {
     return {
       x: this.x,
       y: this.y
     };
-  }
-
-  updateStatus(newLoc, energyCost) {
-    this.location = newLoc;
-    this.energy -= energyCost;
   }
 
   isDead() {
@@ -114,12 +111,13 @@ class Person {
     return terrain.cost;
   }
 
-  // consumeEnergy should eventually take a tile type
-  // as an argument to decide how much energy is lost
-  // during movement.
   consumeEnergy(lost) {
     if(this.energy === 0) this.dead = true;
     this.energy -= lost;
+  }
+
+  usePowerBar(gained) {
+    this.energy += gained;
   }
 
   /**
