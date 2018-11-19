@@ -163,6 +163,7 @@ export default class Game {
     switch(item) {
 
     case ROYAL_DIAMONDS:
+      console.log("Diamonds Found")
       alert("You found the jewels!!!!!! You Win!!");
       //Reload the game to default
       window.location.reload(true);
@@ -172,11 +173,16 @@ export default class Game {
       console.log("You found a pair of binoculars!");
       this.hero.hasBinoculars();
       break;
-    
+
     case POWER_BAR:
       // TODO: Consume power bar on tile move?
       console.log("Power Bar Found");
       this.hero.usePowerBar(10);
+/*      break;
+
+    case TREASURE:
+      console.log("Treasure Chest Found")
+      this.hero.findTreasure();              */
     }
   }
 
