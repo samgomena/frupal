@@ -51,18 +51,21 @@ class Display {
     }
     if(item === "Royal Diamonds") {
 
-        alert("You found the jewels!!!!!! You Win!!");
+        alert("You found the Royal Diamonds! You Win!!");
 
         //Reload the game to default
         window.location.reload(true);
 
-        //TODO: game should end here
         //return false;
     }
     if (item === "Binoculars") {
       //alert("You found a pair of binoculars!");
       this.hero.hasBinoculars();
     }
+    if(item === "Boat") {
+	this.hero.hasBoat();
+    }
+
     const locationText = `Current Location: (${location.x + 1}, ${location.y + 1})`;
     const moneyText = `Whiffles: ${money}`;
     const energyText = `Energy: ${energy}`;
