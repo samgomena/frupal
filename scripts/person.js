@@ -9,6 +9,7 @@ class Person {
     this.energy = hero_init.energy;
     this.money = hero_init.whiffles;
     this.items = hero_init.items;
+    this.boat = false;	//boat should eventually be in inventory
 
     this.map = map;
     this.dead = false;
@@ -65,6 +66,10 @@ class Person {
     this.visibilityRadius = 2;
   }
 
+  hasBoat() {
+    this.boat = true;
+  }
+
   /**
   * This function moves a player `dir_x` units in the x direction.
   *
@@ -83,8 +88,14 @@ class Person {
     }
     let terrain = this.map.layers[((moveX) * this.map.width) + this.y].terrain;
 
-    if (terrain.canEnter)
+    if (terrain.canEnter) {
       this.x = moveX;
+    }
+    else if (terrain.name === "WATER" && this.boat) {
+      this.x = moveX;
+      return 0;
+    }
+
     return terrain.cost;
   }
 
@@ -106,13 +117,19 @@ class Person {
     }
     let terrain = this.map.layers[((this.x) * this.map.width) + moveY].terrain;
 
-    if (terrain.canEnter)
+    if (terrain.canEnter) {
       this.y = moveY;
+    }
+    else if (terrain.name === "WATER" && this.boat) {
+      this.y = moveY;
+      return 0;
+    }
+      
     return terrain.cost;
   }
 
   consumeEnergy(lost) {
-    if(this.energy === 0) this.dead = true;
+    if(this.energy === 0) this.dead = true;	
     this.energy -= lost;
   }
 
