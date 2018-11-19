@@ -138,8 +138,8 @@ class Person {
   }
 
   findTreasure() {
-    this.money += 10;     //adds 10 whiffles
-                          //TODO: check requirements for how much $$ to find
+    this.money += 10;     // adds 10 whiffles
+                          // TODO: check requirements for how much $$ to find
   }
 
   /**
