@@ -24,8 +24,8 @@ Pretty Rock
 13, 12, 0, 1, Tree
 15, 13, 0, 6, Royal Diamonds
 11, 11, 0, 1, Binoculars
-15, 16, 0, 4, Bog 
-5, 5, 1, 0, Power Bar
+15, 16, 0, 4, Bog
+5, 5, 0, 0, Power Bar
 17, 10, 0, 0, Boat
 14, 12, 0, 2, None`;
 
