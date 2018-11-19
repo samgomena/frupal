@@ -1,4 +1,4 @@
-import {TERRAIN_MAP} from "./terrainMap";
+import {TERRAIN_MAP} from "./data/terrainMap";
 
 export function setGameData(gameData) {
   // console.log("GAME DATA ", gameData);

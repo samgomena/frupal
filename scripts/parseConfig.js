@@ -1,6 +1,6 @@
 "use strict";
 
-let TERRAIN_MAP = require("./terrainMap").TERRAIN_MAP;
+let TERRAIN_MAP = require("./data/terrainMap").TERRAIN_MAP;
 
 
 const NUM_REGEX = /(\d+)/;
