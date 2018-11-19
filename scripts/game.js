@@ -1,5 +1,6 @@
 "use strict";
-import { loseGame } from "./endGame";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR } from "./data/items";
+// import { loseGame } from "./endGame";
 
 /**
  * This class is responsible for initializing the height and width of the canvas element that serves as the
@@ -159,21 +160,24 @@ export default class Game {
       Checks the tile that the hero is on.
     */
     const item = this.hero.getPlayerLocItem();
+    switch(item) {
 
-    if(item === "Royal Diamonds") {
-
+    case ROYAL_DIAMONDS:
       alert("You found the jewels!!!!!! You Win!!");
-
       //Reload the game to default
       window.location.reload(true);
+      break;
 
-      //TODO: game should end here
-    }
-    if (item === "Binoculars") {
+    case BINOCULARS:
       console.log("You found a pair of binoculars!");
       this.hero.hasBinoculars();
+      break;
+    
+    case POWER_BAR:
+      // TODO: Consume power bar on tile move?
+      console.log("Power Bar Found");
+      this.hero.usePowerBar(10);
     }
-
   }
 
   /**
