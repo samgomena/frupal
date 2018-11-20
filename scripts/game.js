@@ -30,6 +30,8 @@ export default class Game {
 
     canvas.width = (this.map.tile_size * this.map.width);
     canvas.height = (this.map.tile_size * this.map.height);
+    this.ctx.translate(0, canvas.height)
+    this.ctx.scale(1, -1)
 
     window.addEventListener("load", this.sizeUpBoard.bind(this), false);
     window.addEventListener("resize", this.sizeUpBoard.bind(this), false);
@@ -41,12 +43,12 @@ export default class Game {
     case "up":
     case "ArrowUp":
     case "w":
-      this.hero_move_queue.push(this.hero.up);
+      this.hero_move_queue.push(this.hero.down);
       break;
     case "down":
     case "ArrowDown":
     case "s":
-      this.hero_move_queue.push(this.hero.down);
+      this.hero_move_queue.push(this.hero.up);
       break;
     case "right":
     case "ArrowRight":
