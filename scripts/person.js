@@ -1,3 +1,5 @@
+import { Map } from "./map";
+
 class Person {
   constructor(hero_init, map) {
     this.name = "I made this up";
@@ -39,15 +41,15 @@ class Person {
   }
 
   getPlayerLocInfo() {
-    return this.map.layers[(this.x * this.map.width) + this.y].terrain.name;
+    return this.map.getTerrainName(this.x, this.y);
   }
 
   getPlayerLocCost() {
-    return this.map.layers[(this.x * this.map.width) + this.y].terrain.cost;
+    return this.map.getTerrainCost(this.x, this.y);
   }
   
   getPlayerLocItem() {
-    return this.map.layers[(this.x * this.map.width) + this.y].name;
+    return this.map.getItemAtLoc(this.x, this.y);
   }
   getPlayerLoc() {
     return {
@@ -89,17 +91,12 @@ class Person {
     else if (moveX < 0) {
       moveX = this.map.width - 1;
     }
-    let terrain = this.map.layers[((moveX) * this.map.width) + this.y].terrain;
+    let move = this.map.allowMove(moveX, this.y, this);
 
-    if (terrain.canEnter) {
+    if (move.allow) {
       this.x = moveX;
     }
-    else if (terrain.name === "WATER" && this.boat) {
-      this.x = moveX;
-      return 0;
-    }
-
-    return terrain.cost;
+    return move.cost;
   }
 
   /**
@@ -118,17 +115,12 @@ class Person {
     else if (moveY < 0) {
       moveY = this.map.width - 1;
     }
-    let terrain = this.map.layers[((this.x) * this.map.width) + moveY].terrain;
+    let move = this.map.allowMove(this.x, moveY, this);
 
-    if (terrain.canEnter) {
+    if (move.allow) {
       this.y = moveY;
     }
-    else if (terrain.name === "WATER" && this.boat) {
-      this.y = moveY;
-      return 0;
-    }
-      
-    return terrain.cost;
+    return move.cost;
   }
 
   // consumeEnergy should eventually take a tile type

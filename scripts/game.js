@@ -1,5 +1,6 @@
 "use strict";
 import { loseGame } from "./endGame";
+import { Map } from "./map";
 
 /**
  * This class is responsible for initializing the height and width of the canvas element that serves as the
@@ -228,15 +229,18 @@ export default class Game {
       this.ctx.stroke();
     }
 
-    this.ctx.font = '30px ariel'
+    //The orientation of the Canvas is top-left = 0,0.
+    
+    this.ctx.font = '20px ariel'
     for (let cellX = 0; cellX < this.map.height; ++cellX)
     {
       for (let cellY = 0; cellY < this.map.width; ++cellY)
       {
-        let visible = this.map.layers[(cellX * this.map.width) + cellY].visible;
-        let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
+        let tile = this.map.getTile(cellX, cellY);
         this.ctx.beginPath();
-        this.ctx.fillStyle = visible ? terrain.color : "burlywood";
+        this.ctx.fillStyle = tile.visible ?
+                             tile.terrain.color :
+                             "burlywood";
         this.ctx.rect(
           (cellX * this.map.tile_size) + 1,
           (cellY * this.map.tile_size) + 1,
@@ -245,14 +249,15 @@ export default class Game {
         this.ctx.stroke();
         this.ctx.fill();
 
-        if (visible)
+        if (tile.visible)
         {
           this.ctx.beginPath();
           this.ctx.fillStyle = "black";
           this.ctx.fillText(
-            terrain.name.charAt(0),
-            (cellX * this.map.tile_size) + (this.map.tile_size / 2),
-            (cellY * this.map.tile_size) + (this.map.tile_size / 2));
+            //terrain.name.charAt(0),
+            cellX.toString() + "," + cellY.toString(),
+            (cellX * this.map.tile_size) + (this.map.tile_size / 10),
+	    (cellY * this.map.tile_size) + (this.map.tile_size / 2));
           this.ctx.stroke();
         }
       }

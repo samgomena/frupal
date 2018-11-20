@@ -17,15 +17,6 @@ export function setGameData(gameData) {
     }
   }
 
-  /*
-  gameData.map.objects.forEach((map_object) => {
-    let index = map_object.x * map_object.y;
-    obstacle_layer[index] = Object.assign(
-      obstacle_layer[index],
-      map_object,
-    )
-  });
-  */
   for(let i = 0; i < gameData.map.objects.length; ++i) {
     let index = (gameData.map.objects[i].x * gameData.map.width) + gameData.map.objects[i].y;
     obstacle_layer[index] = Object.assign(obstacle_layer[index], gameData.map.objects[i]);

@@ -4,21 +4,21 @@ import { parse, DEFAULT_CONFIG } from "./parseConfig";
 import Game from "./game";
 import { setGameData } from "./setGameData";
 import createOverlay from "./overlay";
+import Map from "./map";
 import "../styles/main.scss";
 // Don't move this, Overlay must be created before Map and before update event listener.
 createOverlay();
 
 // Parse the game config
-let game_config = parse(DEFAULT_CONFIG);
-let gameData = setGameData(game_config);
+let map;
+let gameConfig = parse(DEFAULT_CONFIG);
+let gameData = setGameData(gameConfig);
 
-// TODO: Use map class instead of raw config
-let map = gameData.map;
 // console.log("MAP:", map);
-let hero_init = game_config.player;
+let hero_init = gameConfig.player;
 
 // Sets text in the browser tab
-setTitle(game_config.title);
+setTitle(gameConfig.title);
 
 // This triggers map refresh, has to come after call to overlay above.
 let update = document.getElementById("update");
