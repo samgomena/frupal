@@ -1,6 +1,6 @@
 "use strict";
 
-let TERRAIN_MAP = require("./terrainMap").TERRAIN_MAP;
+let TERRAIN_MAP = require("./data/terrainMap").TERRAIN_MAP;
 
 
 const NUM_REGEX = /(\d+)/;
@@ -23,8 +23,9 @@ Pretty Rock
 12, 12, 1, 1, None
 13, 12, 0, 1, Tree
 15, 13, 0, 6, Royal Diamonds
-11, 11, 0, 0, Binoculars
+11, 11, 0, 1, Binoculars
 15, 16, 0, 4, Bog 
+5, 5, 1, 0, Power Bar
 17, 10, 0, 0, Boat
 14, 12, 0, 2, None`;
 
@@ -141,7 +142,7 @@ function setGameData(gameData) {
       visible: false,
       terrain: TERRAIN_MAP[0],
       name: ""
-    }
+    };
   }
 
   for(let i = 0; i < gameData.map.objects.length; ++i) {
@@ -170,7 +171,7 @@ function setGameData(gameData) {
   }
 
   // Throw if no diamonds
-  if(!Boolean(contains_diamonds)) {
+  if(!contains_diamonds) {
     throw Error("The map does not contain the royal diamonds.");
   }
   // console.log("GAME DATA ", gameData);
@@ -181,5 +182,5 @@ module.exports = {
   TERRAIN_MAP: TERRAIN_MAP,
   DEFAULT_CONFIG: DEFAULT_CONFIG,
   parse: parse,
-  setGameData: setGameData,
+  setGameData: setGameData
 };

@@ -1,5 +1,6 @@
 "use strict";
-import { loseGame } from "./endGame";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR } from "./data/items";
+// import { loseGame } from "./endGame";
 
 /**
  * This class is responsible for initializing the height and width of the canvas element that serves as the
@@ -7,10 +8,10 @@ import { loseGame } from "./endGame";
  */
 export default class Game {
   constructor(canvas, map, hero, display, fps=5) {
-    console.log(map);
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.map = map;
+    this.newTile = true;
 
     // Setting fps > 10 causes serious overallocation of resources
     this.fps = fps;
@@ -35,6 +36,7 @@ export default class Game {
   }
 
   moveEvent(moveId) {
+    this.newTile = true;
     switch(moveId) {
     case "up":
     case "ArrowUp":
@@ -110,20 +112,20 @@ export default class Game {
    */
   run() {
     // Bind `tick` to `Game` so `this` is not `window`
-        let minX = Math.max(0, this.hero.x - 1);
-        let minY = Math.max(0, this.hero.y - 1);
-        let maxX = Math.min(this.map.width - 1, this.hero.x + 1);
-        let maxY = Math.min(this.map.height - 1, this.hero.y + 1);
+    let minX = Math.max(0, this.hero.x - 1);
+    let minY = Math.max(0, this.hero.y - 1);
+    let maxX = Math.min(this.map.width - 1, this.hero.x + 1);
+    let maxY = Math.min(this.map.height - 1, this.hero.y + 1);
 
-        for (let cellX = minX; cellX <= maxX; ++cellX)
-        {
-          for (let cellY = minY; cellY <= maxY; ++cellY)
-          {
-            let tile = this.map.layers[(cellX * this.map.width) + cellY];
-            tile.visible = true;
-          }
-        }
-      this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
+    for (let cellX = minX; cellX <= maxX; ++cellX)
+    {
+      for (let cellY = minY; cellY <= maxY; ++cellY)
+      {
+        let tile = this.map.layers[(cellX * this.map.width) + cellY];
+        tile.visible = true;
+      }
+    }
+    this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
   stop() {
@@ -135,9 +137,17 @@ export default class Game {
    * This function is responsible for executing game updates and rendering the updates.
    */
   tick() {
+
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.update();
+
+    if(this.newTile) {
+      // Makes sure the player's tile is not constantly checked.
+      this.tileCheck();
+      this.newTile = false;
+    }
+
     this.display.update();
     this.drawGrid();
     this.drawPlayer();
@@ -145,13 +155,37 @@ export default class Game {
     window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
+  tileCheck() {
+    /*
+      Checks the tile that the hero is on.
+    */
+    const item = this.hero.getPlayerLocItem();
+    switch(item) {
+
+    case ROYAL_DIAMONDS:
+      alert("You found the jewels!!!!!! You Win!!");
+      //Reload the game to default
+      window.location.reload(true);
+      break;
+
+    case BINOCULARS:
+      console.log("You found a pair of binoculars!");
+      this.hero.hasBinoculars();
+      break;
+    
+    case POWER_BAR:
+      // TODO: Consume power bar on tile move?
+      console.log("Power Bar Found");
+      this.hero.usePowerBar(10);
+    }
+  }
+
   /**
    * This function consumes the move events in `hero_move_queue` and executes them sequentially.
    */
   update() {
     this.hero_move_queue.forEach(movement => {
-
-      if(this.hero.getEnergy() > 1) {
+      if (this.hero.getEnergy() > 1) {
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
 
@@ -170,11 +204,11 @@ export default class Game {
         }
       }
       else {
-        //TODO: this code isn't being used??
+        alert("You have run out of energy.");
 
-        alert("You have run out of energy :(");
         this.hero.isDead();
         this.stop();
+        //Reload the game to default
         window.location.reload(true);
       }
     });
@@ -228,7 +262,7 @@ export default class Game {
       this.ctx.stroke();
     }
 
-    this.ctx.font = '30px ariel'
+    this.ctx.font = "30px ariel";
     for (let cellX = 0; cellX < this.map.height; ++cellX)
     {
       for (let cellY = 0; cellY < this.map.width; ++cellY)

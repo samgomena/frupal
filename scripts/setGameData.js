@@ -1,10 +1,10 @@
-import {TERRAIN_MAP} from "./terrainMap";
+import {TERRAIN_MAP} from "./data/terrainMap";
 
 export function setGameData(gameData) {
   // console.log("GAME DATA ", gameData);
   // Populate map layer with map objects
   let obstacle_layer = new Array((gameData.board_size) * (gameData.board_size));
-  console.log(obstacle_layer);
+  // console.log(obstacle_layer);
 
   for (let i = 0; i < obstacle_layer.length; ++i)
   {
@@ -14,7 +14,7 @@ export function setGameData(gameData) {
       visible: false,
       terrain: TERRAIN_MAP[0],
       name: ""
-    }
+    };
   }
 
   /*
@@ -50,7 +50,7 @@ export function setGameData(gameData) {
   }
 
   // Throw if no diamonds
-  if(!Boolean(contains_diamonds)) {
+  if(!contains_diamonds) {
     throw Error("The map does not contain the royal diamonds.");
   }
   // console.log("GAME DATA ", gameData);

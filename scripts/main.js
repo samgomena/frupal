@@ -12,7 +12,6 @@ createOverlay();
 let game_config = parse(DEFAULT_CONFIG);
 let gameData = setGameData(game_config);
 
-// TODO: Use map class instead of raw config
 let map = gameData.map;
 // console.log("MAP:", map);
 let hero_init = game_config.player;

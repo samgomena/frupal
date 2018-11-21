@@ -8,7 +8,6 @@ class Display {
     const item = this.hero.getPlayerLocItem();
 
     // Location, Energy, Money nodes.
-    // FIXME: Make it look prettier?
     this.lNode = document.createTextNode(`Current Location: (${this.hero.x}, ${this.hero.y})`);
     this.eNode = document.createTextNode("Energy: 100");
     this.mNode = document.createTextNode("Whiffles: 100");
@@ -37,34 +36,6 @@ class Display {
     const money = this.hero.getMoney();
     const energy = this.hero.getEnergy();
     const item = this.hero.getPlayerLocItem();
-
-    //check that energy hasn't run out
-    // FIXME: Display should not control if game ends.
-    if(energy <= 0) {
-
-      alert("You have run out of energy.");
-
-      //Reload the game to default
-      window.location.reload(true);
-
-      //return false;
-    }
-    if(item === "Royal Diamonds") {
-
-        alert("You found the Royal Diamonds! You Win!!");
-
-        //Reload the game to default
-        window.location.reload(true);
-
-        //return false;
-    }
-    if (item === "Binoculars") {
-      //alert("You found a pair of binoculars!");
-      this.hero.hasBinoculars();
-    }
-    if(item === "Boat") {
-	this.hero.hasBoat();
-    }
 
     const locationText = `Current Location: (${location.x + 1}, ${location.y + 1})`;
     const moneyText = `Whiffles: ${money}`;
