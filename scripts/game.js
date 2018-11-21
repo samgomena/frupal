@@ -283,13 +283,15 @@ export default class Game {
 
         if (visible)
         {
+          this.ctx.scale(1, -1);
           this.ctx.beginPath();
           this.ctx.fillStyle = "black";
           this.ctx.fillText(
             terrain.name.charAt(0),
             (cellX * this.map.tile_size) + (this.map.tile_size / 2),
-            (cellY * this.map.tile_size) + (this.map.tile_size / 2));
+            this.map.height + 1 - ((cellY * this.map.tile_size) + this.map.tile_size));
           this.ctx.stroke();
+          this.ctx.scale(1, -1);
         }
       }
     }
