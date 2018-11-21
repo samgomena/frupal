@@ -15,9 +15,7 @@ const DEFAULT_CONFIG =
 100
 1000
 Axe
-Axe
 Shears
-Boat
 Pretty Rock
 #####################
 12, 12, 1, 1, None
@@ -60,6 +58,8 @@ function parse(game_config) {
   GAME.player = {};
   GAME.player.items = {};
 
+  GAME.player.inventory = [];
+
   let split_map_file = game_config.split("\n");
 
   // Unpack and truncate first three items
@@ -96,6 +96,8 @@ function parse(game_config) {
     let player_item = split_map_file.splice(0, 1)[0];
     // Update player's tool object with tool count
     GAME.player.items.hasOwnProperty(player_item) ? GAME.player.items[player_item]++ : GAME.player.items[player_item] = 1;
+    
+    GAME.player.inventory.push(player_item);
   }
 
   // Remove closing delimiter
