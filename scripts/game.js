@@ -172,25 +172,25 @@ export default class Game {
       break;
 
     case BINOCULARS:
-      console.log("You found a pair of binoculars!");
+      alert("You found a pair of binoculars!");
       this.hero.hasBinoculars();
       this.hero.addToInventory(item);
       break;
     
     case POWER_BAR:
       // TODO: Consume power bar on tile move?
-      console.log("Power Bar Found");
+      alert("Power Bar Found");
       this.hero.usePowerBar(10);
       break;
     
     case BOAT:
-      console.log("Boat found!");
+      alert("Boat found!");
       this.hero.hasBoat();
       this.hero.addToInventory(item);
       break;
 
     case CHAINSAW:
-      console.log("You found a chainsaw");
+      alert("You found a chainsaw");
       this.hero.addToInventory(item);
       break;
 
