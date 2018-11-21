@@ -74,10 +74,21 @@ class Person {
     this.boat = true;
   }
 
+  checkInventory(itemToCheck) {
+    let len = this.inventory.length;
+    var i;
+    for(i = 0; i < len; ++i)
+    {
+       if(itemToCheck === this.inventory[i]) {
+          return true;
+       }
+       return false;
+    }
+  }
+
   addToInventory(item) {
-    let buy = '';
-    buy = prompt(`Would you like to buy ${item}? y or n`);
-    if(buy.toLowerCase() === 'y') {
+    let buy = prompt(`Would you like to buy ${item}? y or n`);
+    if(buy && buy.toLowerCase() === 'y') {
        this.inventory.push([this.map.layers[(this.x * this.map.width) + this.y].name]);
 	this.money-=10;
      }

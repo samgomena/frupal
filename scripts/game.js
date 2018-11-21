@@ -163,7 +163,11 @@ export default class Game {
       Checks the tile that the hero is on.
     */
     const item = this.hero.getPlayerLocItem();
-    switch(item) {
+    let invCheck = this.hero.checkInventory(item);
+     
+    if(invCheck) {  //item already in the player's inventory
+
+    switch(tempItem) {
 
     case ROYAL_DIAMONDS:
       alert("You found the Royal Diamonds! You Win!!");
@@ -174,7 +178,7 @@ export default class Game {
     case BINOCULARS:
       alert("You found a pair of binoculars!");
       this.hero.hasBinoculars();
-      this.hero.addToInventory(item);
+      this.hero.addToInventory(tempItem);
       break;
     
     case POWER_BAR:
@@ -186,15 +190,16 @@ export default class Game {
     case BOAT:
       alert("Boat found!");
       this.hero.hasBoat();
-      this.hero.addToInventory(item);
+      this.hero.addToInventory(tempItem);
       break;
 
     case CHAINSAW:
       alert("You found a chainsaw");
-      this.hero.addToInventory(item);
+      this.hero.addToInventory(tempItem);
       break;
-
     }
+   }
+
   }
 
   /**
