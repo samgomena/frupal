@@ -1,5 +1,5 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, BOAT, CHAINSAW } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW } from "./data/items";
 // import { loseGame } from "./endGame";
 
 /**
@@ -166,6 +166,7 @@ export default class Game {
     switch(item) {
 
     case ROYAL_DIAMONDS:
+      console.log("Diamonds Found")
       alert("You found the Royal Diamonds! You Win!!");
       //Reload the game to default
       window.location.reload(true);
@@ -176,24 +177,28 @@ export default class Game {
       this.hero.hasBinoculars();
       this.hero.addToInventory(item);
       break;
-    
+        
     case POWER_BAR:
       // TODO: Consume power bar on tile move?
       alert("Power Bar Found");
       this.hero.usePowerBar(10);
       break;
-    
+        
+    case TREASURE:
+      console.log("Treasure Chest Found")
+      this.hero.findTreasure();
+      break;
+        
     case BOAT:
       alert("Boat found!");
       this.hero.hasBoat();
       this.hero.addToInventory(item);
       break;
-
+        
     case CHAINSAW:
       alert("You found a chainsaw");
       this.hero.addToInventory(item);
       break;
-
     }
   }
 
