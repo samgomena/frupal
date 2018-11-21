@@ -9,8 +9,7 @@ class Person {
     this.energy = hero_init.energy;
     this.money = hero_init.whiffles;
     this.inventory = hero_init.inventory;
-    this.boat = false;	//boat should eventually be in inventory
-
+    this.boat = false;	
 
     this.map = map;
     this.dead = false;
@@ -76,7 +75,12 @@ class Person {
   }
 
   addToInventory(item) {
-    this.inventory.push([this.map.layers[(this.x * this.map.width) + this.y].name]);
+    let buy = '';
+    buy = prompt(`Would you like to buy ${item}? y or n`);
+    if(buy.toLowerCase() === 'y') {
+       this.inventory.push([this.map.layers[(this.x * this.map.width) + this.y].name]);
+	this.money-=10;
+     }
   }
 
     
