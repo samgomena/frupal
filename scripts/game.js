@@ -1,5 +1,5 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE } from "./data/items";
 // import { loseGame } from "./endGame";
 
 /**
@@ -178,11 +178,12 @@ export default class Game {
       // TODO: Consume power bar on tile move?
       console.log("Power Bar Found");
       this.hero.usePowerBar(10);
-/*      break;
+      break;
 
     case TREASURE:
       console.log("Treasure Chest Found")
-      this.hero.findTreasure();              */
+      this.hero.findTreasure();
+      break;
     }
   }
 
