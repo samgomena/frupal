@@ -1,5 +1,5 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW } from "./data/items";
 // import { loseGame } from "./endGame";
 
 /**
@@ -27,9 +27,12 @@ export default class Game {
 
     // Bind move events
     this.setMoveEvents();
+    
 
     canvas.width = (this.map.tile_size * this.map.width);
     canvas.height = (this.map.tile_size * this.map.height);
+    this.ctx.translate(0, canvas.height)
+    this.ctx.scale(1, -1)
 
     window.addEventListener("load", this.sizeUpBoard.bind(this), false);
     window.addEventListener("resize", this.sizeUpBoard.bind(this), false);
@@ -41,12 +44,12 @@ export default class Game {
     case "up":
     case "ArrowUp":
     case "w":
-      this.hero_move_queue.push(this.hero.up);
+      this.hero_move_queue.push(this.hero.down);
       break;
     case "down":
     case "ArrowDown":
     case "s":
-      this.hero_move_queue.push(this.hero.down);
+      this.hero_move_queue.push(this.hero.up);
       break;
     case "right":
     case "ArrowRight":
@@ -164,25 +167,37 @@ export default class Game {
 
     case ROYAL_DIAMONDS:
       console.log("Diamonds Found")
-      alert("You found the jewels!!!!!! You Win!!");
+      alert("You found the Royal Diamonds! You Win!!");
       //Reload the game to default
       window.location.reload(true);
       break;
 
     case BINOCULARS:
-      console.log("You found a pair of binoculars!");
+      alert("You found a pair of binoculars!");
       this.hero.hasBinoculars();
+      this.hero.addToInventory(item);
       break;
-
+        
     case POWER_BAR:
       // TODO: Consume power bar on tile move?
-      console.log("Power Bar Found");
+      alert("Power Bar Found");
       this.hero.usePowerBar(10);
       break;
-
+        
     case TREASURE:
       console.log("Treasure Chest Found")
       this.hero.findTreasure();
+      break;
+        
+    case BOAT:
+      alert("Boat found!");
+      this.hero.hasBoat();
+      this.hero.addToInventory(item);
+      break;
+        
+    case CHAINSAW:
+      alert("You found a chainsaw");
+      this.hero.addToInventory(item);
       break;
     }
   }
@@ -288,13 +303,15 @@ export default class Game {
 
         if (visible)
         {
+          this.ctx.scale(1, -1);
           this.ctx.beginPath();
           this.ctx.fillStyle = "black";
           this.ctx.fillText(
             terrain.name.charAt(0),
             (cellX * this.map.tile_size) + (this.map.tile_size / 2),
-            (cellY * this.map.tile_size) + (this.map.tile_size / 2));
+            this.map.height + 1 - ((cellY * this.map.tile_size) + this.map.tile_size));
           this.ctx.stroke();
+          this.ctx.scale(1, -1);
         }
       }
     }
