@@ -1,6 +1,6 @@
 
 let assert = require('assert');
-let TERRAIN_MAP = require('../scripts/terrainMap').TERRAIN_MAP;
+let TERRAIN_MAP = require('../scripts/data/terrainMap').TERRAIN_MAP;
 let config = require('../scripts/parseConfig');
 
 function getRandomArbitrary(min, max) {

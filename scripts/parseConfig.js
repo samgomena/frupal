@@ -19,6 +19,8 @@ Shears
 Pretty Rock
 #####################
 12, 12, 1, 1, None
+14, 13, 0, 2, None
+15, 12, 0, 2, None
 13, 12, 0, 1, Tree
 15, 13, 0, 6, Royal Diamonds
 11, 11, 0, 1, Binoculars
