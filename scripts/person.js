@@ -8,8 +8,9 @@ class Person {
     this.location = hero_init.pos;
     this.energy = hero_init.energy;
     this.money = hero_init.whiffles;
-    this.items = hero_init.items;
+    this.inventory = hero_init.inventory;
     this.boat = false;	//boat should eventually be in inventory
+
 
     this.map = map;
     this.dead = false;
@@ -51,6 +52,10 @@ class Person {
     return this.map.layers[(this.x * this.map.width) + this.y].name;
   }
 
+  getPlayerInventory() {
+    return this.inventory;
+  }
+
   getPlayerLoc() {
     return {
       x: this.x,
@@ -70,6 +75,11 @@ class Person {
     this.boat = true;
   }
 
+  addToInventory(item) {
+    this.inventory.push([this.map.layers[(this.x * this.map.width) + this.y].name]);
+  }
+
+    
   /**
   * This function moves a player `dir_x` units in the x direction.
   *
