@@ -1,5 +1,5 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, BOAT, CHAINSAW, WEED_WHACKER, TREASURE_CHEST } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, BOAT, CHAINSAW, WEED_WHACKER} from "./data/items";
 // import { loseGame } from "./endGame";
 
 /**
@@ -197,10 +197,6 @@ export default class Game {
       this.hero.addToInventory(item);
       break;
     
-    case TREASURE_CHEST:
-      alert("You found a treasure chest! 10 whiffles."
-      this.hero.findTreasure();
-      break;
     }
    }
 
