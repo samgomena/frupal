@@ -31,8 +31,8 @@ export default class Game {
 
     canvas.width = (this.map.tile_size * this.map.width);
     canvas.height = (this.map.tile_size * this.map.height);
-    this.ctx.translate(0, canvas.height)
-    this.ctx.scale(1, -1)
+    this.ctx.translate(0, canvas.height);
+    this.ctx.scale(1, -1);
 
     window.addEventListener("load", this.sizeUpBoard.bind(this), false);
     window.addEventListener("resize", this.sizeUpBoard.bind(this), false);
@@ -166,7 +166,7 @@ export default class Game {
     switch(item) {
 
     case ROYAL_DIAMONDS:
-      console.log("Diamonds Found")
+      console.log("Diamonds Found");
       alert("You found the Royal Diamonds! You Win!!");
       //Reload the game to default
       window.location.reload(true);
@@ -291,6 +291,7 @@ export default class Game {
       {
         let visible = this.map.layers[(cellX * this.map.width) + cellY].visible;
         let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
+
         this.ctx.beginPath();
         this.ctx.fillStyle = visible ? terrain.color : "burlywood";
         this.ctx.rect(
