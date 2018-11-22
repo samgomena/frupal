@@ -1,5 +1,5 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, BOAT, CHAINSAW } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, BOAT, CHAINSAW, WEED_WHACKER, TREASURE_CHEST } from "./data/items";
 // import { loseGame } from "./endGame";
 
 /**
@@ -182,7 +182,6 @@ export default class Game {
       break;
     
     case POWER_BAR:
-      // TODO: Consume power bar on tile move?
       alert("Power Bar Found");
       this.hero.usePowerBar(10);
       break;
@@ -196,6 +195,11 @@ export default class Game {
     case CHAINSAW:
       alert("You found a chainsaw");
       this.hero.addToInventory(item);
+      break;
+    
+    case TREASURE_CHEST:
+      alert("You found a treasure chest! 10 whiffles."
+      this.hero.findTreasure();
       break;
     }
    }

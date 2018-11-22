@@ -6,4 +6,4 @@ export const SHEARS = "Shears";
 export const AXE = "Axe";
 export const WEED_WHACKER = "Weed Whacker";
 export const CHAINSAW = "Chainsaw";
-
+export const TREASURE_CHEST = "Treasure Chest";
