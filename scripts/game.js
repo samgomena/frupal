@@ -169,31 +169,31 @@ export default class Game {
 
     switch(item) {
 
-    case "Royal Diamonds":
+    case ROYAL_DIAMONDS:
       alert("You found the Royal Diamonds! You Win!!");
       //Reload the game to default
       window.location.reload(true);
       break;
 
-    case "Binoculars":
+    case BINOCULARS:
       alert("You found a pair of binoculars!");
       this.hero.hasBinoculars();
       this.hero.addToInventory(item);
       break;
     
-    case "Power Bar":
+    case POWER_BAR:
       // TODO: Consume power bar on tile move?
       alert("Power Bar Found");
       this.hero.usePowerBar(10);
       break;
     
-    case "Boat":
+    case BOAT:
       alert("Boat found!");
       this.hero.hasBoat();
       this.hero.addToInventory(item);
       break;
 
-    case "Chainsaw":
+    case CHAINSAW:
       alert("You found a chainsaw");
       this.hero.addToInventory(item);
       break;
