@@ -163,39 +163,39 @@ export default class Game {
       Checks the tile that the hero is on.
     */
     const item = this.hero.getPlayerLocItem();
-    let invCheck = this.hero.checkInventory(item);
-     
-    if(invCheck) {  //item already in the player's inventory
+    var invCheck = this.hero.checkInventory(item);
+    	     
+    if(invCheck === false) {  //item not already in the player's inventory
 
-    switch(tempItem) {
+    switch(item) {
 
-    case ROYAL_DIAMONDS:
+    case "Royal Diamonds":
       alert("You found the Royal Diamonds! You Win!!");
       //Reload the game to default
       window.location.reload(true);
       break;
 
-    case BINOCULARS:
+    case "Binoculars":
       alert("You found a pair of binoculars!");
       this.hero.hasBinoculars();
-      this.hero.addToInventory(tempItem);
+      this.hero.addToInventory(item);
       break;
     
-    case POWER_BAR:
+    case "Power Bar":
       // TODO: Consume power bar on tile move?
       alert("Power Bar Found");
       this.hero.usePowerBar(10);
       break;
     
-    case BOAT:
+    case "Boat":
       alert("Boat found!");
       this.hero.hasBoat();
-      this.hero.addToInventory(tempItem);
+      this.hero.addToInventory(item);
       break;
 
-    case CHAINSAW:
+    case "Chainsaw":
       alert("You found a chainsaw");
-      this.hero.addToInventory(tempItem);
+      this.hero.addToInventory(item);
       break;
     }
    }

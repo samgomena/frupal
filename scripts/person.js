@@ -75,15 +75,14 @@ class Person {
   }
 
   checkInventory(itemToCheck) {
-    let len = this.inventory.length;
-    var i;
-    for(i = 0; i < len; ++i)
+    var len = this.inventory.length;
+    for(var i = 0; i < len; ++i)
     {
-       if(itemToCheck === this.inventory[i]) {
+       if(itemToCheck == this.inventory[i]) {
           return true;
        }
-       return false;
     }
+    return false;
   }
 
   addToInventory(item) {
@@ -91,6 +90,7 @@ class Person {
     if(buy && buy.toLowerCase() === 'y') {
        this.inventory.push([this.map.layers[(this.x * this.map.width) + this.y].name]);
 	this.money-=10;
+	++this.inventoryLength;
      }
   }
 
