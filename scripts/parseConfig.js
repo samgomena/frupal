@@ -54,7 +54,7 @@ Pretty Rock
  */
 function parse(game_config) {
   const GAME = {};
-  GAME.map = {};
+  GAME.map = new Map;
   GAME.map.tile_size = 64; // Magic for now
   GAME.map.objects = [];
   GAME.player = {};
@@ -101,31 +101,7 @@ function parse(game_config) {
   // Remove closing delimiter
   split_map_file.splice(0, 1);
 
-  // Loop through map items after the delimiter
-  split_map_file.forEach(map_item => {
-
-    if(!MAP_ITEM_REGEX.test(map_item)) {
-      throw Error(`'${map_item}' is not a valid syntax for a map items`);
-    }
-
-    let [, x, y, visibility, terrain, name] = map_item.match(MAP_ITEM_REGEX) || [];
-
-    if (+x > board_size || +y > board_size) {
-      throw Error(`Position of ${name} at (${x}, ${y}) is out of bounds.`);
-    }
-
-    if (!TERRAIN_MAP[terrain]) {
-      throw Error(`${TERRAIN_MAP[terrain]} is not a valid terrain value.`);
-    }
-
-    GAME.map.objects.push({
-      x: ((+x) - 1),
-      y: ((+y) - 1),
-      visible: Boolean(+visibility),
-      terrain: TERRAIN_MAP[terrain],
-      name: name === "None" ? "" : name
-    });
-  });
+  map.initObjects(split_map_file);
 
   return GAME;
 }

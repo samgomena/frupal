@@ -38,17 +38,24 @@ class Person {
     return this.money;
   }
 
+  //Returns a string representation of the terrain at the given x,y coordinates
   getPlayerLocInfo() {
-    // Calculates the tile position using black magic. Ask Dan for explanation.
-    return this.map.layers[(this.x * this.map.width) + this.y].terrain.name;
+    return this.map.getTerrainName(this.x, this.y);
   }
 
+  //Returns the int cost of moving into the terrain at the given x,y coordinates
   getPlayerLocCost() {
-    return this.map.layers[(this.x * this.map.width) + this.y].terrain.cost;
+    return this.map.getTerrainCost(this.x, this.y);
   }
   
+  //Returns a string representation of the item at the given x,y coordinates
   getPlayerLocItem() {
-    return this.map.layers[(this.x * this.map.width) + this.y].name;
+    return this.map.getItemAtLoc(this.x, this.y);
+  }
+
+  //Returns a string representation of the obstacle at the given x,y coordinates
+  getPlayerLocItem() {
+    return this.map.getObstacleAtLoc(this.x, this.y);
   }
 
   getPlayerLoc() {
@@ -86,17 +93,12 @@ class Person {
     else if (moveX < 0) {
       moveX = this.map.width - 1;
     }
-    let terrain = this.map.layers[((moveX) * this.map.width) + this.y].terrain;
+    let move = this.map.allowMove(moveX, this.y, this);
 
-    if (terrain.canEnter) {
+    if (move.allow) {
       this.x = moveX;
     }
-    else if (terrain.name === "WATER" && this.boat) {
-      this.x = moveX;
-      return 0;
-    }
-
-    return terrain.cost;
+    return move.cost;
   }
 
   /**
@@ -115,17 +117,12 @@ class Person {
     else if (moveY < 0) {
       moveY = this.map.width - 1;
     }
-    let terrain = this.map.layers[((this.x) * this.map.width) + moveY].terrain;
+    let move = this.map.allowMove(this.x, moveY, this);
 
-    if (terrain.canEnter) {
+    if (move.allow) {
       this.y = moveY;
     }
-    else if (terrain.name === "WATER" && this.boat) {
-      this.y = moveY;
-      return 0;
-    }
-      
-    return terrain.cost;
+    return move.cost;
   }
 
   consumeEnergy(lost) {
