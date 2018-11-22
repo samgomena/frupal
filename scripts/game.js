@@ -1,7 +1,6 @@
 "use strict";
-// import { loseGame } from "./endGame";
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, BOAT, CHAINSAW, WEED_WHACKER} from "./data/items";
-
+// import { loseGame } from "./endGame";
 /**
  * This class is responsible for initializing the height and width of the canvas element that serves as the
  * game board. It also binds event listeners to the keys responsible for moving the hero around the map.
