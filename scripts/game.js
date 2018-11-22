@@ -1,6 +1,6 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, BOAT, CHAINSAW, WEED_WHACKER} from "./data/items";
 // import { loseGame } from "./endGame";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, BOAT, CHAINSAW, WEED_WHACKER} from "./data/items";
 
 /**
  * This class is responsible for initializing the height and width of the canvas element that serves as the
