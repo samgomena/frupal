@@ -160,6 +160,7 @@ class Person {
 
   usePowerBar(gained) {
     this.energy += gained;
+    this.map.layers[(this.x * this.map.width) + this.y].name = "";
   }
 
   /**
