@@ -3,18 +3,24 @@ const TERRAIN_MAP = {
     name: "MEADOW",
     cost: 1,
     color: "#32CD32",
+    frameX: 51,
+    frameY: 272,
     canEnter: true
   },
   1: {
     name: "FOREST",
     cost: 1,
     color: "#0c854e",
+    frameX: 51,
+    frameY: 221,
     canEnter: true
   },
   2: {
     name: "WATER",
     cost: 1,
     color: "#218aff",
+    frameX: 51,
+    frameY: 68,
     canEnter: false
   },
   3: {
@@ -27,6 +33,8 @@ const TERRAIN_MAP = {
     name: "BOG",
     cost: 2,
     color: "#5b4a4d",
+    frameX: 136,
+    frameY: 170,
     canEnter: true
   },
   5: {

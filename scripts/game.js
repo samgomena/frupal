@@ -1,6 +1,8 @@
 "use strict";
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
-import { request } from "https";
+import { TERRAIN_MAP } from "./data/terrainMap";
+import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
+import terrain_image from "../assets/roguelikeSheet_transparent.png";
 
 // import { loseGame } from "./endGame";
 /**
@@ -13,6 +15,25 @@ export default class Game {
     this.ctx = canvas.getContext("2d");
     this.map = map;
     this.newTile = true;
+    this.tileSize = 16;
+
+    this.terrain_sprite = new Image();
+    this.terrain_sprite.src = terrain_image;
+
+    this.hero_sprite = new Image();
+    this.hero_sprite.src = hero_image;
+
+    this.sprite_width = 16;
+    this.sprite_height = 16;
+
+    this.hero_sprite_width = 16;
+    this.hero_sprite_height = 16;
+
+    this.hero_frame_x = 49;
+    this.hero_frame_y = 128;
+
+    this.unknownFrameX = 816;
+    this.unknownFrameY = 442;
 
     // Setting fps > 10 causes serious overallocation of resources
     this.fps = fps;
@@ -275,6 +296,7 @@ export default class Game {
    * This function draws the 'hero' (a circle for now)
    */
   drawPlayer() {
+    /*
     this.ctx.beginPath();
     this.ctx.arc(
       (this.hero.x * this.map.tile_size) + (this.hero.width / 2),
@@ -287,6 +309,11 @@ export default class Game {
     this.ctx.fillStyle = "black";
     this.ctx.fill();
     this.ctx.stroke();
+    */
+    let hero_x = (this.hero.x * this.map.tile_size);
+    let hero_y = (this.hero.y * this.map.tile_size);
+    this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y, 
+      this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
   }
 
   /**
@@ -295,60 +322,20 @@ export default class Game {
    * Each tile on the grid is defined by the maps `tile_size`.
    */
   drawGrid() {
-    let width = this.map.width * this.map.tile_size;
-    let height = this.map.height * this.map.tile_size;
-    let x, y;
-
-    // Draw horizontal grid lines
-    //Uses range 0 - map.height inclusive to draw borders (#cells + 1)
-    for (let step_x = 0; step_x <= this.map.height; ++step_x) {
-      y = step_x * this.map.tile_size;
-      this.ctx.beginPath();
-      this.ctx.moveTo(0, y);
-      this.ctx.lineTo(width, y);
-      this.ctx.stroke();
-    }
-
-    // Draw vertical grid lines
-    //Uses range 0 - map.width inclusive to draw borders (#cells + 1)
-    for (let step_y = 0; step_y <= this.map.width; ++step_y) {
-      x = step_y * this.map.tile_size;
-      this.ctx.beginPath();
-      this.ctx.moveTo(x, 0);
-      this.ctx.lineTo(x, height);
-      this.ctx.stroke();
-    }
-
-    this.ctx.font = "30px ariel";
     for (let cellX = 0; cellX < this.map.height; ++cellX)
     {
       for (let cellY = 0; cellY < this.map.width; ++cellY)
       {
         let visible = this.map.layers[(cellX * this.map.width) + cellY].visible;
-        let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
-
-        this.ctx.beginPath();
-        this.ctx.fillStyle = visible ? terrain.color : "burlywood";
-        this.ctx.rect(
-          (cellX * this.map.tile_size) + 1,
-          (cellY * this.map.tile_size) + 1,
-          this.map.tile_size - 1,
-          this.map.tile_size - 1);
-        this.ctx.stroke();
-        this.ctx.fill();
-
-        if (visible)
-        {
-          this.ctx.scale(1, -1);
-          this.ctx.beginPath();
-          this.ctx.fillStyle = "black";
-          this.ctx.fillText(
-            terrain.name.charAt(0),
-            (cellX * this.map.tile_size) + (this.map.tile_size / 2),
-            this.map.height + 1 - ((cellY * this.map.tile_size) + this.map.tile_size));
-          this.ctx.stroke();
-          this.ctx.scale(1, -1);
+        let toDrawX = this.unknownFrameX;
+        let toDrawY = this.unknownFrameY;
+        if (visible) {
+          let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
+          toDrawX = terrain.frameX;
+          toDrawY = terrain.frameY;
         }
+        this.ctx.drawImage(this.terrain_sprite, toDrawX, toDrawY, this.sprite_width, this.sprite_height, 
+        (cellX * this.map.tile_size) + 1, (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
       }
     }
   }

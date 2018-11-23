@@ -57,7 +57,7 @@ Pretty Rock
 function parse(game_config) {
   const GAME = {};
   GAME.map = {};
-  GAME.map.tile_size = 64; // Magic for now
+  GAME.map.tile_size = 16; // Magic for now
   GAME.map.objects = [];
   GAME.player = {};
   GAME.player.items = {};
@@ -185,8 +185,6 @@ function setGameData(gameData) {
 }
 
 module.exports = {
-  TERRAIN_MAP: TERRAIN_MAP,
   DEFAULT_CONFIG: DEFAULT_CONFIG,
-  parse: parse,
-  setGameData: setGameData
+  parse: parse
 };
