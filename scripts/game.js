@@ -164,7 +164,6 @@ export default class Game {
     */
     const item = this.hero.getPlayerLocItem();
     var invCheck = this.hero.checkInventory(item);
-    	     
     if(invCheck === false) {  //item not already in the player's inventory
 
       switch(item) {
