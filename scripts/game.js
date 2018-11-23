@@ -167,43 +167,43 @@ export default class Game {
     	     
     if(invCheck === false) {  //item not already in the player's inventory
 
-    switch(item) {
+      switch(item) {
 
-    case ROYAL_DIAMONDS:
-      console.log("Diamonds Found");
-      alert("You found the Royal Diamonds! You Win!!");
-      //Reload the game to default
-      window.location.reload(true);
-      break;
+      case ROYAL_DIAMONDS:
+        console.log("Diamonds Found");
+        alert("You found the Royal Diamonds! You Win!!");
+        //Reload the game to default
+        window.location.reload(true);
+        break;
 
-    case BINOCULARS:
-      alert("You found a pair of binoculars!");
-      this.hero.hasBinoculars();
-      this.hero.addToInventory(item);
-      break;
+      case BINOCULARS:
+        alert("You found a pair of binoculars!");
+        this.hero.hasBinoculars();
+        this.hero.addToInventory(item);
+        break;
         
-    case POWER_BAR:
-      alert("Power Bar Found");
-      this.hero.usePowerBar(10);
-      break;
+      case POWER_BAR:
+        alert("Power Bar Found");
+        this.hero.usePowerBar(10);
+        break;
         
-    case TREASURE:
-      console.log("Treasure Chest Found")
-      this.hero.findTreasure();
-      break;
+      case TREASURE:
+        console.log("Treasure Chest Found");
+        this.hero.findTreasure();
+        break;
         
-    case BOAT:
-      alert("Boat found!");
-      this.hero.hasBoat();
-      this.hero.addToInventory(item);
-      break;
+      case BOAT:
+        alert("Boat found!");
+        this.hero.hasBoat();
+        this.hero.addToInventory(item);
+        break;
         
-    case CHAINSAW:
-      alert("You found a chainsaw");
-      this.hero.addToInventory(item);
-      break;
+      case CHAINSAW:
+        alert("You found a chainsaw");
+        this.hero.addToInventory(item);
+        break;
+      }
     }
-   }
 
   }
 

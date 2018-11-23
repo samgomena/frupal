@@ -78,20 +78,20 @@ class Person {
     var len = this.inventory.length;
     for(var i = 0; i < len; ++i)
     {
-       if(itemToCheck == this.inventory[i]) {
-          return true;
-       }
+      if(itemToCheck == this.inventory[i]) {
+        return true;
+      }
     }
     return false;
   }
 
   addToInventory(item) {
     let buy = prompt(`Would you like to buy ${item}? y or n`);
-    if(buy && buy.toLowerCase() === 'y') {
-       this.inventory.push([this.map.layers[(this.x * this.map.width) + this.y].name]);
-	this.money-=10;
-	++this.inventoryLength;
-     }
+    if(buy && buy.toLowerCase() === "y") {
+      this.inventory.push([this.map.layers[(this.x * this.map.width) + this.y].name]);
+      this.money-=10;
+      ++this.inventoryLength;
+    }
   }
 
     
@@ -165,7 +165,7 @@ class Person {
 
   findTreasure() {
     this.money += 10;     // adds 10 whiffles
-                          // TODO: check requirements for how much $$ to find
+    // TODO: check requirements for how much $$ to find
   }
 
   /**
