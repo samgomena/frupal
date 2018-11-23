@@ -8,7 +8,7 @@ import { request } from "https";
  * game board. It also binds event listeners to the keys responsible for moving the hero around the map.
  */
 export default class Game {
-  constructor(canvas, map, hero, display, fps=30) {
+  constructor(canvas, map, hero, display, fps=5) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.map = map;
@@ -136,6 +136,7 @@ export default class Game {
 
   stop() {
     this.game_stop = true;
+    window.clearTimeout(this.tick);
   }
 
 
@@ -172,10 +173,8 @@ export default class Game {
       switch(item) {
 
       case ROYAL_DIAMONDS:
-        console.log("Diamonds Found");
-        alert("You found the Royal Diamonds! You Win!!");
+        this.winPrompt();
         //Reload the game to default
-        window.location.reload(true);
         break;
 
       case BINOCULARS:
@@ -193,17 +192,32 @@ export default class Game {
         break;
         
       case BOAT:
-        this.hero.hasBoat();
         this.hero.addToInventory(item);
         break;
         
       case CHAINSAW:
-        alert("You found a chainsaw");
         this.hero.addToInventory(item);
         break;
       }
     }
 
+  }
+
+  winPrompt() {
+    let popup = document.getElementById("popup");
+    popup.style["display"] = "block";
+    const win_text = document.createTextNode("You found the diamonds! You Win!");
+    const ok_text = document.createTextNode("Okay :D");
+    const ok_button = document.createElement("button");
+    ok_button.appendChild(ok_text);
+    popup.appendChild(win_text);
+    popup.appendChild(ok_button);
+    ok_button.addEventListener("click", () => {
+      //Reload the game to default
+      window.location.reload(true);
+    });
+
+    this.stop();
   }
 
   /**
@@ -236,8 +250,10 @@ export default class Game {
         const ok_text = document.createTextNode("Okay :C");
         const ok_button = document.createElement("button");
         ok_button.appendChild(ok_text);
-        popup.appendChild(dead_text);
-        popup.appendChild(ok_button);
+        if (popup.innerHTML == "") {
+          popup.appendChild(dead_text);
+          popup.appendChild(ok_button);
+        }
 
         ok_button.addEventListener("click", () => {
           //Reload the game to default
