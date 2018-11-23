@@ -13,63 +13,69 @@
     <script defer src="./scripts/main.js"></script>
 </head>
 <body>
-
-<!-- menu div is an overlay that represents the game start menu -->
-<div id="menu" class="overlay">
-    <div id="sub" class="overlay-content">
-        <div id="start">Start</div>
-        <div id="close">&times</div>
-    </div>
-</div>
-
-<!-- options div is an overlay that represents the customization menu -->
-<div id="options" class="overlay" style="display:none;">
-    <h2>Options</h2>
-
-    <div class="dropdown">
-        <button id="dropbtn" class="dropbtn">Choose Map
-            <div id="myDropdown" class="dropdown-content" style="display:none"></div>
-        </button>
-    </div>
-    <button id="update">Update</button>
-
-    <div id="form" class="overlay-content">
-        <input type="text" placeholder="Map Name" name="in"/> <br>        <!-- map name -->
-        <input type="text" placeholder="Map Size" name="in"/> <br>        <!-- map size -->
-        <input type="text" placeholder="Player Location X" name="in"/> <br> <!-- player location -->
-        <input type="text" placeholder="Player Location Y" name="in"/> <br> <!-- player location -->
-        <input type="text" placeholder="Energy" name="in"> <br>          <!-- energy -->
-        <input type="text" placeholder="Money" name="in"> <br>           <!-- money -->
-        <textarea placeholder="Items" name="in"></textarea> <br>         <!-- items -->
-        <div class = "overlay-instruct">
-            <label for="in">Tiles:</label>
-        </div>
-
-        <textarea name="in" placeholder="Royal Diamonds: 0,0;"></textarea> <br>         <!-- tiles -->
-        <input type="button" id="submit" value="Create"/>
-    </div>
-</div>
-
-<div class = "row">
-    <div class="game">
-        <!-- display div is handled by the display class -->
-        <div class="column"> </div>
-        <div class="column">
-            <h1>Frupal</h1>
-            <div id="display" class="game-display"></div>
-            <div class="movement__button">
-                <button id="up">North</button>
-                <div class="movement__left-right">
-                    <button id="left">West</button>
-                    <button id="right">East</button>
-                </div>
-                <button id="down">South</button>
+    <div class="container">
+        <header class="title">
+            <h1>
+                Frupal Game
+            </h1>
+        </header>
+        <!-- menu div is an overlay that represents the game start menu -->
+        <div id="menu" class="overlay center">
+            <div id="sub" class="overlay-content">
+                <div id="start">Start</div>
+                <div id="close">&times</div>
             </div>
         </div>
-        <div class="column">
-            <canvas id="demo" style="background: #ddd;"></canvas>
+
+        <!-- options div is an overlay that represents the customization menu -->
+        <div id="options" class="overlay center" style="display:none;">
+            <h2>Options</h2>
+
+            <div class="dropdown">
+                <button id="dropbtn" class="dropbtn">Choose Map
+                    <div id="myDropdown" class="dropdown-content" style="display:none"></div>
+                </button>
+            </div>
+            <button id="update">Update</button>
+
+            <div id="form" class="overlay-content">
+                <input type="text" placeholder="Map Name" name="in"/> <br>        <!-- map name -->
+                <input type="text" placeholder="Map Size" name="in"/> <br>        <!-- map size -->
+                <input type="text" placeholder="Player Location X" name="in"/> <br> <!-- player location -->
+                <input type="text" placeholder="Player Location Y" name="in"/> <br> <!-- player location -->
+                <input type="text" placeholder="Energy" name="in"> <br>          <!-- energy -->
+                <input type="text" placeholder="Money" name="in"> <br>           <!-- money -->
+                <textarea placeholder="Items" name="in"></textarea> <br>         <!-- items -->
+                <div class = "overlay-instruct">
+                    <label for="in">Tiles:</label>
+                </div>
+
+                <textarea name="in" placeholder="Royal Diamonds: 0,0;"></textarea> <br>         <!-- tiles -->
+                <input type="button" id="submit" value="Create"/>
+            </div>
+        </div>
+
+        <div class="game center">
+            <!-- display div is handled by the display class -->
+            <div class="hud">
+                <div id="display" class="game-display">
+
+                </div>
+                <div class="movement__buttons">
+                    <div class="top-row">
+                        <button id="up">North</button>
+                    </div>
+                    <div class="bottom-row">
+                        <button id="left">West</button>
+                        <button id="down">South</button>
+                        <button id="right">East</button>
+                    </div>
+                </div>
+            </div>
+            <div class="game-window">
+                <canvas id="demo"></canvas>
+            </div>
         </div>
     </div>
-</div>
 </body>
 </html>
