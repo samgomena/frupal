@@ -1,5 +1,6 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, BOAT, CHAINSAW, WEED_WHACKER} from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
+
 // import { loseGame } from "./endGame";
 /**
  * This class is responsible for initializing the height and width of the canvas element that serves as the
@@ -30,8 +31,8 @@ export default class Game {
 
     canvas.width = (this.map.tile_size * this.map.width);
     canvas.height = (this.map.tile_size * this.map.height);
-    this.ctx.translate(0, canvas.height)
-    this.ctx.scale(1, -1)
+    this.ctx.translate(0, canvas.height);
+    this.ctx.scale(1, -1);
 
     window.addEventListener("load", this.sizeUpBoard.bind(this), false);
     window.addEventListener("resize", this.sizeUpBoard.bind(this), false);
@@ -169,6 +170,7 @@ export default class Game {
     switch(item) {
 
     case ROYAL_DIAMONDS:
+      console.log("Diamonds Found");
       alert("You found the Royal Diamonds! You Win!!");
       //Reload the game to default
       window.location.reload(true);
@@ -179,23 +181,27 @@ export default class Game {
       this.hero.hasBinoculars();
       this.hero.addToInventory(item);
       break;
-    
+        
     case POWER_BAR:
       alert("Power Bar Found");
       this.hero.usePowerBar(10);
       break;
-    
+        
+    case TREASURE:
+      console.log("Treasure Chest Found")
+      this.hero.findTreasure();
+      break;
+        
     case BOAT:
       alert("Boat found!");
       this.hero.hasBoat();
       this.hero.addToInventory(item);
       break;
-
+        
     case CHAINSAW:
       alert("You found a chainsaw");
       this.hero.addToInventory(item);
       break;
-    
     }
    }
 
@@ -290,6 +296,7 @@ export default class Game {
       {
         let visible = this.map.layers[(cellX * this.map.width) + cellY].visible;
         let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
+
         this.ctx.beginPath();
         this.ctx.fillStyle = visible ? terrain.color : "burlywood";
         this.ctx.rect(

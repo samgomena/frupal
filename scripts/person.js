@@ -46,7 +46,7 @@ class Person {
   getPlayerLocCost() {
     return this.map.layers[(this.x * this.map.width) + this.y].terrain.cost;
   }
-  
+
   getPlayerLocItem() {
     return this.map.layers[(this.x * this.map.width) + this.y].name;
   }
@@ -149,18 +149,23 @@ class Person {
       this.y = moveY;
       return 0;
     }
-      
+
     return terrain.cost;
   }
 
   consumeEnergy(lost) {
-    if(this.energy === 0) this.dead = true;	
+    if(this.energy === 0) this.dead = true;
     this.energy -= lost;
   }
 
   usePowerBar(gained) {
     this.energy += gained;
     this.map.layers[(this.x * this.map.width) + this.y].name = "";
+  }
+
+  findTreasure() {
+    this.money += 10;     // adds 10 whiffles
+                          // TODO: check requirements for how much $$ to find
   }
 
   /**
@@ -179,4 +184,3 @@ class Person {
 }
 
 export default Person;
-
