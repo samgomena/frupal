@@ -67,3 +67,14 @@ body {
 canvas {
   background: #ddd;
 }
+
+#popup {
+  background-color: white;
+  border: 1px solid black;
+  display: none;
+  height: 150px;
+  position: absolute;
+  text-align: center;
+  width: 150px;
+  z-index: 99;
+}

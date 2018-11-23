@@ -176,8 +176,6 @@ export default class Game {
         break;
 
       case BINOCULARS:
-        alert("You found a pair of binoculars!");
-        this.hero.hasBinoculars();
         this.hero.addToInventory(item);
         break;
         
@@ -192,7 +190,6 @@ export default class Game {
         break;
         
       case BOAT:
-        alert("Boat found!");
         this.hero.hasBoat();
         this.hero.addToInventory(item);
         break;

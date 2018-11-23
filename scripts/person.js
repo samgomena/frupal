@@ -1,3 +1,5 @@
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
+
 class Person {
   constructor(hero_init, map) {
     this.name = "I made this up";
@@ -86,14 +88,54 @@ class Person {
   }
 
   addToInventory(item) {
-    let buy = prompt(`Would you like to buy ${item}? y or n`);
-    if(buy && buy.toLowerCase() === "y") {
-      this.inventory.push([this.map.layers[(this.x * this.map.width) + this.y].name]);
-      this.money-=10;
-      ++this.inventoryLength;
-    }
+    let popup = document.getElementById("popup");
+    popup.style["display"] = "block";
+    const buy_text = document.createTextNode(`Would you like to buy ${item}?`);
+    const buy_message = document.createElement("div");
+    buy_message.appendChild(buy_text);
+    const yes_text = document.createTextNode("Yes");
+    const no_text = document.createTextNode("No");
+    const yes = document.createElement("button");
+    yes.appendChild(yes_text);
+    const no = document.createElement("button");
+    no.appendChild(no_text);
+
+    yes.addEventListener("click", () => {
+      this.inventory.push(item);
+      this.money -= 10;
+      this.inventoryLength += 1;
+      popup.style["display"] = "none";
+      popup.innerHTML = "";
+
+      switch(item) {
+      case BOAT:
+        this.hasBoat();
+        break;
+      case BINOCULARS:
+        this.hasBinoculars();
+        break;
+      }
+    });
+
+    no.addEventListener("click", () => {
+      popup.style["display"] = "none";
+      popup.innerHTML = "";
+    });
+
+    popup.appendChild(buy_message);
+    popup.appendChild(yes);
+    popup.appendChild(no);
   }
 
+  giveItem(item) {
+    // ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER
+    // TODO: Might need this for obstacle-tool interaction?
+    switch(item) {
+    case BINOCULARS:
+      this.hasBinoculars();
+      break;
+    }
+  }
     
   /**
   * This function moves a player `dir_x` units in the x direction.
