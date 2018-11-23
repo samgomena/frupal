@@ -185,7 +185,10 @@ export default class Game {
         break;
         
       case POWER_BAR:
-        alert("Power Bar Found");
+        this.goodPrompt("You found a power bar!", (popup) => {
+          popup.style["display"] = "none";
+          popup.innerHTML = "";
+        });
         this.hero.usePowerBar(10);
         break;
         
