@@ -1,11 +1,10 @@
 "use strict";
+import Map from "./map";
 
 let TERRAIN_MAP = require("./data/terrainMap").TERRAIN_MAP;
 
-
 const NUM_REGEX = /(\d+)/;
 const COORD_REGEX = /(\d+),\s*(\d+)/;
-const MAP_ITEM_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
 
 const DEFAULT_CONFIG =
 `Sample Frupal Game Map
@@ -54,9 +53,6 @@ Pretty Rock
  */
 function parse(game_config) {
   const GAME = {};
-  GAME.map = new Map;
-  GAME.map.tile_size = 64; // Magic for now
-  GAME.map.objects = [];
   GAME.player = {};
   GAME.player.items = {};
 
@@ -65,12 +61,8 @@ function parse(game_config) {
   // Unpack and truncate first three items
   let [game_title, board_size, first_delimiter] = split_map_file.splice(0, 3);
 
-  GAME.board_size = +board_size;
-
   GAME.title = game_title;
-  GAME.map.width = GAME.map.height = +board_size;
-  // Control layer
-  GAME.map.layers = new Array(GAME.map.width * GAME.map.width);
+  GAME.map = new Map(+board_size, +board_size);
 
   let delimiter = first_delimiter.charAt(0);
 
@@ -101,62 +93,13 @@ function parse(game_config) {
   // Remove closing delimiter
   split_map_file.splice(0, 1);
 
-  map.initObjects(split_map_file);
+  GAME.map.initObjects(split_map_file);
 
   return GAME;
-}
-
-function setGameData(gameData) {
-
-  let obstacle_layer = new Array((gameData.board_size) * (gameData.board_size));
-
-  for (let i = 0; i < obstacle_layer.length; ++i)
-  {
-    obstacle_layer[i] = {
-      x: undefined,
-      y: undefined,
-      visible: false,
-      terrain: TERRAIN_MAP[0],
-      name: ""
-    };
-  }
-
-  for(let i = 0; i < gameData.map.objects.length; ++i) {
-    let index = (gameData.map.objects[i].x * gameData.map.width) + gameData.map.objects[i].y;
-    obstacle_layer[index] = gameData.map.objects[i];
-  }
-  gameData.map.layers = obstacle_layer;
-
-
-  // Perform checks
-
-  // TODO: Add error checking to ensure jewels aren't at player starting location
-
-  // Throw if player's starting location is off the map
-  if(gameData.player.pos.x > gameData.map.width || gameData.player.pos.y > gameData.map.height) {
-    throw Error(`Starting position of (${gameData.player.pos.x}, ${gameData.player.pos.y}) is out of bounds.`);
-  }
-
-  let contains_diamonds = gameData.map.objects.filter(board_object => {
-    return board_object.name === "Royal Diamonds";
-  }).length;
-
-  // Throw if more than 1 diamonds
-  if(contains_diamonds !== 1) {
-    throw Error("The map can only have one royal diamonds item.");
-  }
-
-  // Throw if no diamonds
-  if(!contains_diamonds) {
-    throw Error("The map does not contain the royal diamonds.");
-  }
-  // console.log("GAME DATA ", gameData);
-  return gameData;
 }
 
 module.exports = {
   TERRAIN_MAP: TERRAIN_MAP,
   DEFAULT_CONFIG: DEFAULT_CONFIG,
-  parse: parse,
-  setGameData: setGameData
+  parse: parse
 };

@@ -2,6 +2,7 @@ import Person from "./person";
 import Display from "./display";
 import { parse, DEFAULT_CONFIG } from "./parseConfig";
 import Game from "./game";
+import Map from "./map";
 import { setGameData } from "./setGameData";
 import createOverlay from "./overlay";
 import "../styles/main.scss";
@@ -9,17 +10,18 @@ import "../styles/main.scss";
 createOverlay();
 
 // Parse the game config
-let game_config = parse(DEFAULT_CONFIG);
-let gameData = setGameData(game_config);
+let gameConfig = parse(DEFAULT_CONFIG);
+//let gameData = setGameData(gameConfig);
 
-let map = gameData.map;
+let map = gameConfig.map;
 // console.log("MAP:", map);
-let hero_init = game_config.player;
+let hero_init = gameConfig.player;
 
 // Sets text in the browser tab
-setTitle(game_config.title);
+setTitle(gameConfig.title);
 
 // This triggers map refresh, has to come after call to overlay above.
+/*
 let update = document.getElementById("update");
 
 update.addEventListener("click", function() {
@@ -39,6 +41,7 @@ update.addEventListener("click", function() {
   // the start button. 
   // ...
 });
+*/
 
 /*
 let start = document.getElementById("start");

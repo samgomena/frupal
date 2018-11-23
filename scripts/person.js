@@ -1,3 +1,6 @@
+"use strict";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR } from "./data/items";
+
 class Person {
   constructor(hero_init, map) {
     this.name = "I made this up";
@@ -21,6 +24,8 @@ class Person {
     this.left = { x: -1, y: 0 };
     this.right = { x: 1, y: 0 };
 
+    this.mapX = this.x * this.map.width;
+    this.mapY = this.y;
   }
 
   printStatus() {
@@ -48,14 +53,9 @@ class Person {
     return this.map.getTerrainCost(this.x, this.y);
   }
   
-  //Returns a string representation of the item at the given x,y coordinates
+  //Returns a string representation of the item or obstacle at the given x,y coordinates
   getPlayerLocItem() {
-    return this.map.getItemAtLoc(this.x, this.y);
-  }
-
-  //Returns a string representation of the obstacle at the given x,y coordinates
-  getPlayerLocItem() {
-    return this.map.getObstacleAtLoc(this.x, this.y);
+    return this.map.getObjectAtLoc(this.x, this.y);
   }
 
   getPlayerLoc() {
@@ -69,8 +69,12 @@ class Person {
     this.dead = true;
   }
 
-  hasBinoculars() {
+  useBinoculars() {
     this.visibilityRadius = 2;
+  }
+
+  usePowerBar(gained) {
+    this.energy += gained;
   }
 
   hasBoat() {
@@ -97,6 +101,9 @@ class Person {
 
     if (move.allow) {
       this.x = moveX;
+      
+       if (move.object !== "None")
+         this.interactWithObject(move.object);
     }
     return move.cost;
   }
@@ -130,10 +137,6 @@ class Person {
     this.energy -= lost;
   }
 
-  usePowerBar(gained) {
-    this.energy += gained;
-  }
-
   /**
    * This function calls move updates for the x and y directions.
    *
@@ -146,6 +149,28 @@ class Person {
     let costX = this.moveX(step_x);
     let costY = this.moveY(step_y);
     this.consumeEnergy(costX + costY);
+  }
+
+  interactWithObject(object) {
+    switch(object) {
+
+    case ROYAL_DIAMONDS:
+      alert("You found the jewels!!!!!! You Win!!");
+      //Reload the game to default
+      window.location.reload(true);
+      break;
+
+    case BINOCULARS:
+      console.log("You found a pair of binoculars!");
+      this.useBinoculars();
+      break;
+    
+    case POWER_BAR:
+      // TODO: Consume power bar on tile move?
+      console.log("Power Bar Found");
+      this.usePowerBar(10);
+    }
+    this.map.destroyObject(this.x, this.y);
   }
 }
 

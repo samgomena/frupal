@@ -114,19 +114,7 @@ export default class Game {
    */
   run() {
     // Bind `tick` to `Game` so `this` is not `window`
-    let minX = Math.max(0, this.hero.x - 1);
-    let minY = Math.max(0, this.hero.y - 1);
-    let maxX = Math.min(this.map.width - 1, this.hero.x + 1);
-    let maxY = Math.min(this.map.height - 1, this.hero.y + 1);
-
-    for (let cellX = minX; cellX <= maxX; ++cellX)
-    {
-      for (let cellY = minY; cellY <= maxY; ++cellY)
-      {
-        let tile = this.map.layers[(cellX * this.map.width) + cellY];
-        tile.visible = true;
-      }
-    }
+    this.revealMap();
     this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
@@ -144,11 +132,13 @@ export default class Game {
 
     this.update();
 
-    if(this.newTile) {
+    /*
+    if (this.newTile) {
       // Makes sure the player's tile is not constantly checked.
       this.tileCheck();
       this.newTile = false;
     }
+    */
 
     this.display.update();
     this.drawGrid();
@@ -156,11 +146,11 @@ export default class Game {
 
     window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
-
+/*
   tileCheck() {
     /*
       Checks the tile that the hero is on.
-    */
+    *
     const item = this.hero.getPlayerLocItem();
     switch(item) {
 
@@ -181,7 +171,7 @@ export default class Game {
       this.hero.usePowerBar(10);
     }
   }
-
+*/
   /**
    * This function consumes the move events in `hero_move_queue` and executes them sequentially.
    */
@@ -190,20 +180,7 @@ export default class Game {
       if (this.hero.getEnergy() > 1) {
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
-
-        let minX = Math.max(0, this.hero.x - this.hero.visibilityRadius);
-        let minY = Math.max(0, this.hero.y - this.hero.visibilityRadius);
-        let maxX = Math.min(this.map.width - this.hero.visibilityRadius, this.hero.x + this.hero.visibilityRadius);
-        let maxY = Math.min(this.map.height - this.hero.visibilityRadius, this.hero.y + this.hero.visibilityRadius);
-
-        for (let cellX = minX; cellX <= maxX; ++cellX)
-        {
-          for (let cellY = minY; cellY <= maxY; ++cellY)
-          {
-            let tile = this.map.layers[(cellX * this.map.width) + cellY];
-            tile.visible = true;
-          }
-        }
+        this.revealMap();
       }
       else {
         alert("You have run out of energy.");
@@ -214,6 +191,21 @@ export default class Game {
         window.location.reload(true);
       }
     });
+  }
+
+  revealMap() {
+    let minX = Math.max(0, this.hero.x - this.hero.visibilityRadius);
+    let minY = Math.max(0, this.hero.y - this.hero.visibilityRadius);
+    let maxX = Math.min(this.map.width - this.hero.visibilityRadius, this.hero.x + this.hero.visibilityRadius);
+    let maxY = Math.min(this.map.height - this.hero.visibilityRadius, this.hero.y + this.hero.visibilityRadius);
+
+    for (let cellX = minX; cellX <= maxX; ++cellX)
+    {
+      for (let cellY = minY; cellY <= maxY; ++cellY)
+      {
+        this.map.showTile(cellX, cellY);
+      }
+    }
   }
 
   /**
@@ -264,15 +256,16 @@ export default class Game {
       this.ctx.stroke();
     }
 
-    this.ctx.font = "30px ariel";
+    this.ctx.font = "20px ariel";
     for (let cellX = 0; cellX < this.map.height; ++cellX)
     {
       for (let cellY = 0; cellY < this.map.width; ++cellY)
       {
-        let visible = this.map.layers[(cellX * this.map.width) + cellY].visible;
-        let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
+        let tile = this.map.getTile(cellX, cellY);
         this.ctx.beginPath();
-        this.ctx.fillStyle = visible ? terrain.color : "burlywood";
+        this.ctx.fillStyle = tile.visible ?
+                             tile.terrain.color :
+                             "burlywood";
         this.ctx.rect(
           (cellX * this.map.tile_size) + 1,
           (cellY * this.map.tile_size) + 1,
@@ -281,15 +274,18 @@ export default class Game {
         this.ctx.stroke();
         this.ctx.fill();
 
-        if (visible)
+        if (tile.visible)
         {
           this.ctx.scale(1, -1);
           this.ctx.beginPath();
           this.ctx.fillStyle = "black";
+          let x1 = cellX + 1;
+          let y1 = cellY + 1;
           this.ctx.fillText(
-            terrain.name.charAt(0),
-            (cellX * this.map.tile_size) + (this.map.tile_size / 2),
-            this.map.height + 1 - ((cellY * this.map.tile_size) + this.map.tile_size));
+            //terrain.name.charAt(0),
+            x1.toString() + "," + y1.toString(),
+            (cellX * this.map.tile_size) + (this.map.tile_size / 10),
+	    this.map.height + 1 - ((cellY * this.map.tile_size) + this.map.tile_size));
           this.ctx.stroke();
           this.ctx.scale(1, -1);
         }
