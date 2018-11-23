@@ -1,6 +1,7 @@
 "use strict";
 
 let TERRAIN_MAP = require("./data/terrainMap").TERRAIN_MAP;
+const items = require("./data/items");
 
 
 const NUM_REGEX = /(\d+)/;
@@ -12,7 +13,7 @@ const DEFAULT_CONFIG =
 25
 #####################
 12,12
-100
+50
 1000
 Axe
 Shears
@@ -22,14 +23,14 @@ Pretty Rock
 14, 13, 0, 2, None
 15, 12, 0, 2, None
 13, 12, 0, 1, Tree
-15, 13, 0, 6, Royal Diamonds
-11, 11, 0, 1, Binoculars
+15, 13, 0, 6, ${items.ROYAL_DIAMONDS}
+11, 11, 0, 1, ${items.BINOCULARS}
 15, 16, 0, 4, Bog
-5, 5, 1, 0, Power Bar
-10, 10, 0, 0, Treasure
-17, 10, 0, 0, Boat
+5, 5, 1, 0, ${items.POWER_BAR}
+10, 10, 0, 0, ${items.TREASURE}
+17, 10, 0, 0, ${items.BOAT}
 14, 12, 0, 2, None
-9, 9, 0, 1, Treasure Chest`;
+9, 9, 0, 1, ${items.TREASURE}`;
 
 /**
  *
