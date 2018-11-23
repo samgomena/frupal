@@ -88,17 +88,21 @@ class Person {
   }
 
   addToInventory(item) {
+    // This giant thing is just creating HTML elements to show up within the popup element.
     let popup = document.getElementById("popup");
     popup.style["display"] = "flex";
     const buy_text = document.createTextNode(`Would you like to buy ${item}?`);
     const buy_message = document.createElement("div");
     buy_message.appendChild(buy_text);
+    const yes_no_box = document.createElement("div");
     const yes_text = document.createTextNode("Yes");
     const no_text = document.createTextNode("No");
     const yes = document.createElement("button");
     yes.appendChild(yes_text);
     const no = document.createElement("button");
     no.appendChild(no_text);
+    yes_no_box.appendChild(yes);
+    yes_no_box.appendChild(no);
 
     yes.addEventListener("click", () => {
       this.inventory.push(item);
@@ -123,8 +127,7 @@ class Person {
     });
 
     popup.appendChild(buy_message);
-    popup.appendChild(yes);
-    popup.appendChild(no);
+    popup.appendChild(yes_no_box);
   }
 
   giveItem(item) {
