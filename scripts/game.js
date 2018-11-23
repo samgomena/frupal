@@ -173,8 +173,11 @@ export default class Game {
       switch(item) {
 
       case ROYAL_DIAMONDS:
-        this.winPrompt();
+        this.stop();
+        this.goodPrompt("You found the Royal Diamonds! You Win!", () => {
         //Reload the game to default
+          window.location.reload(true);
+        });
         break;
 
       case BINOCULARS:
@@ -188,6 +191,10 @@ export default class Game {
         
       case TREASURE:
         console.log("Treasure Chest Found");
+        this.goodPrompt("You found treasure!", (popup) => {
+          popup.style["display"] = "none";
+          popup.innerHTML = "";
+        });
         this.hero.findTreasure();
         break;
         
@@ -203,21 +210,16 @@ export default class Game {
 
   }
 
-  winPrompt() {
+  goodPrompt(text, eventHandler) {
     let popup = document.getElementById("popup");
     popup.style["display"] = "block";
-    const win_text = document.createTextNode("You found the diamonds! You Win!");
+    const happy_text = document.createTextNode(text);
     const ok_text = document.createTextNode("Okay :D");
     const ok_button = document.createElement("button");
     ok_button.appendChild(ok_text);
-    popup.appendChild(win_text);
+    popup.appendChild(happy_text);
     popup.appendChild(ok_button);
-    ok_button.addEventListener("click", () => {
-      //Reload the game to default
-      window.location.reload(true);
-    });
-
-    this.stop();
+    ok_button.addEventListener("click", eventHandler.bind(this, popup));
   }
 
   /**
