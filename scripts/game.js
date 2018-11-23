@@ -271,7 +271,7 @@ export default class Game {
       }
       else {
         let popup = document.getElementById("popup");
-        popup.style["display"] = "block";
+        popup.style["display"] = "flex";
         const dead_text = document.createTextNode("You are already dead.");
         const ok_text = document.createTextNode("Okay :C");
         const ok_button = document.createElement("button");
