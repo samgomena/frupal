@@ -8,7 +8,7 @@ import { request } from "https";
  * game board. It also binds event listeners to the keys responsible for moving the hero around the map.
  */
 export default class Game {
-  constructor(canvas, map, hero, display, fps=5) {
+  constructor(canvas, map, hero, display, fps=30) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.map = map;
@@ -130,8 +130,8 @@ export default class Game {
         tile.visible = true;
       }
     }
-    // this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
-    requestAnimationFrame(this.tick.bind(this));
+    this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
+    // requestAnimationFrame(this.tick.bind(this));
   }
 
   stop() {
@@ -157,7 +157,8 @@ export default class Game {
     this.drawGrid();
     this.drawPlayer();
 
-    requestAnimationFrame(this.tick.bind(this));
+    // requestAnimationFrame(this.tick.bind(this));
+    window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
   tileCheck() {
