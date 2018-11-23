@@ -1,5 +1,6 @@
 "use strict";
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
+import { request } from "https";
 
 // import { loseGame } from "./endGame";
 /**
@@ -120,6 +121,7 @@ export default class Game {
     let maxX = Math.min(this.map.width - 1, this.hero.x + 1);
     let maxY = Math.min(this.map.height - 1, this.hero.y + 1);
 
+    // Initial Visibility
     for (let cellX = minX; cellX <= maxX; ++cellX)
     {
       for (let cellY = minY; cellY <= maxY; ++cellY)
@@ -128,11 +130,12 @@ export default class Game {
         tile.visible = true;
       }
     }
-    this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
+    // this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
+    requestAnimationFrame(this.tick.bind(this));
   }
 
   stop() {
-    clearTimeout(this.game_loop);
+    this.game_stop = true;
   }
 
 
@@ -140,9 +143,8 @@ export default class Game {
    * This function is responsible for executing game updates and rendering the updates.
    */
   tick() {
-
+    if(this.game_stop) return 0;
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
     this.update();
 
     if(this.newTile) {
@@ -155,7 +157,7 @@ export default class Game {
     this.drawGrid();
     this.drawPlayer();
 
-    window.setTimeout(this.tick.bind(this), 1000/this.fps);
+    requestAnimationFrame(this.tick.bind(this));
   }
 
   tileCheck() {
@@ -227,12 +229,22 @@ export default class Game {
         }
       }
       else {
-        alert("You have run out of energy.");
+        let popup = document.getElementById("popup");
+        popup.style["display"] = "block";
+        const dead_text = document.createTextNode("You are already dead.");
+        const ok_text = document.createTextNode("Okay :C");
+        const ok_button = document.createElement("button");
+        ok_button.appendChild(ok_text);
+        popup.appendChild(dead_text);
+        popup.appendChild(ok_button);
+
+        ok_button.addEventListener("click", () => {
+          //Reload the game to default
+          window.location.reload(true);
+        });
 
         this.hero.isDead();
         this.stop();
-        //Reload the game to default
-        window.location.reload(true);
       }
     });
   }
