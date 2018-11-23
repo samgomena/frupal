@@ -9,8 +9,7 @@ class Person {
     this.energy = hero_init.energy;
     this.money = hero_init.whiffles;
     this.inventory = hero_init.inventory;
-    this.boat = false;	//boat should eventually be in inventory
-
+    this.boat = false;	
 
     this.map = map;
     this.dead = false;
@@ -75,8 +74,24 @@ class Person {
     this.boat = true;
   }
 
+  checkInventory(itemToCheck) {
+    var len = this.inventory.length;
+    for(var i = 0; i < len; ++i)
+    {
+       if(itemToCheck == this.inventory[i]) {
+          return true;
+       }
+    }
+    return false;
+  }
+
   addToInventory(item) {
-    this.inventory.push([this.map.layers[(this.x * this.map.width) + this.y].name]);
+    let buy = prompt(`Would you like to buy ${item}? y or n`);
+    if(buy && buy.toLowerCase() === 'y') {
+       this.inventory.push([this.map.layers[(this.x * this.map.width) + this.y].name]);
+	this.money-=10;
+	++this.inventoryLength;
+     }
   }
 
     
@@ -145,6 +160,7 @@ class Person {
 
   usePowerBar(gained) {
     this.energy += gained;
+    this.map.layers[(this.x * this.map.width) + this.y].name = "";
   }
 
   findTreasure() {

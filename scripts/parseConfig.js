@@ -28,8 +28,8 @@ Pretty Rock
 5, 5, 1, 0, Power Bar
 10, 10, 0, 0, Treasure
 17, 10, 0, 0, Boat
-14, 12, 0, 2, None`;
-
+14, 12, 0, 2, None
+9, 9, 0, 1, Treasure Chest`;
 
 /**
  *

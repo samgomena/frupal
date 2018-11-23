@@ -1,7 +1,7 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW } from "./data/items";
-// import { loseGame } from "./endGame";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
 
+// import { loseGame } from "./endGame";
 /**
  * This class is responsible for initializing the height and width of the canvas element that serves as the
  * game board. It also binds event listeners to the keys responsible for moving the hero around the map.
@@ -163,6 +163,10 @@ export default class Game {
       Checks the tile that the hero is on.
     */
     const item = this.hero.getPlayerLocItem();
+    var invCheck = this.hero.checkInventory(item);
+    	     
+    if(invCheck === false) {  //item not already in the player's inventory
+
     switch(item) {
 
     case ROYAL_DIAMONDS:
@@ -179,7 +183,6 @@ export default class Game {
       break;
         
     case POWER_BAR:
-      // TODO: Consume power bar on tile move?
       alert("Power Bar Found");
       this.hero.usePowerBar(10);
       break;
@@ -200,6 +203,8 @@ export default class Game {
       this.hero.addToInventory(item);
       break;
     }
+   }
+
   }
 
   /**
