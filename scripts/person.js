@@ -89,7 +89,7 @@ class Person {
 
   addToInventory(item) {
     let popup = document.getElementById("popup");
-    popup.style["display"] = "block";
+    popup.style["display"] = "flex";
     const buy_text = document.createTextNode(`Would you like to buy ${item}?`);
     const buy_message = document.createElement("div");
     buy_message.appendChild(buy_text);

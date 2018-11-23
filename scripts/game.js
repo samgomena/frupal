@@ -215,7 +215,7 @@ export default class Game {
 
   goodPrompt(text, eventHandler) {
     let popup = document.getElementById("popup");
-    popup.style["display"] = "block";
+    popup.style["display"] = "flex";
     const happy_text = document.createTextNode(text);
     const ok_text = document.createTextNode("Okay :D");
     const ok_button = document.createElement("button");

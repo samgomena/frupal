@@ -69,10 +69,13 @@ canvas {
 }
 
 #popup {
+  align-items: center;
   background-color: white;
   border: 1px solid black;
   display: none;
+  flex-direction: column;
   height: 150px;
+  justify-content: space-evenly;
   position: absolute;
   text-align: center;
   width: 150px;
