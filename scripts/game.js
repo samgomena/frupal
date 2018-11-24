@@ -313,8 +313,8 @@ export default class Game {
 
         let minX = Math.max(0, this.hero.x - this.hero.visibilityRadius);
         let minY = Math.max(0, this.hero.y - this.hero.visibilityRadius);
-        let maxX = Math.min(this.map.width - this.hero.visibilityRadius, this.hero.x + this.hero.visibilityRadius);
-        let maxY = Math.min(this.map.height - this.hero.visibilityRadius, this.hero.y + this.hero.visibilityRadius);
+        let maxX = Math.min(this.map.width - this.hero.visibilityRadius + 1, this.hero.x + this.hero.visibilityRadius);
+        let maxY = Math.min(this.map.height - this.hero.visibilityRadius + 1, this.hero.y + this.hero.visibilityRadius);
 
         for (let cellX = minX; cellX <= maxX; ++cellX)
         {

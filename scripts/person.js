@@ -69,7 +69,7 @@ class Person {
   }
 
   hasBinoculars() {
-    this.visibilityRadius = 2;
+    this.visibilityRadius = 2; //can see two squares in each direction now.
   }
 
   hasBoat() {
