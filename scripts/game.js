@@ -1,6 +1,5 @@
 "use strict";
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
-import { TERRAIN_MAP } from "./data/terrainMap";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
 
@@ -95,7 +94,7 @@ export default class Game {
     // Define up, down, left, right, elements and attach click events to them
     ["up", "down", "left", "right"].forEach(direction => {
       document.getElementById(direction).addEventListener("click", () => {
-        if(!this.game_loop.paused && !this.game_stop) {
+        if(!this.isGamePaused() && !this.isGameStopped()) {
           this.moveEvent(direction);
         }
       });
@@ -103,7 +102,8 @@ export default class Game {
 
     // e stands for event
     document.addEventListener("keydown", e => {
-      if(!this.game_loop.paused && !this.game_stop) {
+      if(!this.isGamePaused() && !this.isGameStopped()) {
+        // I wonder if using function calls like this impacts performance?
         const keyName = e.key;
         const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
@@ -112,6 +112,14 @@ export default class Game {
         }
       }
     });
+  }
+
+  isGamePaused() {
+    return this.game_paused;
+  }
+
+  isGameStopped() {
+    return this.game_stop;
   }
 
   /**
