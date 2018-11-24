@@ -35,6 +35,8 @@ export default class Game {
     this.unknownFrameX = 816;
     this.unknownFrameY = 442;
 
+    this.game_paused = false;
+
     // Setting fps > 10 causes serious overallocation of resources
     this.fps = fps;
 
@@ -93,17 +95,23 @@ export default class Game {
     // Define up, down, left, right, elements and attach click events to them
     ["up", "down", "left", "right"].forEach(direction => {
       document.getElementById(direction).addEventListener("click", () => {
-        this.moveEvent(direction);
+        if(!this.game_loop.paused && !this.game_stop) {
+          console.log("ADD EVENT");
+          this.moveEvent(direction);
+        }
       });
     });
 
     // e stands for event
     document.addEventListener("keydown", e => {
-      const keyName = e.key;
-      const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+      if(!this.game_loop.paused && !this.game_stop) {
+        console.log("ADD EVENT");
+        const keyName = e.key;
+        const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
-      if(validKeys.indexOf(keyName) !== -1) {
-        this.moveEvent(keyName, 1);
+        if(validKeys.indexOf(keyName) !== -1) {
+          this.moveEvent(keyName, 1);
+        }
       }
     });
   }
@@ -165,19 +173,22 @@ export default class Game {
    * This function is responsible for executing game updates and rendering the updates.
    */
   tick() {
-    if(this.game_stop) return 0;
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.update();
+    if (this.game_stop) return 0;
+    if (!this.game_paused) {
 
-    if(this.newTile) {
-      // Makes sure the player's tile is not constantly checked.
-      this.tileCheck();
-      this.newTile = false;
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.update();
+
+      if(this.newTile) {
+        // Makes sure the player's tile is not constantly checked.
+        this.tileCheck();
+        this.newTile = false;
+      }
+
+      this.display.update();
+      this.drawGrid();
+      this.drawPlayer();
     }
-
-    this.display.update();
-    this.drawGrid();
-    this.drawPlayer();
 
     // requestAnimationFrame(this.tick.bind(this));
     window.setTimeout(this.tick.bind(this), 1000/this.fps);
@@ -190,40 +201,35 @@ export default class Game {
     const item = this.hero.getPlayerLocItem();
     var invCheck = this.hero.checkInventory(item);
     if(invCheck === false) {  //item not already in the player's inventory
-
+      // Pause the game to allow for player to buy things.
       switch(item) {
 
       case ROYAL_DIAMONDS:
         this.stop();
-        this.goodPrompt("You found the Royal Diamonds! You Win!", () => {
+        this.textPrompt("You found the Royal Diamonds! You Win!", () => {
         //Reload the game to default
           window.location.reload(true);
         });
         break;
 
       case BINOCULARS:
-        this.hero.addToInventory(item);
+        this.buyPrompt("Would you like to buy binoculars?", item);
         break;
         
       case POWER_BAR:
-        this.goodPrompt("You found a power bar!", (popup) => {
-          popup.style["display"] = "none";
-          popup.innerHTML = "";
-        });
+        this.textPrompt("You found a power bar!");
         this.hero.usePowerBar(10);
         break;
         
       case TREASURE:
         console.log("Treasure Chest Found");
-        this.goodPrompt("You found treasure!", (popup) => {
-          popup.style["display"] = "none";
-          popup.innerHTML = "";
-        });
+        this.textPrompt("You found treasure!");
         this.hero.findTreasure();
         break;
         
       case BOAT:
-        this.hero.addToInventory(item);
+        // this.hero.addToInventory(item);
+        this.buyPrompt("Would you like to buy a boat?", item);
         break;
         
       case CHAINSAW:
@@ -234,16 +240,59 @@ export default class Game {
 
   }
 
-  goodPrompt(text, eventHandler) {
+  buyPrompt(text, item) {
+    this.game_paused = true;
+
+    // This giant thing is just creating HTML elements to show up within the popup element.
     let popup = document.getElementById("popup");
     popup.style["display"] = "flex";
-    const happy_text = document.createTextNode(text);
-    const ok_text = document.createTextNode("Okay :D");
-    const ok_button = document.createElement("button");
-    ok_button.appendChild(ok_text);
-    popup.appendChild(happy_text);
-    popup.appendChild(ok_button);
-    ok_button.addEventListener("click", eventHandler.bind(this, popup));
+    const buy_text = document.createTextNode(`Would you like to buy ${item}?`);
+    const buy_message = document.createElement("div");
+    buy_message.appendChild(buy_text);
+    const yes_no_box = document.createElement("div");
+    const yes_text = document.createTextNode("Yes");
+    const no_text = document.createTextNode("No");
+    const yes = document.createElement("button");
+    yes.appendChild(yes_text);
+    const no = document.createElement("button");
+    no.appendChild(no_text);
+    yes_no_box.appendChild(yes);
+    yes_no_box.appendChild(no);
+
+    yes.addEventListener("click", () => {
+      this.clearPopupAndUnpause(popup);
+      this.hero.addToInventory(item);
+    });
+
+    no.addEventListener("click", this.clearPopupAndUnpause.bind(this));
+
+    popup.appendChild(buy_message);
+    popup.appendChild(yes_no_box);
+  }
+
+  textPrompt(text, eventHandler=this.clearPopupAndUnpause.bind(this)) {
+    // Pause the game if the prompt shows up.
+    this.game_paused = true;
+
+    let popup = document.getElementById("popup");
+    if (popup.innerHTML == "") {
+      popup.style["display"] = "flex";
+      const happy_text = document.createTextNode(text);
+      const ok_text = document.createTextNode("Okay");
+      const ok_button = document.createElement("button");
+      ok_button.appendChild(ok_text);
+      popup.appendChild(happy_text);
+      popup.appendChild(ok_button);
+      ok_button.addEventListener("click", eventHandler);
+    }
+  }
+
+  clearPopupAndUnpause() {
+    let popup = document.getElementById("popup");
+    popup.style["display"] = "none";
+    popup.innerHTML = "";
+    // Unpause game
+    this.game_paused = false;
   }
 
   /**
@@ -270,24 +319,10 @@ export default class Game {
         }
       }
       else {
-        let popup = document.getElementById("popup");
-        popup.style["display"] = "flex";
-        const dead_text = document.createTextNode("You are already dead.");
-        const ok_text = document.createTextNode("Okay :C");
-        const ok_button = document.createElement("button");
-        ok_button.appendChild(ok_text);
-        if (popup.innerHTML == "") {
-          popup.appendChild(dead_text);
-          popup.appendChild(ok_button);
-        }
-
-        ok_button.addEventListener("click", () => {
-          //Reload the game to default
+        this.stop();
+        this.textPrompt("Oh dear, you are dead!", () => {
           window.location.reload(true);
         });
-
-        this.hero.isDead();
-        this.stop();
       }
     });
   }
