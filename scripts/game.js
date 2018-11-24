@@ -323,9 +323,9 @@ export default class Game {
         let maxY = Math.min(this.map.height - this.hero.visibilityRadius, showUp);
 
         //This fixes the binoculars issue at the edge of the map.
-        if (maxX >= this.map.width - 3)
+        if (this.hero.visibilityRadius == 2 && maxX >= this.map.width - 3)
           ++maxX;
-        if (maxY >= this.map.height - 3)
+        if (this.hero.visibilityRadius == 2 && maxY >= this.map.height - 3)
           ++maxY;
 
         //Basic cell visibility, no wrap around.
