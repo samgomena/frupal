@@ -50,7 +50,7 @@ export default class Game {
 
     // Bind move events
     this.setMoveEvents();
-    
+
 
     canvas.width = (this.map.tile_size * this.map.width);
     canvas.height = (this.map.tile_size * this.map.height);
@@ -222,23 +222,23 @@ export default class Game {
       case BINOCULARS:
         this.buyPrompt("Would you like to buy binoculars?", item);
         break;
-        
+
       case POWER_BAR:
         this.textPrompt("You found a power bar!");
         this.hero.usePowerBar(10);
         break;
-        
+
       case TREASURE:
         console.log("Treasure Chest Found");
         this.textPrompt("You found treasure!");
         this.hero.findTreasure();
         break;
-        
+
       case BOAT:
         // this.hero.addToInventory(item);
         this.buyPrompt("Would you like to buy a boat?", item);
         break;
-        
+
       case CHAINSAW:
         this.hero.addToInventory(item);
         break;
@@ -447,7 +447,7 @@ export default class Game {
     */
     let hero_x = (this.hero.x * this.map.tile_size);
     let hero_y = (this.hero.y * this.map.tile_size);
-    this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y, 
+    this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y,
       this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
   }
 
@@ -469,7 +469,7 @@ export default class Game {
           toDrawX = terrain.frameX;
           toDrawY = terrain.frameY;
         }
-        this.ctx.drawImage(this.terrain_sprite, toDrawX, toDrawY, this.sprite_width, this.sprite_height, 
+        this.ctx.drawImage(this.terrain_sprite, toDrawX, toDrawY, this.sprite_width, this.sprite_height,
         (cellX * this.map.tile_size) + 1, (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
       }
     }
