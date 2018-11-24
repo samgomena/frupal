@@ -28,8 +28,19 @@ export default class Game {
     this.hero_sprite_width = 16;
     this.hero_sprite_height = 16;
 
-    this.hero_frame_x = 49;
-    this.hero_frame_y = 128;
+    // Initial start position is looking downwards.
+    this.hero_frame_position = 2;
+
+    // w a s d
+    // up, left, down, right
+    this.hero_frame_x = 48;
+    this.hero_frame_y = [162, 145, 126, 108];
+
+    this.hero_animation_frames = [32, 48, 64];
+    // Start on 1.
+    this.hero_animation_num = 1;
+    this.hero_max_animation = 3;
+    this.hero_animation_iterations = this.hero_max_animation;
 
     this.unknownFrameX = 816;
     this.unknownFrameY = 442;
@@ -92,9 +103,11 @@ export default class Game {
   setMoveEvents() {
 
     // Define up, down, left, right, elements and attach click events to them
-    ["up", "down", "left", "right"].forEach(direction => {
+    ["up", "left", "down", "right"].forEach((direction, i) => {
       document.getElementById(direction).addEventListener("click", () => {
         if(!this.isGamePaused() && !this.isGameStopped()) {
+          this.hero_frame_position = i;
+          this.hero_animation_iterations = 0;
           this.moveEvent(direction);
         }
       });
@@ -106,9 +119,13 @@ export default class Game {
         // I wonder if using function calls like this impacts performance?
         const keyName = e.key;
         const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+        let keyIndex = validKeys.indexOf(keyName);
 
-        if(validKeys.indexOf(keyName) !== -1) {
+        if(keyIndex !== -1) {
           e.preventDefault();
+          // Key index mod 4 because that's how many keys there are.
+          this.hero_frame_position = keyIndex % 4;
+          this.hero_animation_iterations = 0;
           this.moveEvent(keyName, 1);
         }
       }
@@ -338,24 +355,21 @@ export default class Game {
    * This function draws the 'hero' (a circle for now)
    */
   drawPlayer() {
-    /*
-    this.ctx.beginPath();
-    this.ctx.arc(
-      (this.hero.x * this.map.tile_size) + (this.hero.width / 2),
-      (this.hero.y * this.map.tile_size) + (this.hero.height / 2),
-      31,
-      0,
-      2 * Math.PI,
-      false
-    );
-    this.ctx.fillStyle = "black";
-    this.ctx.fill();
-    this.ctx.stroke();
-    */
     let hero_x = (this.hero.x * this.map.tile_size);
     let hero_y = (this.hero.y * this.map.tile_size);
-    this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y, 
-      this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
+
+    // Prevents hero moving animation from constantly occurring.
+    if(this.hero_animation_iterations < (this.hero_max_animation)) {
+      this.hero_animation_iterations += 1;
+      this.hero_animation_num = (this.hero_animation_num + 1) % this.hero_max_animation;
+      // Hero frame position is tied to the movement events.
+      this.ctx.drawImage(this.hero_sprite, this.hero_animation_frames[this.hero_animation_num], this.hero_frame_y[this.hero_frame_position], 
+        this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
+    }
+    else {
+      this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y[this.hero_frame_position], 
+        this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
+    }
   }
 
   /**
