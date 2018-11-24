@@ -225,9 +225,9 @@ export default class Game {
         break;
 
       case POWER_BAR:
-        //this.textPrompt("You found a power bar!");
-        this.buyPrompt(item);
-        //this.hero.usePowerBar(20);    //20 energy per user stories
+        if(this.hero.getMoney() > 0){
+          this.buyPrompt(item);
+        }
         break;
 
       case TREASURE:
@@ -243,8 +243,9 @@ export default class Game {
         break;
 
       case BOAT:
-        // this.hero.addToInventory(item);
-        this.buyPrompt(item);
+        if(this.hero.getMoney() > 0){
+          this.buyPrompt(item);
+        }
         break;
 
       case CHAINSAW:
