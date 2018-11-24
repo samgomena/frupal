@@ -20,42 +20,6 @@ let hero_init = gameConfig.player;
 // Sets text in the browser tab
 setTitle(gameConfig.title);
 
-// This triggers map refresh, has to come after call to overlay above.
-/*
-let update = document.getElementById("update");
-
-update.addEventListener("click", function() {
-  if(!localStorage.hasOwnProperty("currentMap")){
-    throw new Error("No current map");
-  }
-
-  let paramsList = localStorage.currentMap;
-  paramsList = JSON.parse(paramsList);
-  let updatedGame = setGameData(paramsList);
-  map = updatedGame.map;
-  console.log(map);
-  hero_init = updatedGame.player;
-  // ...
-  // Whoever is working on the map, connect the array of parameters (paramList)
-  // to the DEFAULT_PARAM thing so that a new map can be generated upon pressing
-  // the start button. 
-  // ...
-});
-*/
-
-/*
-let start = document.getElementById("start");
-start.addEventListener("click", () => {
-  // Grab the canvas element
-  let context = document.getElementById("demo");
-  let hero = new Person(hero_init, map);
-  let display = new Display(hero, map);
-
-  let game = new Game(context, map, hero, display);
-  game.run();
-});
-*/
-
 let context = document.getElementById("demo");
 let hero = new Person(hero_init, map);
 let display = new Display(hero, map);

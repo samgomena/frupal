@@ -11,7 +11,6 @@ export default class Game {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.map = map;
-    this.newTile = true;
 
     // Setting fps > 10 causes serious overallocation of resources
     this.fps = fps;
@@ -131,47 +130,13 @@ export default class Game {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     this.update();
-
-    /*
-    if (this.newTile) {
-      // Makes sure the player's tile is not constantly checked.
-      this.tileCheck();
-      this.newTile = false;
-    }
-    */
-
     this.display.update();
     this.drawGrid();
     this.drawPlayer();
 
     window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
-/*
-  tileCheck() {
-    /*
-      Checks the tile that the hero is on.
-    *
-    const item = this.hero.getPlayerLocItem();
-    switch(item) {
 
-    case ROYAL_DIAMONDS:
-      alert("You found the jewels!!!!!! You Win!!");
-      //Reload the game to default
-      window.location.reload(true);
-      break;
-
-    case BINOCULARS:
-      console.log("You found a pair of binoculars!");
-      this.hero.hasBinoculars();
-      break;
-    
-    case POWER_BAR:
-      // TODO: Consume power bar on tile move?
-      console.log("Power Bar Found");
-      this.hero.usePowerBar(10);
-    }
-  }
-*/
   /**
    * This function consumes the move events in `hero_move_queue` and executes them sequentially.
    */
@@ -192,7 +157,7 @@ export default class Game {
       }
     });
   }
-
+  //TODO optimize and refactor
   revealMap() {
     let minX = Math.max(0, this.hero.x - this.hero.visibilityRadius);
     let minY = Math.max(0, this.hero.y - this.hero.visibilityRadius);
