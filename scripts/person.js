@@ -88,46 +88,18 @@ class Person {
   }
 
   addToInventory(item) {
-    // This giant thing is just creating HTML elements to show up within the popup element.
-    let popup = document.getElementById("popup");
-    popup.style["display"] = "flex";
-    const buy_text = document.createTextNode(`Would you like to buy ${item}?`);
-    const buy_message = document.createElement("div");
-    buy_message.appendChild(buy_text);
-    const yes_no_box = document.createElement("div");
-    const yes_text = document.createTextNode("Yes");
-    const no_text = document.createTextNode("No");
-    const yes = document.createElement("button");
-    yes.appendChild(yes_text);
-    const no = document.createElement("button");
-    no.appendChild(no_text);
-    yes_no_box.appendChild(yes);
-    yes_no_box.appendChild(no);
+    this.inventory.push(item);
+    this.money -= 10;
+    this.inventoryLength += 1;
 
-    yes.addEventListener("click", () => {
-      this.inventory.push(item);
-      this.money -= 10;
-      this.inventoryLength += 1;
-      popup.style["display"] = "none";
-      popup.innerHTML = "";
-
-      switch(item) {
-      case BOAT:
-        this.hasBoat();
-        break;
-      case BINOCULARS:
-        this.hasBinoculars();
-        break;
-      }
-    });
-
-    no.addEventListener("click", () => {
-      popup.style["display"] = "none";
-      popup.innerHTML = "";
-    });
-
-    popup.appendChild(buy_message);
-    popup.appendChild(yes_no_box);
+    switch(item) {
+    case BOAT:
+      this.hasBoat();
+      break;
+    case BINOCULARS:
+      this.hasBinoculars();
+      break;
+    }
   }
 
   giveItem(item) {
