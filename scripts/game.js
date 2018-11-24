@@ -220,12 +220,14 @@ export default class Game {
         break;
 
       case BINOCULARS:
-        this.buyPrompt("Would you like to buy binoculars?", item);
+        this.buyPrompt(item);
+
         break;
 
       case POWER_BAR:
-        this.textPrompt("You found a power bar!");
-        this.hero.usePowerBar(10);
+        //this.textPrompt("You found a power bar!");
+        this.buyPrompt(item);
+        //this.hero.usePowerBar(20);    //20 energy per user stories
         break;
 
       case TREASURE:
@@ -242,7 +244,7 @@ export default class Game {
 
       case BOAT:
         // this.hero.addToInventory(item);
-        this.buyPrompt("Would you like to buy a boat?", item);
+        this.buyPrompt(item);
         break;
 
       case CHAINSAW:
@@ -253,7 +255,7 @@ export default class Game {
 
   }
 
-  buyPrompt(text, item) {
+  buyPrompt(item) {
     this.game_paused = true;
 
     // This giant thing is just creating HTML elements to show up within the popup element.
@@ -272,15 +274,25 @@ export default class Game {
     yes_no_box.appendChild(yes);
     yes_no_box.appendChild(no);
 
-    yes.addEventListener("click", () => {
-      this.clearPopupAndUnpause(popup);
-      this.hero.addToInventory(item);
-    });
+    if(item === POWER_BAR){
+      yes.addEventListener("click", () => {
+        this.clearPopupAndUnpause(popup);
+        this.hero.usePowerBar(20);
+      });
+    }
+
+    else {
+      yes.addEventListener("click", () => {
+        this.clearPopupAndUnpause(popup);
+        this.hero.addToInventory(item);
+      });
+    }
 
     no.addEventListener("click", this.clearPopupAndUnpause.bind(this));
 
     popup.appendChild(buy_message);
     popup.appendChild(yes_no_box);
+
   }
 
   textPrompt(text, eventHandler=this.clearPopupAndUnpause.bind(this)) {
