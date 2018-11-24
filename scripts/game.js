@@ -96,7 +96,6 @@ export default class Game {
     ["up", "down", "left", "right"].forEach(direction => {
       document.getElementById(direction).addEventListener("click", () => {
         if(!this.game_loop.paused && !this.game_stop) {
-          console.log("ADD EVENT");
           this.moveEvent(direction);
         }
       });
@@ -105,7 +104,6 @@ export default class Game {
     // e stands for event
     document.addEventListener("keydown", e => {
       if(!this.game_loop.paused && !this.game_stop) {
-        console.log("ADD EVENT");
         const keyName = e.key;
         const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
@@ -182,10 +180,10 @@ export default class Game {
       if(this.newTile) {
         // Makes sure the player's tile is not constantly checked.
         this.tileCheck();
+        this.display.update();
         this.newTile = false;
       }
 
-      this.display.update();
       this.drawGrid();
       this.drawPlayer();
     }
