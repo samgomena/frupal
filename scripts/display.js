@@ -1,5 +1,6 @@
 class Display {
   constructor(person, map) {
+    // TODO: Make display render inside the game display (Upper right corner).
     this.map = map;
     this.hero = person;
     this.displayEl = document.getElementById("display");
