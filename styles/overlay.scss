@@ -2,19 +2,15 @@
   background-color: rgba(250, 235, 215, 1);
   display: block;
   height: 100%;
-  left: 0;
-  overflow: auto;
-  position: fixed;
-  top: 0;
-  width: 100%;
+  text-align: center;
   z-index: 1;
 
   div {
+    color: #818181;
+    font-size: 36px;
     padding: 8px;
     text-decoration: none;
-    font-size: 36px;
-    color: #818181;
-    transition: 0.3s;
+    transition: .3s;
   }
 }
 

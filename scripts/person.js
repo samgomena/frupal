@@ -1,3 +1,5 @@
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
+
 class Person {
   constructor(hero_init, map) {
     this.name = "I made this up";
@@ -78,22 +80,37 @@ class Person {
     var len = this.inventory.length;
     for(var i = 0; i < len; ++i)
     {
-       if(itemToCheck == this.inventory[i]) {
-          return true;
-       }
+      if(itemToCheck == this.inventory[i]) {
+        return true;
+      }
     }
     return false;
   }
 
   addToInventory(item) {
-    let buy = prompt(`Would you like to buy ${item}? y or n`);
-    if(buy && buy.toLowerCase() === 'y') {
-       this.inventory.push([this.map.layers[(this.x * this.map.width) + this.y].name]);
-	this.money-=10;
-	++this.inventoryLength;
-     }
+    this.inventory.push(item);
+    this.money -= 10;
+    this.inventoryLength += 1;
+
+    switch(item) {
+    case BOAT:
+      this.hasBoat();
+      break;
+    case BINOCULARS:
+      this.hasBinoculars();
+      break;
+    }
   }
 
+  giveItem(item) {
+    // ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER
+    // TODO: Might need this for obstacle-tool interaction?
+    switch(item) {
+    case BINOCULARS:
+      this.hasBinoculars();
+      break;
+    }
+  }
     
   /**
   * This function moves a player `dir_x` units in the x direction.
@@ -165,7 +182,7 @@ class Person {
 
   findTreasure() {
     this.money += 10;     // adds 10 whiffles
-                          // TODO: check requirements for how much $$ to find
+    // TODO: check requirements for how much $$ to find
   }
 
   /**

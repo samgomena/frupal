@@ -1,5 +1,7 @@
 "use strict";
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
+import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
+import terrain_image from "../assets/roguelikeSheet_transparent.png";
 
 // import { loseGame } from "./endGame";
 /**
@@ -12,6 +14,27 @@ export default class Game {
     this.ctx = canvas.getContext("2d");
     this.map = map;
     this.newTile = true;
+    this.tileSize = 16;
+
+    this.terrain_sprite = new Image();
+    this.terrain_sprite.src = terrain_image;
+
+    this.hero_sprite = new Image();
+    this.hero_sprite.src = hero_image;
+
+    this.sprite_width = 16;
+    this.sprite_height = 16;
+
+    this.hero_sprite_width = 16;
+    this.hero_sprite_height = 16;
+
+    this.hero_frame_x = 49;
+    this.hero_frame_y = 128;
+
+    this.unknownFrameX = 816;
+    this.unknownFrameY = 442;
+
+    this.game_paused = false;
 
     // Setting fps > 10 causes serious overallocation of resources
     this.fps = fps;
@@ -71,19 +94,33 @@ export default class Game {
     // Define up, down, left, right, elements and attach click events to them
     ["up", "down", "left", "right"].forEach(direction => {
       document.getElementById(direction).addEventListener("click", () => {
-        this.moveEvent(direction);
+        if(!this.isGamePaused() && !this.isGameStopped()) {
+          this.moveEvent(direction);
+        }
       });
     });
 
     // e stands for event
     document.addEventListener("keydown", e => {
-      const keyName = e.key;
-      const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+      if(!this.isGamePaused() && !this.isGameStopped()) {
+        // I wonder if using function calls like this impacts performance?
+        const keyName = e.key;
+        const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
-      if(validKeys.indexOf(keyName) !== -1) {
-        this.moveEvent(keyName, 1);
+        if(validKeys.indexOf(keyName) !== -1) {
+          e.preventDefault();
+          this.moveEvent(keyName, 1);
+        }
       }
     });
+  }
+
+  isGamePaused() {
+    return this.game_paused;
+  }
+
+  isGameStopped() {
+    return this.game_stop;
   }
 
   /**
@@ -120,6 +157,7 @@ export default class Game {
     let maxX = Math.min(this.map.width - 1, this.hero.x + 1);
     let maxY = Math.min(this.map.height - 1, this.hero.y + 1);
 
+    // Initial Visibility
     for (let cellX = minX; cellX <= maxX; ++cellX)
     {
       for (let cellY = minY; cellY <= maxY; ++cellY)
@@ -129,10 +167,12 @@ export default class Game {
       }
     }
     this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
+    // requestAnimationFrame(this.tick.bind(this));
   }
 
   stop() {
-    clearTimeout(this.game_loop);
+    this.game_stop = true;
+    window.clearTimeout(this.tick);
   }
 
 
@@ -140,21 +180,24 @@ export default class Game {
    * This function is responsible for executing game updates and rendering the updates.
    */
   tick() {
+    if (this.game_stop) return 0;
+    if (!this.game_paused) {
 
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+      this.update();
 
-    this.update();
+      if(this.newTile) {
+        // Makes sure the player's tile is not constantly checked.
+        this.tileCheck();
+        this.display.update();
+        this.newTile = false;
+      }
 
-    if(this.newTile) {
-      // Makes sure the player's tile is not constantly checked.
-      this.tileCheck();
-      this.newTile = false;
+      this.drawGrid();
+      this.drawPlayer();
     }
 
-    this.display.update();
-    this.drawGrid();
-    this.drawPlayer();
-
+    // requestAnimationFrame(this.tick.bind(this));
     window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
@@ -164,47 +207,99 @@ export default class Game {
     */
     const item = this.hero.getPlayerLocItem();
     var invCheck = this.hero.checkInventory(item);
-    	     
     if(invCheck === false) {  //item not already in the player's inventory
+      // Pause the game to allow for player to buy things.
+      switch(item) {
 
-    switch(item) {
+      case ROYAL_DIAMONDS:
+        this.stop();
+        this.textPrompt("You found the Royal Diamonds! You Win!", () => {
+        //Reload the game to default
+          window.location.reload(true);
+        });
+        break;
 
-    case ROYAL_DIAMONDS:
-      console.log("Diamonds Found");
-      alert("You found the Royal Diamonds! You Win!!");
-      //Reload the game to default
-      window.location.reload(true);
-      break;
-
-    case BINOCULARS:
-      alert("You found a pair of binoculars!");
-      this.hero.hasBinoculars();
-      this.hero.addToInventory(item);
-      break;
+      case BINOCULARS:
+        this.buyPrompt("Would you like to buy binoculars?", item);
+        break;
         
-    case POWER_BAR:
-      alert("Power Bar Found");
-      this.hero.usePowerBar(10);
-      break;
+      case POWER_BAR:
+        this.textPrompt("You found a power bar!");
+        this.hero.usePowerBar(10);
+        break;
         
-    case TREASURE:
-      console.log("Treasure Chest Found")
-      this.hero.findTreasure();
-      break;
+      case TREASURE:
+        console.log("Treasure Chest Found");
+        this.textPrompt("You found treasure!");
+        this.hero.findTreasure();
+        break;
         
-    case BOAT:
-      alert("Boat found!");
-      this.hero.hasBoat();
-      this.hero.addToInventory(item);
-      break;
+      case BOAT:
+        // this.hero.addToInventory(item);
+        this.buyPrompt("Would you like to buy a boat?", item);
+        break;
         
-    case CHAINSAW:
-      alert("You found a chainsaw");
-      this.hero.addToInventory(item);
-      break;
+      case CHAINSAW:
+        this.hero.addToInventory(item);
+        break;
+      }
     }
-   }
 
+  }
+
+  buyPrompt(text, item) {
+    this.game_paused = true;
+
+    // This giant thing is just creating HTML elements to show up within the popup element.
+    let popup = document.getElementById("popup");
+    popup.style["display"] = "flex";
+    const buy_text = document.createTextNode(`Would you like to buy ${item}?`);
+    const buy_message = document.createElement("div");
+    buy_message.appendChild(buy_text);
+    const yes_no_box = document.createElement("div");
+    const yes_text = document.createTextNode("Yes");
+    const no_text = document.createTextNode("No");
+    const yes = document.createElement("button");
+    yes.appendChild(yes_text);
+    const no = document.createElement("button");
+    no.appendChild(no_text);
+    yes_no_box.appendChild(yes);
+    yes_no_box.appendChild(no);
+
+    yes.addEventListener("click", () => {
+      this.clearPopupAndUnpause(popup);
+      this.hero.addToInventory(item);
+    });
+
+    no.addEventListener("click", this.clearPopupAndUnpause.bind(this));
+
+    popup.appendChild(buy_message);
+    popup.appendChild(yes_no_box);
+  }
+
+  textPrompt(text, eventHandler=this.clearPopupAndUnpause.bind(this)) {
+    // Pause the game if the prompt shows up.
+    this.game_paused = true;
+
+    let popup = document.getElementById("popup");
+    if (popup.innerHTML == "") {
+      popup.style["display"] = "flex";
+      const happy_text = document.createTextNode(text);
+      const ok_text = document.createTextNode("Okay");
+      const ok_button = document.createElement("button");
+      ok_button.appendChild(ok_text);
+      popup.appendChild(happy_text);
+      popup.appendChild(ok_button);
+      ok_button.addEventListener("click", eventHandler);
+    }
+  }
+
+  clearPopupAndUnpause() {
+    let popup = document.getElementById("popup");
+    popup.style["display"] = "none";
+    popup.innerHTML = "";
+    // Unpause game
+    this.game_paused = false;
   }
 
   /**
@@ -231,12 +326,10 @@ export default class Game {
         }
       }
       else {
-        alert("You have run out of energy.");
-
-        this.hero.isDead();
         this.stop();
-        //Reload the game to default
-        window.location.reload(true);
+        this.textPrompt("Oh dear, you are dead!", () => {
+          window.location.reload(true);
+        });
       }
     });
   }
@@ -245,6 +338,7 @@ export default class Game {
    * This function draws the 'hero' (a circle for now)
    */
   drawPlayer() {
+    /*
     this.ctx.beginPath();
     this.ctx.arc(
       (this.hero.x * this.map.tile_size) + (this.hero.width / 2),
@@ -257,6 +351,11 @@ export default class Game {
     this.ctx.fillStyle = "black";
     this.ctx.fill();
     this.ctx.stroke();
+    */
+    let hero_x = (this.hero.x * this.map.tile_size);
+    let hero_y = (this.hero.y * this.map.tile_size);
+    this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y, 
+      this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
   }
 
   /**
@@ -265,60 +364,20 @@ export default class Game {
    * Each tile on the grid is defined by the maps `tile_size`.
    */
   drawGrid() {
-    let width = this.map.width * this.map.tile_size;
-    let height = this.map.height * this.map.tile_size;
-    let x, y;
-
-    // Draw horizontal grid lines
-    //Uses range 0 - map.height inclusive to draw borders (#cells + 1)
-    for (let step_x = 0; step_x <= this.map.height; ++step_x) {
-      y = step_x * this.map.tile_size;
-      this.ctx.beginPath();
-      this.ctx.moveTo(0, y);
-      this.ctx.lineTo(width, y);
-      this.ctx.stroke();
-    }
-
-    // Draw vertical grid lines
-    //Uses range 0 - map.width inclusive to draw borders (#cells + 1)
-    for (let step_y = 0; step_y <= this.map.width; ++step_y) {
-      x = step_y * this.map.tile_size;
-      this.ctx.beginPath();
-      this.ctx.moveTo(x, 0);
-      this.ctx.lineTo(x, height);
-      this.ctx.stroke();
-    }
-
-    this.ctx.font = "30px ariel";
     for (let cellX = 0; cellX < this.map.height; ++cellX)
     {
       for (let cellY = 0; cellY < this.map.width; ++cellY)
       {
         let visible = this.map.layers[(cellX * this.map.width) + cellY].visible;
-        let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
-
-        this.ctx.beginPath();
-        this.ctx.fillStyle = visible ? terrain.color : "burlywood";
-        this.ctx.rect(
-          (cellX * this.map.tile_size) + 1,
-          (cellY * this.map.tile_size) + 1,
-          this.map.tile_size - 1,
-          this.map.tile_size - 1);
-        this.ctx.stroke();
-        this.ctx.fill();
-
-        if (visible)
-        {
-          this.ctx.scale(1, -1);
-          this.ctx.beginPath();
-          this.ctx.fillStyle = "black";
-          this.ctx.fillText(
-            terrain.name.charAt(0),
-            (cellX * this.map.tile_size) + (this.map.tile_size / 2),
-            this.map.height + 1 - ((cellY * this.map.tile_size) + this.map.tile_size));
-          this.ctx.stroke();
-          this.ctx.scale(1, -1);
+        let toDrawX = this.unknownFrameX;
+        let toDrawY = this.unknownFrameY;
+        if (visible) {
+          let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
+          toDrawX = terrain.frameX;
+          toDrawY = terrain.frameY;
         }
+        this.ctx.drawImage(this.terrain_sprite, toDrawX, toDrawY, this.sprite_width, this.sprite_height, 
+        (cellX * this.map.tile_size) + 1, (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
       }
     }
   }
