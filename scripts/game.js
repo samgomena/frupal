@@ -1,5 +1,5 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, TYPETWO, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
 
@@ -232,6 +232,12 @@ export default class Game {
         console.log("Treasure Chest Found");
         this.textPrompt("You found treasure!");
         this.hero.findTreasure();
+        break;
+
+      case TYPETWO:
+        console.log("Type 2 chest found...lose all money");
+        this.textPrompt("Sorry, all your whiffles have been stolen :(");
+        this.hero.loseMoney();
         break;
 
       case BOAT:

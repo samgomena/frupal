@@ -187,6 +187,14 @@ class Person {
     this.map.layers[(this.x * this.map.width) + this.y].name = "";
   }
 
+  //encounter a Type Two Treasure which takes all your money
+  loseMoney(){
+    this.money = 0;
+
+    //reset cell so treasure can't be found again
+    this.map.layers[(this.x * this.map.width) + this.y].name = "";
+  }
+
   /**
    * This function calls move updates for the x and y directions.
    *

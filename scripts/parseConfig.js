@@ -28,6 +28,7 @@ Pretty Rock
 15, 16, 0, 4, Bog
 5, 5, 1, 0, ${items.POWER_BAR}
 10, 10, 0, 0, ${items.TREASURE}
+10, 11, 0, 0, ${items.TYPETWO}
 17, 10, 0, 0, ${items.BOAT}
 14, 12, 0, 2, None
 9, 9, 0, 1, ${items.TREASURE}`;
@@ -100,7 +101,7 @@ function parse(game_config) {
     let player_item = split_map_file.splice(0, 1)[0];
     // Update player's tool object with tool count
     GAME.player.items.hasOwnProperty(player_item) ? GAME.player.items[player_item]++ : GAME.player.items[player_item] = 1;
-    
+
     GAME.player.inventory.push(player_item);
   }
 
