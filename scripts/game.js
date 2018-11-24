@@ -108,6 +108,7 @@ export default class Game {
         const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
 
         if(validKeys.indexOf(keyName) !== -1) {
+          e.preventDefault();
           this.moveEvent(keyName, 1);
         }
       }
