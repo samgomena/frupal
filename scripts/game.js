@@ -250,7 +250,6 @@ export default class Game {
           this.hero.move(movement.x, movement.y, allowMove.cost);
         }
         if(allowMove.object != "None") {
-          console.log("HI");
           this.tileCheck(allowMove.object, this.hero.x + movement.x, this.hero.y + movement.y);
         }
         this.hero_move_queue.shift();
@@ -300,6 +299,8 @@ export default class Game {
       case TREASURE:
         console.log("Treasure Chest Found");
         this.textPrompt("You found treasure!");
+        //reset cell so treasure can't be found again
+        this.map.destroyObject(x, y);
         this.hero.findTreasure();
         break;
 
@@ -310,6 +311,7 @@ export default class Game {
         this.balloon_flag = 2;
         this.textPrompt("Sorry, all your whiffles have been stolen :(");
         this.hero.loseMoney();
+        this.map.destroyObject(x, y);
         break;
 
       case BOAT:

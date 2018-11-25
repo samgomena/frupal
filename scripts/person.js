@@ -189,16 +189,11 @@ class Person {
   findTreasure() {
     this.money += 100;
 
-    //reset cell so treasure can't be found again
-    this.map.destroyObject(this.x, this.y);
   }
 
   //encounter a Type Two Treasure which takes all your money
   loseMoney(){
     this.money = 0;
-
-    //reset cell so treasure can't be found again
-    this.map.destroyObject(this.x, this.y);
   }
 
   /**
