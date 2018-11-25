@@ -315,6 +315,8 @@ export default class Game {
         //reset cell so treasure can't be found again
         this.map.destroyObject(x, y);
         this.hero.findTreasure();
+
+        // NOTE: what is this move call for 
         this.hero.move(x - this.hero.x, y - this.hero.y, move_cost);
         break;
 
