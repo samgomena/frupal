@@ -8,3 +8,7 @@ export const SHEARS = "Shears";
 export const AXE = "Axe";
 export const WEED_WHACKER = "Weed Whacker";
 export const CHAINSAW = "Chainsaw";
+
+export const TREE = "Tree";
+export const BOULDER = "Boulder";
+export const BLK_BERRY = "Black Berry Bush";

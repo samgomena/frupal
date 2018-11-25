@@ -81,6 +81,10 @@ class Person {
     this.boat = true;
   }
 
+  boatStatus() {
+    return this.boat;
+  }
+
   checkInventory(itemToCheck) {
     var len = this.inventory.length;
     for(var i = 0; i < len; ++i)
@@ -133,12 +137,15 @@ class Person {
     else if (moveX < 0) {
       moveX = this.map.width - 1;
     }
+    /*
     let move = this.map.allowMove(moveX, this.y, this);
 
     if (move.allow) {
       this.x = moveX;
     }
     return move.cost;
+    */
+    this.x = moveX;
   }
 
   /**
@@ -157,12 +164,15 @@ class Person {
     else if (moveY < 0) {
       moveY = this.map.width - 1;
     }
+    /*
     let move = this.map.allowMove(this.x, moveY, this);
 
     if (move.allow) {
       this.y = moveY;
     }
     return move.cost;
+    */
+    this.y = moveY;
   }
 
   consumeEnergy(lost) {
@@ -197,14 +207,14 @@ class Person {
    * @param step_x The number of movements to take in the x direction
    * @param step_y The number of movements to take in the y direction
    */
-  move(step_x, step_y) {
+  move(step_x, step_y, cost) {
 
     // These should probably be pure
-    let costX = this.moveX(step_x);
-    let costY = this.moveY(step_y);
-    this.consumeEnergy(costX + costY);
+    this.moveX(step_x);
+    this.moveY(step_y);
+    this.consumeEnergy(cost);
   }
-
+  /*
   interactWithObject(object) {
     switch(object) {
 
@@ -226,6 +236,7 @@ class Person {
     }
     this.map.destroyObject(this.x, this.y);
   }
+  */
 }
 
 export default Person;

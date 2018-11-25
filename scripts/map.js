@@ -1,6 +1,7 @@
 "use strict";
 // import Person from "./person";
 import {TERRAIN_MAP} from "./data/terrainMap";
+import { TREE } from "./data/obstacles";
 const OBJECT_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
 
 /**
@@ -12,6 +13,7 @@ class Map {
     this.height = height;
     this.tile_size = 16; // Needs to be 16 for graphics.
     this.tiles = new Array(this.width * this.height); 
+    this.obstacles = [TREE];
   }
 
   /**
@@ -23,9 +25,8 @@ class Map {
    */
   allowMove(x, y, person) {
     let tile = this.getTile(x, y);
-    
-    //False for Water and Walls
-    if (tile.terrain.canEnter) {
+    //False for Water and Walls and obstacles.
+    if (tile.terrain.canEnter && !tile.object) {
       return {
         allow: true, //allow person to move
         cost: tile.terrain.cost, //cost of movement based on terrain
@@ -33,11 +34,19 @@ class Map {
       }; //^Either send back the object located on a given tile, or "None"
       // as a default value
     }
-    else if (tile.terrain === "WATER" && person.hasBoat()) {
+    else if (tile.terrain.name === TERRAIN_MAP[2].name && person.boatStatus()) {
       return {
         allow: true,
         cost: 0, //no movement penalty for water+boat
         object: tile.hasOwnProperty("object") ? tile.object : "None"
+      };
+    }
+    else if (tile.object) {
+      // If there is an object, allow player to buy it.
+      return {
+        allow: false,
+        cost: tile.terrain.cost,
+        object: tile.object
       };
     }
     else {

@@ -1,5 +1,6 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, TYPETWO, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, 
+  TYPETWO, BOAT, CHAINSAW, WEED_WHACKER, TREE, BLK_BERRY, BOULDER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
 import balloons from "../assets/balloons.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
@@ -225,8 +226,7 @@ export default class Game {
       this.update();
 
       if(this.newTile) {
-        // Makes sure the player's tile is not constantly checked.
-        this.tileCheck();
+        // Makes sure the display is not constantly updated and repainted..
         this.display.update();
         this.newTile = false;
       }
@@ -239,16 +239,46 @@ export default class Game {
     window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
-  tileCheck() {
+  /**
+   * This function consumes the move events in `hero_move_queue` and executes them sequentially.
+   */
+  update() {
+    this.hero_move_queue.forEach(movement => {
+      if (this.hero.getEnergy() > 1) {
+        let allowMove = this.map.allowMove(this.hero.x + movement.x, this.hero.y + movement.y, this.hero);
+        if(allowMove.allow) {
+          this.hero.move(movement.x, movement.y, allowMove.cost);
+        }
+        if(allowMove.object != "None") {
+          console.log("HI");
+          this.tileCheck(allowMove.object, this.hero.x + movement.x, this.hero.y + movement.y);
+        }
+        this.hero_move_queue.shift();
+
+        this.revealMap();
+      }
+      else {
+        this.stop();
+        this.textPrompt("Oh dear, you are dead!", () => {
+          window.location.reload(true);
+        });
+      }
+    });
+  }
+
+  tileCheck(obj, x, y) {
     /*
       Checks the tile that the hero is on.
     */
-    const item = this.hero.getPlayerLocItem();
-    var invCheck = this.hero.checkInventory(item);
-    if(invCheck === false) {  //item not already in the player's inventory
+    var invCheck = this.hero.checkInventory(obj);
+    if(invCheck === false) {  //obj not already in the player's inventory
       // Pause the game to allow for player to buy things.
-      switch(item) {
-
+      switch(obj) {
+      case TREE:
+      case BLK_BERRY:
+      case BOULDER:
+        this.obstaclePrompt(obj, x, y);
+        break;
       case ROYAL_DIAMONDS:
         this.stop();
         this.textPrompt("You found the Royal Diamonds! You Win!", () => {
@@ -258,12 +288,12 @@ export default class Game {
         break;
 
       case BINOCULARS:
-        this.buyPrompt(item);
+        this.buyPrompt(obj, x, y);
         break;
 
       case POWER_BAR:
         if(this.hero.getMoney() > 0){
-          this.buyPrompt(item);
+          this.buyPrompt(obj, x, y);
         }
         break;
 
@@ -284,19 +314,49 @@ export default class Game {
 
       case BOAT:
         if(this.hero.getMoney() > 0){
-          this.buyPrompt(item);
+          this.buyPrompt(obj, x, y);
         }
         break;
 
       case CHAINSAW:
-        this.hero.addToInventory(item);
+        this.hero.addToInventory(obj);
         break;
       }
     }
+  }
+
+  obstaclePrompt(obj, x, y) {
+    this.game_paused = true;
+    this.balloon_flag = 1;
+
+    let popup = document.getElementById("popup");
+    popup.style["display"] = "flex";
+    const remove_text = document.createTextNode(`Would you like to remove ${obj}?`);
+    const remove_message = document.createElement("div");
+    remove_message.appendChild(remove_text);
+    const yes_no_box = document.createElement("div");
+    const yes_text = document.createTextNode("Yes");
+    const no_text = document.createTextNode("No");
+    const yes = document.createElement("button");
+    yes.appendChild(yes_text);
+    const no = document.createElement("button");
+    no.appendChild(no_text);
+    yes_no_box.appendChild(yes);
+    yes_no_box.appendChild(no);
+
+    yes.addEventListener("click", () => {
+      this.clearPopupAndUnpause(popup);
+      this.map.destroyObject(x, y);
+    });
+
+    no.addEventListener("click", this.clearPopupAndUnpause.bind(this));
+
+    popup.appendChild(remove_message);
+    popup.appendChild(yes_no_box);
 
   }
 
-  buyPrompt(item) {
+  buyPrompt(item, x, y) {
     this.game_paused = true;
     this.balloon_flag = 1;
 
@@ -327,6 +387,7 @@ export default class Game {
       yes.addEventListener("click", () => {
         this.clearPopupAndUnpause(popup);
         this.hero.addToInventory(item);
+        this.map.destroyObject(x, y);
       });
     }
 
@@ -375,25 +436,7 @@ export default class Game {
     this.balloon_animation_num = 0;
   }
 
-  /**
-   * This function consumes the move events in `hero_move_queue` and executes them sequentially.
-   */
-  update() {
-    this.hero_move_queue.forEach(movement => {
-      if (this.hero.getEnergy() > 1) {
-        this.hero.move(movement.x, movement.y);
-        this.hero_move_queue.shift();
 
-        this.revealMap();
-      }
-      else {
-        this.stop();
-        this.textPrompt("Oh dear, you are dead!", () => {
-          window.location.reload(true);
-        });
-      }
-    });
-  }
   //TODO optimize and refactor
   revealMap() {
     let showLeft = this.hero.x - this.hero.visibilityRadius;
