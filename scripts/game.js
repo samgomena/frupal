@@ -297,6 +297,18 @@ export default class Game {
       case BINOCULARS.name:
         break;
 
+      case SHEARS.name:
+        this.buyPrompt(obj, x, y);
+        break;
+
+      case HATCHET.name:
+        this.buyPrompt(obj, x, y);
+        break;
+
+      case AXE.name:
+        this.buyPrompt(obj, x, y);
+        break;
+
       case WEED_WHACKER.name:
         this.buyPrompt(obj, x, y);
         break;
@@ -305,8 +317,17 @@ export default class Game {
         this.buyPrompt(obj, x, y);
         break;
 
+      case CHISEL.name:
+        this.buyPrompt(obj, x, y);
+        break;
 
+      case SLEDGE.name:
+        this.buyPrompt(obj, x, y);
+        break;
 
+      case JACKHAMMER.name:
+        this.buyPrompt(obj, x, y);
+        break;
 
       case ROYAL_DIAMONDS.name:
         this.stop();
