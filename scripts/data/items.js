@@ -1,5 +1,5 @@
 export const ROYAL_DIAMONDS = {name: "Royal Diamonds"};
-export const BINOCULARS = { name :"Binoculars", cost: 100};
+export const BINOCULARS = { name :"Binoculars", cost: 50};
 export const POWER_BAR = { name: "Power Bar", cost: 1};
 export const TREASURE = {name: "Treasure"};
 export const TYPE_TWO = {name: "Type Two"}; // Chest
