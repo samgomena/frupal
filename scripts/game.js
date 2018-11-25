@@ -15,7 +15,6 @@ export default class Game {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.map = map;
-    this.newTile = true;
     this.tileSize = 16;
 
     this.terrain_sprite = new Image();
@@ -89,7 +88,6 @@ export default class Game {
   }
 
   moveEvent(moveId) {
-    this.newTile = true;
     switch(moveId) {
     case "up":
     case "ArrowUp":
@@ -225,11 +223,7 @@ export default class Game {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.update();
 
-      if(this.newTile) {
-        // Makes sure the display is not constantly updated and repainted..
-        this.display.update();
-        this.newTile = false;
-      }
+      this.display.update();
 
       this.drawGrid();
       this.drawPlayer();
@@ -449,8 +443,6 @@ export default class Game {
     popup.innerHTML = "";
     // Unpause game
     this.game_paused = false;
-    // reload display
-    this.display.update();
   }
 
   resetBalloon() {
