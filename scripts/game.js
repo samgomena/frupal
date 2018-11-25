@@ -194,10 +194,11 @@ export default class Game {
     {
       for (let cellY = minY; cellY <= maxY; ++cellY)
       {
-        let tile = this.map.layers[(cellX * this.map.width) + cellY];
+        let tile = this.map.tiles[(cellX * this.map.width) + cellY];
         tile.visible = true;
       }
     }
+    this.revealMap();
     this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
     // requestAnimationFrame(this.tick.bind(this));
   }
@@ -258,7 +259,6 @@ export default class Game {
 
       case BINOCULARS:
         this.buyPrompt(item);
-
         break;
 
       case POWER_BAR:
@@ -384,112 +384,7 @@ export default class Game {
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
 
-        let showLeft = this.hero.x - this.hero.visibilityRadius;
-        let showRight = this.hero.x + this.hero.visibilityRadius;
-        let showDown = this.hero.y - this.hero.visibilityRadius;
-        let showUp = this.hero.y + this.hero.visibilityRadius;
-
-
-        let minX = Math.max(0, showLeft);
-        let minY = Math.max(0, showDown);
-        let maxX = Math.min(this.map.width - this.hero.visibilityRadius, showRight);
-        let maxY = Math.min(this.map.height - this.hero.visibilityRadius, showUp);
-
-        //This fixes the binoculars issue at the edge of the map.
-        if (maxX >= this.map.width - 3)
-          ++maxX;
-        if (maxY >= this.map.height - 3)
-          ++maxY;
-
-        //Basic cell visibility, no wrap around.
-        for (let cellX = minX; cellX <= maxX; ++cellX)
-        {
-          for (let cellY = minY; cellY <= maxY; ++cellY)
-          {
-            let tile = this.map.layers[(cellX * this.map.width) + cellY];
-            tile.visible = true;
-          }
-        }
-        //Wrap around map off left side (show right)
-        if (showLeft < 0)
-        {
-          let tempX = this.map.width - 1;
-          for (let tempY = minY; tempY <= maxY; ++tempY)
-          {
-            let tile = this.map.layers[(tempX * this.map.width) + tempY];
-            tile.visible = true;
-          }
-          //wrap around visibility with binoculars
-          if (showLeft == -2)
-          {
-            --tempX;
-            for (let tempY = minY; tempY <= maxY; ++tempY)
-            {
-              let tile = this.map.layers[(tempX * this.map.width) + tempY];
-              tile.visible = true;
-            }
-          }
-        }
-        //Wrap around map off right side (show left)
-        if (showRight >= this.map.width)
-        {
-          let tempX = 0;
-          for (let tempY = minY; tempY <= maxY; ++tempY)
-          {
-            let tile = this.map.layers[(tempX * this.map.width) + tempY];
-            tile.visible = true;
-          }
-          //wrap around visibility with binoculars
-          if (showRight == this.map.width + 1)
-          {
-            ++tempX;
-            for (let tempY = minY; tempY <= maxY; ++tempY)
-            {
-              let tile = this.map.layers[(tempX * this.map.width) + tempY];
-              tile.visible = true;
-            }
-          }
-        }
-        //Wrap around map off bottom (show top)
-        if (showDown < 0)
-        {
-          let tempY = this.map.height - 1;
-          for (let tempX = minX; tempX <= maxX; ++tempX)
-          {
-            let tile = this.map.layers[(tempX * this.map.width) + tempY];
-            tile.visible = true;
-          }
-          //wrap around visibility with binoculars
-          if (showDown == -2)
-          {
-            --tempY;
-            for (let tempX = minX; tempX <= maxX; ++tempX)
-            {
-              let tile = this.map.layers[(tempX * this.map.width) + tempY];
-              tile.visible = true;
-            }
-          }
-        }
-        //Wrap around map off top (show bottom)
-        if (showUp >= this.map.height)
-        {
-          let tempY = 0;
-          for (let tempX = minX; tempX <= maxX; ++tempX)
-          {
-            let tile = this.map.layers[(tempX * this.map.width) + tempY];
-            tile.visible = true;
-          }
-          //wrap around visibility with binoculars
-          if (showLeft == -2)
-          {
-            ++tempY;
-            for (let tempX = minX; tempX <= maxX; ++tempX)
-            {
-              let tile = this.map.layers[(tempX * this.map.width) + tempY];
-              tile.visible = true;
-            }
-          }
-        }
+        this.revealMap();
       }
       else {
         this.stop();
@@ -498,6 +393,113 @@ export default class Game {
         });
       }
     });
+  }
+  //TODO optimize and refactor
+  revealMap() {
+    let showLeft = this.hero.x - this.hero.visibilityRadius;
+    let showRight = this.hero.x + this.hero.visibilityRadius;
+    let showDown = this.hero.y - this.hero.visibilityRadius;
+    let showUp = this.hero.y + this.hero.visibilityRadius;
+
+    let minX = Math.max(0, showLeft);
+    let minY = Math.max(0, showDown);
+    let maxX = Math.min(this.map.width - this.hero.visibilityRadius, showRight);
+    let maxY = Math.min(this.map.height - this.hero.visibilityRadius, showUp);
+
+    //This fixes the binoculars issue at the edge of the map.
+    if (maxX >= this.map.width - 3)
+      ++maxX;
+    if (maxY >= this.map.height - 3)
+      ++maxY;
+
+    //Basic cell visibility, no wrap around.
+    for (let cellX = minX; cellX <= maxX; ++cellX)
+    {
+      for (let cellY = minY; cellY <= maxY; ++cellY)
+      {
+        this.map.showTile(cellX, cellY);
+      }
+    }
+    //Wrap around map off left side (show right)
+    if (showLeft < 0)
+    {
+      let tempX = this.map.width - 1;
+      for (let tempY = minY; tempY <= maxY; ++tempY)
+      {
+        let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+        tile.visible = true;
+      }
+      //wrap around visibility with binoculars
+      if (showLeft == -2)
+      {
+        --tempX;
+        for (let tempY = minY; tempY <= maxY; ++tempY)
+        {
+          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+          tile.visible = true;
+        }
+      }
+    }
+    //Wrap around map off right side (show left)
+    if (showRight >= this.map.width)
+    {
+      let tempX = 0;
+      for (let tempY = minY; tempY <= maxY; ++tempY)
+      {
+        let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+        tile.visible = true;
+      }
+      //wrap around visibility with binoculars
+      if (showRight == this.map.width + 1)
+      {
+        ++tempX;
+        for (let tempY = minY; tempY <= maxY; ++tempY)
+        {
+          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+          tile.visible = true;
+        }
+      }
+    }
+    //Wrap around map off bottom (show top)
+    if (showDown < 0)
+    {
+      let tempY = this.map.height - 1;
+      for (let tempX = minX; tempX <= maxX; ++tempX)
+      {
+        let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+        tile.visible = true;
+      }
+      //wrap around visibility with binoculars
+      if (showDown == -2)
+      {
+        --tempY;
+        for (let tempX = minX; tempX <= maxX; ++tempX)
+        {
+          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+          tile.visible = true;
+        }
+      }
+    }
+    //Wrap around map off top (show bottom)
+    if (showUp >= this.map.height)
+    {
+      let tempY = 0;
+      for (let tempX = minX; tempX <= maxX; ++tempX)
+      {
+        let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+        tile.visible = true;
+      }
+      //wrap around visibility with binoculars
+      if (showLeft == -2)
+      {
+        ++tempY;
+        for (let tempX = minX; tempX <= maxX; ++tempX)
+        {
+          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+          tile.visible = true;
+        }
+      }
+    }
   }
 
   /**
@@ -548,16 +550,16 @@ export default class Game {
     {
       for (let cellY = 0; cellY < this.map.width; ++cellY)
       {
-        let visible = this.map.layers[(cellX * this.map.width) + cellY].visible;
+        let visible = this.map.tiles[(cellX * this.map.width) + cellY].visible;
         let toDrawX = this.unknownFrameX;
         let toDrawY = this.unknownFrameY;
         if (visible) {
-          let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
+          let terrain = this.map.tiles[(cellX * this.map.width) + cellY].terrain;
           toDrawX = terrain.frameX;
           toDrawY = terrain.frameY;
         }
         this.ctx.drawImage(this.terrain_sprite, toDrawX, toDrawY, this.sprite_width, this.sprite_height,
-        (cellX * this.map.tile_size) + 1, (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+          (cellX * this.map.tile_size) + 1, (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
       }
     }
   }

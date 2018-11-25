@@ -23,6 +23,8 @@ class Person {
     this.left = { x: -1, y: 0 };
     this.right = { x: 1, y: 0 };
 
+    this.mapX = this.x * this.map.width;
+    this.mapY = this.y;
   }
 
   printStatus() {
@@ -40,17 +42,19 @@ class Person {
     return this.money;
   }
 
+  //Returns a string representation of the terrain at the given x,y coordinates
   getPlayerLocInfo() {
-    // Calculates the tile position using black magic. Ask Dan for explanation.
-    return this.map.layers[(this.x * this.map.width) + this.y].terrain.name;
+    return this.map.getTerrainName(this.x, this.y);
   }
 
+  //Returns the int cost of moving into the terrain at the given x,y coordinates
   getPlayerLocCost() {
-    return this.map.layers[(this.x * this.map.width) + this.y].terrain.cost;
+    return this.map.getTerrainCost(this.x, this.y);
   }
-
+  
+  //Returns a string representation of the item or obstacle at the given x,y coordinates
   getPlayerLocItem() {
-    return this.map.layers[(this.x * this.map.width) + this.y].name;
+    return this.map.getObjectAtLoc(this.x, this.y);
   }
 
   getPlayerInventory() {
@@ -68,6 +72,7 @@ class Person {
     this.dead = true;
   }
 
+  // Not sure which one to remove, lol
   hasBinoculars() {
     this.visibilityRadius = 2; //can see two squares in each direction now.
   }
@@ -128,17 +133,12 @@ class Person {
     else if (moveX < 0) {
       moveX = this.map.width - 1;
     }
-    let terrain = this.map.layers[((moveX) * this.map.width) + this.y].terrain;
+    let move = this.map.allowMove(moveX, this.y, this);
 
-    if (terrain.canEnter) {
+    if (move.allow) {
       this.x = moveX;
     }
-    else if (terrain.name === "WATER" && this.boat) {
-      this.x = moveX;
-      return 0;
-    }
-
-    return terrain.cost;
+    return move.cost;
   }
 
   /**
@@ -157,17 +157,12 @@ class Person {
     else if (moveY < 0) {
       moveY = this.map.width - 1;
     }
-    let terrain = this.map.layers[((this.x) * this.map.width) + moveY].terrain;
+    let move = this.map.allowMove(this.x, moveY, this);
 
-    if (terrain.canEnter) {
+    if (move.allow) {
       this.y = moveY;
     }
-    else if (terrain.name === "WATER" && this.boat) {
-      this.y = moveY;
-      return 0;
-    }
-
-    return terrain.cost;
+    return move.cost;
   }
 
   consumeEnergy(lost) {
@@ -178,14 +173,14 @@ class Person {
   usePowerBar(gained) {
     this.money -= 1;
     this.energy += gained;
-    this.map.layers[(this.x * this.map.width) + this.y].name = "";
+    this.map.destroyObject(this.x, this.y);
   }
 
   findTreasure() {
     this.money += 100;
 
     //reset cell so treasure can't be found again
-    this.map.layers[(this.x * this.map.width) + this.y].name = "";
+    this.map.destroyObject(this.x, this.y);
   }
 
   //encounter a Type Two Treasure which takes all your money
@@ -193,7 +188,7 @@ class Person {
     this.money = 0;
 
     //reset cell so treasure can't be found again
-    this.map.layers[(this.x * this.map.width) + this.y].name = "";
+    this.map.destroyObject(this.x, this.y);
   }
 
   /**
@@ -208,6 +203,28 @@ class Person {
     let costX = this.moveX(step_x);
     let costY = this.moveY(step_y);
     this.consumeEnergy(costX + costY);
+  }
+
+  interactWithObject(object) {
+    switch(object) {
+
+    case ROYAL_DIAMONDS:
+      alert("You found the jewels!!!!!! You Win!!");
+      //Reload the game to default
+      window.location.reload(true);
+      break;
+
+    case BINOCULARS:
+      console.log("You found a pair of binoculars!");
+      this.hasBinoculars();
+      break;
+    
+    case POWER_BAR:
+      // TODO: Consume power bar on tile move?
+      console.log("Power Bar Found");
+      this.usePowerBar(10);
+    }
+    this.map.destroyObject(this.x, this.y);
   }
 }
 
