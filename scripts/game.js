@@ -301,6 +301,13 @@ export default class Game {
         this.buyPrompt(obj, x, y);
         break;
 
+      case CHAINSAW.name:
+        this.buyPrompt(obj, x, y);
+        break;
+
+
+
+
       case ROYAL_DIAMONDS.name:
         this.stop();
         this.textPrompt("You found the Royal Diamonds! You Win!", () => {
@@ -316,7 +323,7 @@ export default class Game {
         this.map.destroyObject(x, y);
         this.hero.findTreasure();
 
-        // NOTE: what is this move call for 
+        // NOTE: what is this move call for
         this.hero.move(x - this.hero.x, y - this.hero.y, move_cost);
         break;
 
