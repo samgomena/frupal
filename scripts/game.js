@@ -1,5 +1,5 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, 
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE,
   TYPE_TWO, BOAT, CHAINSAW, WEED_WHACKER, TREE, BLK_BERRY, BOULDER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
 import balloons from "../assets/balloons.png";
@@ -273,19 +273,32 @@ export default class Game {
     if(invCheck === false) {  //obj not already in the player's inventory
       // Pause the game to allow for player to buy things.
       switch(obj.name) {
+
       case TREE.name:
+        break;
+
       case BLK_BERRY.name:
+        break;
+
       case BOULDER.name:
-      // TODO: Check if player has tools to break down, 
+      // TODO: Check if player has tools to break down,
       // consume appropriate energy by calling a movement on this.hero.x - x (?).
         this.obstaclePrompt(obj, x, y);
         break;
+
       case POWER_BAR.name:
+        break;
+
       case BOAT.name:
+        break;
+
       case BINOCULARS.name:
+        break;
+        
       case WEED_WHACKER.name:
         this.buyPrompt(obj, x, y);
         break;
+
       case ROYAL_DIAMONDS.name:
         this.stop();
         this.textPrompt("You found the Royal Diamonds! You Win!", () => {
@@ -394,7 +407,7 @@ export default class Game {
   textPrompt(text, eventHandler=this.clearPopupAndUnpause.bind(this)) {
     // Pause the game if the prompt shows up.
     this.game_paused = true;
-    
+
     // Temp fix for finding type2 treasure.
     if(this.balloon_flag == -1) {
       this.balloon_flag = 3;
@@ -544,17 +557,17 @@ export default class Game {
   drawPlayer() {
     let hero_x = (this.hero.x * this.map.tile_size);
     let hero_y = (this.hero.y * this.map.tile_size);
-    
+
     // Prevents hero moving animation from constantly occurring.
     if(this.hero_animation_iterations < (this.hero_max_animation)) {
       this.hero_animation_iterations += 1;
       this.hero_animation_num = (this.hero_animation_num + 1) % this.hero_max_animation;
       // Hero frame position is tied to the movement events.
-      this.ctx.drawImage(this.hero_sprite, this.hero_animation_frames[this.hero_animation_num], this.hero_frame_y[this.hero_frame_position], 
+      this.ctx.drawImage(this.hero_sprite, this.hero_animation_frames[this.hero_animation_num], this.hero_frame_y[this.hero_frame_position],
         this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
     }
     else {
-      this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y[this.hero_frame_position], 
+      this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y[this.hero_frame_position],
         this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
     }
   }
@@ -563,14 +576,14 @@ export default class Game {
     let hero_x = (this.hero.x * this.map.tile_size);
     let hero_y = (this.hero.y * this.map.tile_size);
     if(this.balloon_animation_num < (this.balloon_animation_max)) {
-      this.ctx.drawImage(this.balloon_sprite, this.balloon_animations[this.balloon_animation_frame], this.balloon_type[this.balloon_flag], this.tileSize, this.tileSize, 
+      this.ctx.drawImage(this.balloon_sprite, this.balloon_animations[this.balloon_animation_frame], this.balloon_type[this.balloon_flag], this.tileSize, this.tileSize,
         hero_x, hero_y + this.tileSize, this.tileSize, this.tileSize);
 
       this.balloon_animation_num += 1;
       this.balloon_animation_frame = (this.balloon_animation_frame + 1) % this.balloon_animation_max;
     }
     else {
-      this.ctx.drawImage(this.balloon_sprite, this.balloon_animations[this.balloon_animation_max - 1], this.balloon_type[this.balloon_flag], this.tileSize, this.tileSize, 
+      this.ctx.drawImage(this.balloon_sprite, this.balloon_animations[this.balloon_animation_max - 1], this.balloon_type[this.balloon_flag], this.tileSize, this.tileSize,
         hero_x, hero_y + this.tileSize, this.tileSize, this.tileSize);
       this.resetBalloon();
     }
