@@ -1,5 +1,5 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, TYPETWO, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
 
@@ -50,7 +50,7 @@ export default class Game {
 
     // Bind move events
     this.setMoveEvents();
-    
+
 
     canvas.width = (this.map.tile_size * this.map.width);
     canvas.height = (this.map.tile_size * this.map.height);
@@ -222,23 +222,29 @@ export default class Game {
       case BINOCULARS:
         this.buyPrompt("Would you like to buy binoculars?", item);
         break;
-        
+
       case POWER_BAR:
         this.textPrompt("You found a power bar!");
         this.hero.usePowerBar(10);
         break;
-        
+
       case TREASURE:
         console.log("Treasure Chest Found");
         this.textPrompt("You found treasure!");
         this.hero.findTreasure();
         break;
-        
+
+      case TYPETWO:
+        console.log("Type 2 chest found...lose all money");
+        this.textPrompt("Sorry, all your whiffles have been stolen :(");
+        this.hero.loseMoney();
+        break;
+
       case BOAT:
         // this.hero.addToInventory(item);
         this.buyPrompt("Would you like to buy a boat?", item);
         break;
-        
+
       case CHAINSAW:
         this.hero.addToInventory(item);
         break;
@@ -311,17 +317,110 @@ export default class Game {
         this.hero.move(movement.x, movement.y);
         this.hero_move_queue.shift();
 
-        let minX = Math.max(0, this.hero.x - this.hero.visibilityRadius);
-        let minY = Math.max(0, this.hero.y - this.hero.visibilityRadius);
-        let maxX = Math.min(this.map.width - this.hero.visibilityRadius, this.hero.x + this.hero.visibilityRadius);
-        let maxY = Math.min(this.map.height - this.hero.visibilityRadius, this.hero.y + this.hero.visibilityRadius);
+        let showLeft = this.hero.x - this.hero.visibilityRadius;
+        let showRight = this.hero.x + this.hero.visibilityRadius;
+        let showDown = this.hero.y - this.hero.visibilityRadius;
+        let showUp = this.hero.y + this.hero.visibilityRadius;
 
+
+        let minX = Math.max(0, showLeft);
+        let minY = Math.max(0, showDown);
+        let maxX = Math.min(this.map.width - this.hero.visibilityRadius, showRight);
+        let maxY = Math.min(this.map.height - this.hero.visibilityRadius, showUp);
+
+        //This fixes the binoculars issue at the edge of the map.
+        if (maxX >= this.map.width - 3)
+          ++maxX;
+        if (maxY >= this.map.height - 3)
+          ++maxY;
+
+        //Basic cell visibility, no wrap around.
         for (let cellX = minX; cellX <= maxX; ++cellX)
         {
           for (let cellY = minY; cellY <= maxY; ++cellY)
           {
             let tile = this.map.layers[(cellX * this.map.width) + cellY];
             tile.visible = true;
+          }
+        }
+        //Wrap around map off left side (show right)
+        if (showLeft < 0)
+        {
+          let tempX = this.map.width - 1;
+          for (let tempY = minY; tempY <= maxY; ++tempY)
+          {
+            let tile = this.map.layers[(tempX * this.map.width) + tempY];
+            tile.visible = true;
+          }
+          //wrap around visibility with binoculars
+          if (showLeft == -2)
+          {
+            --tempX;
+            for (let tempY = minY; tempY <= maxY; ++tempY)
+            {
+              let tile = this.map.layers[(tempX * this.map.width) + tempY];
+              tile.visible = true;
+            }
+          }
+        }
+        //Wrap around map off right side (show left)
+        if (showRight >= this.map.width)
+        {
+          let tempX = 0;
+          for (let tempY = minY; tempY <= maxY; ++tempY)
+          {
+            let tile = this.map.layers[(tempX * this.map.width) + tempY];
+            tile.visible = true;
+          }
+          //wrap around visibility with binoculars
+          if (showRight == this.map.width + 1)
+          {
+            ++tempX;
+            for (let tempY = minY; tempY <= maxY; ++tempY)
+            {
+              let tile = this.map.layers[(tempX * this.map.width) + tempY];
+              tile.visible = true;
+            }
+          }
+        }
+        //Wrap around map off bottom (show top)
+        if (showDown < 0)
+        {
+          let tempY = this.map.height - 1;
+          for (let tempX = minX; tempX <= maxX; ++tempX)
+          {
+            let tile = this.map.layers[(tempX * this.map.width) + tempY];
+            tile.visible = true;
+          }
+          //wrap around visibility with binoculars
+          if (showDown == -2)
+          {
+            --tempY;
+            for (let tempX = minX; tempX <= maxX; ++tempX)
+            {
+              let tile = this.map.layers[(tempX * this.map.width) + tempY];
+              tile.visible = true;
+            }
+          }
+        }
+        //Wrap around map off top (show bottom)
+        if (showUp >= this.map.height)
+        {
+          let tempY = 0;
+          for (let tempX = minX; tempX <= maxX; ++tempX)
+          {
+            let tile = this.map.layers[(tempX * this.map.width) + tempY];
+            tile.visible = true;
+          }
+          //wrap around visibility with binoculars
+          if (showLeft == -2)
+          {
+            ++tempY;
+            for (let tempX = minX; tempX <= maxX; ++tempX)
+            {
+              let tile = this.map.layers[(tempX * this.map.width) + tempY];
+              tile.visible = true;
+            }
           }
         }
       }
@@ -354,7 +453,7 @@ export default class Game {
     */
     let hero_x = (this.hero.x * this.map.tile_size);
     let hero_y = (this.hero.y * this.map.tile_size);
-    this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y, 
+    this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y,
       this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
   }
 
@@ -376,7 +475,7 @@ export default class Game {
           toDrawX = terrain.frameX;
           toDrawY = terrain.frameY;
         }
-        this.ctx.drawImage(this.terrain_sprite, toDrawX, toDrawY, this.sprite_width, this.sprite_height, 
+        this.ctx.drawImage(this.terrain_sprite, toDrawX, toDrawY, this.sprite_width, this.sprite_height,
         (cellX * this.map.tile_size) + 1, (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
       }
     }

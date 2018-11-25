@@ -11,7 +11,7 @@ class Person {
     this.energy = hero_init.energy;
     this.money = hero_init.whiffles;
     this.inventory = hero_init.inventory;
-    this.boat = false;	
+    this.boat = false;
 
     this.map = map;
     this.dead = false;
@@ -69,7 +69,7 @@ class Person {
   }
 
   hasBinoculars() {
-    this.visibilityRadius = 2;
+    this.visibilityRadius = 2; //can see two squares in each direction now.
   }
 
   hasBoat() {
@@ -111,7 +111,7 @@ class Person {
       break;
     }
   }
-    
+
   /**
   * This function moves a player `dir_x` units in the x direction.
   *
@@ -181,8 +181,18 @@ class Person {
   }
 
   findTreasure() {
-    this.money += 10;     // adds 10 whiffles
-    // TODO: check requirements for how much $$ to find
+    this.money += 100;
+
+    //reset cell so treasure can't be found again
+    this.map.layers[(this.x * this.map.width) + this.y].name = "";
+  }
+
+  //encounter a Type Two Treasure which takes all your money
+  loseMoney(){
+    this.money = 0;
+
+    //reset cell so treasure can't be found again
+    this.map.layers[(this.x * this.map.width) + this.y].name = "";
   }
 
   /**
