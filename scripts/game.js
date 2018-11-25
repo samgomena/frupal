@@ -1,6 +1,6 @@
 "use strict";
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE,
-  TYPE_TWO, BOAT, CHAINSAW, WEED_WHACKER, TREE, BLK_BERRY, BOULDER } from "./data/items";
+  TYPE_TWO, BOAT, CHAINSAW, SHEARS, HATCHET, AXE, SLEDGE, JACKHAMMER, CHISEL, WEED_WHACKER, TREE, BLK_BERRY, BOULDER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
 import balloons from "../assets/balloons.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
@@ -275,11 +275,7 @@ export default class Game {
       switch(obj.name) {
 
       case TREE.name:
-        break;
-
       case BLK_BERRY.name:
-        break;
-
       case BOULDER.name:
       // TODO: Check if player has tools to break down,
       // consume appropriate energy by calling a movement on this.hero.x - x (?).
@@ -287,44 +283,15 @@ export default class Game {
         break;
 
       case POWER_BAR.name:
-        this.buyPrompt(obj, x, y);
-        break;
-
       case BOAT.name:
-        this.buyPrompt(obj, x, y);
-        break;
-
       case BINOCULARS.name:
-        break;
-
       case SHEARS.name:
-        this.buyPrompt(obj, x, y);
-        break;
-
       case HATCHET.name:
-        this.buyPrompt(obj, x, y);
-        break;
-
       case AXE.name:
-        this.buyPrompt(obj, x, y);
-        break;
-
       case WEED_WHACKER.name:
-        this.buyPrompt(obj, x, y);
-        break;
-
       case CHAINSAW.name:
-        this.buyPrompt(obj, x, y);
-        break;
-
       case CHISEL.name:
-        this.buyPrompt(obj, x, y);
-        break;
-
       case SLEDGE.name:
-        this.buyPrompt(obj, x, y);
-        break;
-
       case JACKHAMMER.name:
         this.buyPrompt(obj, x, y);
         break;
