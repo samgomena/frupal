@@ -449,6 +449,8 @@ export default class Game {
     popup.innerHTML = "";
     // Unpause game
     this.game_paused = false;
+    // reload display
+    this.display.update();
   }
 
   resetBalloon() {
