@@ -275,6 +275,9 @@ export default class Game {
 
       case TYPETWO:
         console.log("Type 2 chest found...lose all money");
+
+        // Temp fix for now.
+        this.balloon_flag = 2;
         this.textPrompt("Sorry, all your whiffles have been stolen :(");
         this.hero.loseMoney();
         break;
@@ -337,7 +340,11 @@ export default class Game {
   textPrompt(text, eventHandler=this.clearPopupAndUnpause.bind(this)) {
     // Pause the game if the prompt shows up.
     this.game_paused = true;
-    this.balloon_flag = 3;
+    
+    // Temp fix for finding type2 treasure.
+    if(this.balloon_flag == -1) {
+      this.balloon_flag = 3;
+    }
 
     let popup = document.getElementById("popup");
     if (popup.innerHTML == "") {
