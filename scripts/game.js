@@ -287,14 +287,16 @@ export default class Game {
         break;
 
       case POWER_BAR.name:
+        this.buyPrompt(obj, x, y);
         break;
 
       case BOAT.name:
+        this.buyPrompt(obj, x, y);
         break;
 
       case BINOCULARS.name:
         break;
-        
+
       case WEED_WHACKER.name:
         this.buyPrompt(obj, x, y);
         break;
@@ -384,18 +386,34 @@ export default class Game {
     yes_no_box.appendChild(yes);
     yes_no_box.appendChild(no);
 
+    if(item === POWER_BAR){
+      yes.addEventListener("click", () => {
+        this.clearPopupAndUnpause(popup);
+        let moneyCost = item.cost;
+        if(this.hero.getMoney() >= moneyCost){
+          this.hero.usePowerBar(20);
+          this.map.destroyObject(x, y);
+        }
+        else {
+          this.textPrompt("Not enough money");
+        }
+      });
+    }
 
-    yes.addEventListener("click", () => {
-      this.clearPopupAndUnpause(popup);
-      let moneyCost = item.cost;
-      if(this.hero.getMoney() >= moneyCost){
-        this.hero.addToInventory(item, moneyCost);
-        this.map.destroyObject(x, y);
-      }
-      else {
-        this.textPrompt("Not enough money");
-      }
-    });
+    else {
+      yes.addEventListener("click", () => {
+        this.clearPopupAndUnpause(popup);
+        let moneyCost = item.cost;
+        if(this.hero.getMoney() >= moneyCost){
+          this.hero.addToInventory(item, moneyCost);
+          this.map.destroyObject(x, y);
+        }
+        else {
+          this.textPrompt("Not enough money");
+        }
+      });
+    }
+
 
     no.addEventListener("click", this.clearPopupAndUnpause.bind(this));
 
