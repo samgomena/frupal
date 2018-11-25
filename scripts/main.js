@@ -2,8 +2,6 @@ import Person from "./person";
 import Display from "./display";
 import { parse, DEFAULT_CONFIG } from "./parseConfig";
 import Game from "./game";
-import Map from "./map";
-import { setGameData } from "./setGameData";
 import createOverlay from "./overlay";
 import "../styles/main.scss";
 // Don't move this, Overlay must be created before Map and before update event listener.

@@ -1,5 +1,5 @@
 "use strict";
-import Person from "./person";
+// import Person from "./person";
 import {TERRAIN_MAP} from "./data/terrainMap";
 const OBJECT_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
 
