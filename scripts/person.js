@@ -3,8 +3,8 @@ import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_W
 class Person {
   constructor(hero_init, map) {
     this.name = "I made this up";
-    this.width = 64; // Magic for now
-    this.height = 64;
+    this.width = 16; // Magic for now
+    this.height = 16;
     this.x = hero_init.pos.x;
     this.y = hero_init.pos.y;
     this.location = hero_init.pos;
@@ -96,16 +96,18 @@ class Person {
     return false;
   }
 
-  addToInventory(item) {
-    this.inventory.push(item);
-    this.money -= 10;
+  addToInventory(item, cost) {
+    // Can turn this into the actual object later for displaying image
+    this.inventory.push(item.name);
+    this.money -= cost;
     this.inventoryLength += 1;
 
-    switch(item) {
-    case BOAT:
+    switch(item.name) {
+    case BOAT.name:
       this.hasBoat();
       break;
-    case BINOCULARS:
+    case BINOCULARS.name:
+      console.log(BINOCULARS);
       this.hasBinoculars();
       break;
     }
@@ -115,7 +117,7 @@ class Person {
     // ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER
     // TODO: Might need this for obstacle-tool interaction?
     switch(item) {
-    case BINOCULARS:
+    case BINOCULARS.name:
       this.hasBinoculars();
       break;
     }
@@ -183,7 +185,6 @@ class Person {
   usePowerBar(gained) {
     this.money -= 1;
     this.energy += gained;
-    this.map.destroyObject(this.x, this.y);
   }
 
   findTreasure() {

@@ -1,6 +1,6 @@
 "use strict";
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, 
-  TYPETWO, BOAT, CHAINSAW, WEED_WHACKER, TREE, BLK_BERRY, BOULDER } from "./data/items";
+  TYPE_TWO, BOAT, CHAINSAW, WEED_WHACKER, TREE, BLK_BERRY, BOULDER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
 import balloons from "../assets/balloons.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
@@ -250,7 +250,7 @@ export default class Game {
           this.hero.move(movement.x, movement.y, allowMove.cost);
         }
         if(allowMove.object != "None") {
-          this.tileCheck(allowMove.object, this.hero.x + movement.x, this.hero.y + movement.y);
+          this.tileCheck(allowMove.object, this.hero.x + movement.x, this.hero.y + movement.y, allowMove.cost);
         }
         this.hero_move_queue.shift();
 
@@ -265,20 +265,28 @@ export default class Game {
     });
   }
 
-  tileCheck(obj, x, y) {
+  tileCheck(obj, x, y, move_cost) {
     /*
       Checks the tile that the hero is on.
     */
     var invCheck = this.hero.checkInventory(obj);
     if(invCheck === false) {  //obj not already in the player's inventory
       // Pause the game to allow for player to buy things.
-      switch(obj) {
-      case TREE:
-      case BLK_BERRY:
-      case BOULDER:
+      switch(obj.name) {
+      case TREE.name:
+      case BLK_BERRY.name:
+      case BOULDER.name:
+      // TODO: Check if player has tools to break down, 
+      // consume appropriate energy by calling a movement on this.hero.x - x (?).
         this.obstaclePrompt(obj, x, y);
         break;
-      case ROYAL_DIAMONDS:
+      case POWER_BAR.name:
+      case BOAT.name:
+      case BINOCULARS.name:
+      case WEED_WHACKER.name:
+        this.buyPrompt(obj, x, y);
+        break;
+      case ROYAL_DIAMONDS.name:
         this.stop();
         this.textPrompt("You found the Royal Diamonds! You Win!", () => {
         //Reload the game to default
@@ -286,25 +294,16 @@ export default class Game {
         });
         break;
 
-      case BINOCULARS:
-        this.buyPrompt(obj, x, y);
-        break;
-
-      case POWER_BAR:
-        if(this.hero.getMoney() > 0){
-          this.buyPrompt(obj, x, y);
-        }
-        break;
-
-      case TREASURE:
+      case TREASURE.name:
         console.log("Treasure Chest Found");
         this.textPrompt("You found treasure!");
         //reset cell so treasure can't be found again
         this.map.destroyObject(x, y);
         this.hero.findTreasure();
+        this.hero.move(x - this.hero.x, y - this.hero.y, move_cost);
         break;
 
-      case TYPETWO:
+      case TYPE_TWO.name:
         console.log("Type 2 chest found...lose all money");
 
         // Temp fix for now.
@@ -314,16 +313,10 @@ export default class Game {
         this.map.destroyObject(x, y);
         break;
 
-      case BOAT:
-        if(this.hero.getMoney() > 0){
-          this.buyPrompt(obj, x, y);
-        }
-        break;
-
-      case CHAINSAW:
-        this.hero.addToInventory(obj);
-        break;
+      default:
+        throw("Could not find object");
       }
+
     }
   }
 
@@ -365,7 +358,7 @@ export default class Game {
     // This giant thing is just creating HTML elements to show up within the popup element.
     let popup = document.getElementById("popup");
     popup.style["display"] = "flex";
-    const buy_text = document.createTextNode(`Would you like to buy ${item}?`);
+    const buy_text = document.createTextNode(`Would you like to buy ${item.name}?`);
     const buy_message = document.createElement("div");
     buy_message.appendChild(buy_text);
     const yes_no_box = document.createElement("div");
@@ -378,20 +371,18 @@ export default class Game {
     yes_no_box.appendChild(yes);
     yes_no_box.appendChild(no);
 
-    if(item === POWER_BAR){
-      yes.addEventListener("click", () => {
-        this.clearPopupAndUnpause(popup);
-        this.hero.usePowerBar(20);
-      });
-    }
 
-    else {
-      yes.addEventListener("click", () => {
-        this.clearPopupAndUnpause(popup);
-        this.hero.addToInventory(item);
+    yes.addEventListener("click", () => {
+      this.clearPopupAndUnpause(popup);
+      let moneyCost = item.cost;
+      if(this.hero.getMoney() >= moneyCost){
+        this.hero.addToInventory(item, moneyCost);
         this.map.destroyObject(x, y);
-      });
-    }
+      }
+      else {
+        this.textPrompt("Not enough money");
+      }
+    });
 
     no.addEventListener("click", this.clearPopupAndUnpause.bind(this));
 

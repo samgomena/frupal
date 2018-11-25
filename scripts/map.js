@@ -1,7 +1,7 @@
 "use strict";
 // import Person from "./person";
 import {TERRAIN_MAP} from "./data/terrainMap";
-import { TREE } from "./data/obstacles";
+import * as items from "./data/items";
 const OBJECT_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
 
 /**
@@ -13,7 +13,6 @@ class Map {
     this.height = height;
     this.tile_size = 16; // Needs to be 16 for graphics.
     this.tiles = new Array(this.width * this.height); 
-    this.obstacles = [TREE];
   }
 
   /**
@@ -154,10 +153,11 @@ class Map {
           terrain: TERRAIN_MAP[terrain]
         };
       } else {
+        object = items[object.toUpperCase().replace(" ", "_")];
         tile = {
           visible: Boolean(+visibility),
           terrain: TERRAIN_MAP[terrain],
-          object: object//Can represent an item or obstacle
+          object: object //Can represent an item or obstacle
         };
       }
       this.tiles[(xC * this.width) + yC] = tile;//Assign the special tile to its location

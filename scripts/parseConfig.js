@@ -21,16 +21,16 @@ Pretty Rock
 12, 12, 1, 1, None
 14, 13, 0, 2, None
 15, 12, 0, 2, None
-13, 12, 0, 1, Tree
-15, 13, 0, 6, ${items.ROYAL_DIAMONDS}
-11, 11, 0, 1, ${items.BINOCULARS}
-15, 16, 0, 4, Bog
-5, 5, 1, 0, ${items.POWER_BAR}
-10, 10, 0, 0, ${items.TREASURE}
-10, 11, 0, 0, ${items.TYPETWO}
-17, 10, 0, 0, ${items.BOAT}
+13, 12, 0, 1, ${items.TREE.name}
+15, 13, 0, 6, ${items.ROYAL_DIAMONDS.name}
+11, 11, 0, 1, ${items.BINOCULARS.name}
+15, 16, 0, 4, None
+5, 5, 1, 0, ${items.POWER_BAR.name}
+10, 10, 0, 0, ${items.TREASURE.name}
+10, 11, 0, 0, ${items.TYPE_TWO.name}
+17, 10, 0, 0, ${items.BOAT.name}
 14, 12, 0, 2, None
-9, 9, 0, 1, ${items.TREASURE}`;
+9, 9, 0, 1, ${items.TREASURE.name}`;
 
 /**
  *
