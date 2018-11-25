@@ -1,6 +1,7 @@
 "use strict";
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, TYPETWO, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
+import balloons from "../assets/balloons.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
 
 // import { loseGame } from "./endGame";
@@ -22,15 +23,40 @@ export default class Game {
     this.hero_sprite = new Image();
     this.hero_sprite.src = hero_image;
 
+    this.balloon_sprite = new Image();
+    this.balloon_sprite.src = balloons;
+
     this.sprite_width = 16;
     this.sprite_height = 16;
+
+    this.balloon_animations = [112, 96, 80, 64, 48, 32, 16, 0];
+    this.balloon_animation_max = 8;
+    this.balloon_animation_frame = 0;
+    this.balloon_animation_num = 0;
+
+    // Question mark, exclamation point, ellipses, heart.
+    this.balloon_type = [0, 16, 32, 48];
+    // If balloon_flag == -1, don't show a flag.
+    this.balloon_flag = -1;
 
     this.hero_sprite_width = 16;
     this.hero_sprite_height = 16;
 
-    this.hero_frame_x = 49;
-    this.hero_frame_y = 128;
+    // Initial start position is looking downwards.
+    this.hero_frame_position = 2;
 
+    // w a s d
+    // up, left, down, right
+    this.hero_frame_x = 48;
+    this.hero_frame_y = [162, 145, 126, 108];
+
+    this.hero_animation_frames = [32, 48, 64];
+    // Start on 1.
+    this.hero_animation_num = 1;
+    this.hero_max_animation = 3;
+    this.hero_animation_iterations = this.hero_max_animation;
+
+    // Unknown frames for unknown map tiles.
     this.unknownFrameX = 816;
     this.unknownFrameY = 442;
 
@@ -92,9 +118,11 @@ export default class Game {
   setMoveEvents() {
 
     // Define up, down, left, right, elements and attach click events to them
-    ["up", "down", "left", "right"].forEach(direction => {
+    ["up", "left", "down", "right"].forEach((direction, i) => {
       document.getElementById(direction).addEventListener("click", () => {
         if(!this.isGamePaused() && !this.isGameStopped()) {
+          this.hero_frame_position = i;
+          this.hero_animation_iterations = 0;
           this.moveEvent(direction);
         }
       });
@@ -106,9 +134,13 @@ export default class Game {
         // I wonder if using function calls like this impacts performance?
         const keyName = e.key;
         const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+        let keyIndex = validKeys.indexOf(keyName);
 
-        if(validKeys.indexOf(keyName) !== -1) {
+        if(keyIndex !== -1) {
           e.preventDefault();
+          // Key index mod 4 because that's how many keys there are.
+          this.hero_frame_position = keyIndex % 4;
+          this.hero_animation_iterations = 0;
           this.moveEvent(keyName, 1);
         }
       }
@@ -181,6 +213,11 @@ export default class Game {
    */
   tick() {
     if (this.game_stop) return 0;
+
+    if(this.balloon_flag !== -1) {
+      this.drawBalloon();
+    }
+
     if (!this.game_paused) {
 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -258,6 +295,7 @@ export default class Game {
 
   buyPrompt(item) {
     this.game_paused = true;
+    this.balloon_flag = 1;
 
     // This giant thing is just creating HTML elements to show up within the popup element.
     let popup = document.getElementById("popup");
@@ -299,6 +337,7 @@ export default class Game {
   textPrompt(text, eventHandler=this.clearPopupAndUnpause.bind(this)) {
     // Pause the game if the prompt shows up.
     this.game_paused = true;
+    this.balloon_flag = 3;
 
     let popup = document.getElementById("popup");
     if (popup.innerHTML == "") {
@@ -309,7 +348,9 @@ export default class Game {
       ok_button.appendChild(ok_text);
       popup.appendChild(happy_text);
       popup.appendChild(ok_button);
-      ok_button.addEventListener("click", eventHandler);
+      ok_button.addEventListener("click", () => {
+        eventHandler();
+      });
     }
   }
 
@@ -319,6 +360,12 @@ export default class Game {
     popup.innerHTML = "";
     // Unpause game
     this.game_paused = false;
+  }
+
+  resetBalloon() {
+    this.balloon_flag = -1;
+    this.balloon_animation_frame = 0;
+    this.balloon_animation_num = 0;
   }
 
   /**
@@ -450,24 +497,38 @@ export default class Game {
    * This function draws the 'hero' (a circle for now)
    */
   drawPlayer() {
-    /*
-    this.ctx.beginPath();
-    this.ctx.arc(
-      (this.hero.x * this.map.tile_size) + (this.hero.width / 2),
-      (this.hero.y * this.map.tile_size) + (this.hero.height / 2),
-      31,
-      0,
-      2 * Math.PI,
-      false
-    );
-    this.ctx.fillStyle = "black";
-    this.ctx.fill();
-    this.ctx.stroke();
-    */
     let hero_x = (this.hero.x * this.map.tile_size);
     let hero_y = (this.hero.y * this.map.tile_size);
-    this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y,
-      this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
+    
+    // Prevents hero moving animation from constantly occurring.
+    if(this.hero_animation_iterations < (this.hero_max_animation)) {
+      this.hero_animation_iterations += 1;
+      this.hero_animation_num = (this.hero_animation_num + 1) % this.hero_max_animation;
+      // Hero frame position is tied to the movement events.
+      this.ctx.drawImage(this.hero_sprite, this.hero_animation_frames[this.hero_animation_num], this.hero_frame_y[this.hero_frame_position], 
+        this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
+    }
+    else {
+      this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y[this.hero_frame_position], 
+        this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
+    }
+  }
+
+  drawBalloon() {
+    let hero_x = (this.hero.x * this.map.tile_size);
+    let hero_y = (this.hero.y * this.map.tile_size);
+    if(this.balloon_animation_num < (this.balloon_animation_max)) {
+      this.ctx.drawImage(this.balloon_sprite, this.balloon_animations[this.balloon_animation_frame], this.balloon_type[this.balloon_flag], this.tileSize, this.tileSize, 
+        hero_x, hero_y + this.tileSize, this.tileSize, this.tileSize);
+
+      this.balloon_animation_num += 1;
+      this.balloon_animation_frame = (this.balloon_animation_frame + 1) % this.balloon_animation_max;
+    }
+    else {
+      this.ctx.drawImage(this.balloon_sprite, this.balloon_animations[this.balloon_animation_max - 1], this.balloon_type[this.balloon_flag], this.tileSize, this.tileSize, 
+        hero_x, hero_y + this.tileSize, this.tileSize, this.tileSize);
+      this.resetBalloon();
+    }
   }
 
   /**
