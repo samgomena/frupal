@@ -71,6 +71,7 @@ function parse(game_config) {
 
   GAME.title = game_title;
   GAME.map = new Map(+board_size, +board_size);
+  GAME.board_size = +board_size;
 
   let delimiter = first_delimiter.charAt(0);
 
@@ -102,6 +103,7 @@ function parse(game_config) {
 
   // Remove closing delimiter
   split_map_file.splice(0, 1);
+  GAME.split_map_file = split_map_file;
 
   GAME.map.initObjects(split_map_file);
 
