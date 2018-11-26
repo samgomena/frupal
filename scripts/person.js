@@ -1,10 +1,11 @@
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, 
+  TREASURE, BOAT, CHAINSAW, WEED_WHACKER, TREE, BOULDER, BLK_BERRY } from "./data/items";
 
 class Person {
   constructor(hero_init, map) {
     this.name = "I made this up";
-    this.width = 64; // Magic for now
-    this.height = 64;
+    this.width = 16; // Magic for now
+    this.height = 16;
     this.x = hero_init.pos.x;
     this.y = hero_init.pos.y;
     this.location = hero_init.pos;
@@ -22,7 +23,10 @@ class Person {
     this.down = { x: 0, y: 1 };
     this.left = { x: -1, y: 0 };
     this.right = { x: 1, y: 0 };
+    this.interact = {x: 0, y: 0, flag: 1};
 
+    this.mapX = this.x * this.map.width;
+    this.mapY = this.y;
   }
 
   printStatus() {
@@ -40,17 +44,19 @@ class Person {
     return this.money;
   }
 
+  //Returns a string representation of the terrain at the given x,y coordinates
   getPlayerLocInfo() {
-    // Calculates the tile position using black magic. Ask Dan for explanation.
-    return this.map.layers[(this.x * this.map.width) + this.y].terrain.name;
+    return this.map.getTerrainName(this.x, this.y);
   }
 
+  //Returns the int cost of moving into the terrain at the given x,y coordinates
   getPlayerLocCost() {
-    return this.map.layers[(this.x * this.map.width) + this.y].terrain.cost;
+    return this.map.getTerrainCost(this.x, this.y);
   }
-
+  
+  //Returns a string representation of the item or obstacle at the given x,y coordinates
   getPlayerLocItem() {
-    return this.map.layers[(this.x * this.map.width) + this.y].name;
+    return this.map.getObjectAtLoc(this.x, this.y);
   }
 
   getPlayerInventory() {
@@ -68,12 +74,38 @@ class Person {
     this.dead = true;
   }
 
+  // Not sure which one to remove, lol
   hasBinoculars() {
     this.visibilityRadius = 2; //can see two squares in each direction now.
   }
 
   hasBoat() {
     this.boat = true;
+  }
+
+  obstacleInteraction(obstacle) {
+    const obstacles = [TREE, BLK_BERRY, BOULDER];
+    const numTools = obstacle.rightTools.length;
+    const itemsToCheck = obstacles.filter((obj) => {
+      return obj.name == obstacle.name;
+    })[0].rightTools;
+    let hasItem = false;
+    let cost = obstacle.noToolsCost;
+    for(let i = 0; i < numTools; ++i) {
+      if(this.checkInventory(itemsToCheck[i])) {
+        // TODO: Remove item from inventory on use
+        cost = obstacle.reducedCost;
+        hasItem = true;
+      }
+    }
+    return {
+      cost: cost,
+      hasItem: hasItem
+    };
+  }
+
+  boatStatus() {
+    return this.boat;
   }
 
   checkInventory(itemToCheck) {
@@ -87,16 +119,18 @@ class Person {
     return false;
   }
 
-  addToInventory(item) {
-    this.inventory.push(item);
-    this.money -= 10;
+  addToInventory(item, cost) {
+    // Can turn this into the actual object later for displaying image
+    this.inventory.push(item.name);
+    this.money -= cost;
     this.inventoryLength += 1;
 
-    switch(item) {
-    case BOAT:
+    switch(item.name) {
+    case BOAT.name:
       this.hasBoat();
       break;
-    case BINOCULARS:
+    case BINOCULARS.name:
+      console.log(BINOCULARS);
       this.hasBinoculars();
       break;
     }
@@ -106,7 +140,7 @@ class Person {
     // ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER
     // TODO: Might need this for obstacle-tool interaction?
     switch(item) {
-    case BINOCULARS:
+    case BINOCULARS.name:
       this.hasBinoculars();
       break;
     }
@@ -128,17 +162,15 @@ class Person {
     else if (moveX < 0) {
       moveX = this.map.width - 1;
     }
-    let terrain = this.map.layers[((moveX) * this.map.width) + this.y].terrain;
+    /*
+    let move = this.map.allowMove(moveX, this.y, this);
 
-    if (terrain.canEnter) {
+    if (move.allow) {
       this.x = moveX;
     }
-    else if (terrain.name === "WATER" && this.boat) {
-      this.x = moveX;
-      return 0;
-    }
-
-    return terrain.cost;
+    return move.cost;
+    */
+    this.x = moveX;
   }
 
   /**
@@ -157,17 +189,15 @@ class Person {
     else if (moveY < 0) {
       moveY = this.map.width - 1;
     }
-    let terrain = this.map.layers[((this.x) * this.map.width) + moveY].terrain;
+    /*
+    let move = this.map.allowMove(this.x, moveY, this);
 
-    if (terrain.canEnter) {
+    if (move.allow) {
       this.y = moveY;
     }
-    else if (terrain.name === "WATER" && this.boat) {
-      this.y = moveY;
-      return 0;
-    }
-
-    return terrain.cost;
+    return move.cost;
+    */
+    this.y = moveY;
   }
 
   consumeEnergy(lost) {
@@ -178,22 +208,16 @@ class Person {
   usePowerBar(gained) {
     this.money -= 1;
     this.energy += gained;
-    this.map.layers[(this.x * this.map.width) + this.y].name = "";
   }
 
   findTreasure() {
     this.money += 100;
 
-    //reset cell so treasure can't be found again
-    this.map.layers[(this.x * this.map.width) + this.y].name = "";
   }
 
   //encounter a Type Two Treasure which takes all your money
   loseMoney(){
     this.money = 0;
-
-    //reset cell so treasure can't be found again
-    this.map.layers[(this.x * this.map.width) + this.y].name = "";
   }
 
   /**
@@ -202,13 +226,36 @@ class Person {
    * @param step_x The number of movements to take in the x direction
    * @param step_y The number of movements to take in the y direction
    */
-  move(step_x, step_y) {
+  move(step_x, step_y, cost) {
 
     // These should probably be pure
-    let costX = this.moveX(step_x);
-    let costY = this.moveY(step_y);
-    this.consumeEnergy(costX + costY);
+    this.moveX(step_x);
+    this.moveY(step_y);
+    this.consumeEnergy(cost);
   }
+  /*
+  interactWithObject(object) {
+    switch(object) {
+
+    case ROYAL_DIAMONDS:
+      alert("You found the jewels!!!!!! You Win!!");
+      //Reload the game to default
+      window.location.reload(true);
+      break;
+
+    case BINOCULARS:
+      console.log("You found a pair of binoculars!");
+      this.hasBinoculars();
+      break;
+    
+    case POWER_BAR:
+      // TODO: Consume power bar on tile move?
+      console.log("Power Bar Found");
+      this.usePowerBar(10);
+    }
+    this.map.destroyObject(this.x, this.y);
+  }
+  */
 }
 
 export default Person;

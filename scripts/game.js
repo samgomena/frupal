@@ -1,13 +1,15 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, TYPETWO, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE,
+  TYPE_TWO, BOAT, CHAINSAW, SHEARS, HATCHET, AXE, SLEDGE, JACKHAMMER, CHISEL, WEED_WHACKER, TREE, BLK_BERRY, BOULDER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
+import balloons from "../assets/balloons.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
-import diamond_image from "../assets/diamond.png";
-import powerbar_image from "../assets/bar.png";
-import binoculars_image from "../assets/binoculars.png";
-import boat_image from "../assets/boat.png";
-import treasure_image from "../assets/treasure.png";
-import chainsaw_image from "../assets/chainsaw.png";
+import diamond_image from "../assets/items/diamond.png";
+import powerbar_image from "../assets/items/bar.png";
+import binoculars_image from "../assets/items/binoculars.png";
+import boat_image from "../assets/items/boat.png";
+import treasure_image from "../assets/items/treasure.png";
+import chainsaw_image from "../assets/items/chainsaw.png";
 
 // import { loseGame } from "./endGame";
 /**
@@ -19,7 +21,6 @@ export default class Game {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.map = map;
-    this.newTile = true;
     this.tileSize = 16;
 
     this.diamond_sprite = new Image();
@@ -41,15 +42,40 @@ export default class Game {
     this.hero_sprite = new Image();
     this.hero_sprite.src = hero_image;
 
+    this.balloon_sprite = new Image();
+    this.balloon_sprite.src = balloons;
+
     this.sprite_width = 16;
     this.sprite_height = 16;
+
+    this.balloon_animations = [112, 96, 80, 64, 48, 32, 16, 0];
+    this.balloon_animation_max = 8;
+    this.balloon_animation_frame = 0;
+    this.balloon_animation_num = 0;
+
+    // Question mark, exclamation point, ellipses, heart.
+    this.balloon_type = [0, 16, 32, 48];
+    // If balloon_flag == -1, don't show a flag.
+    this.balloon_flag = -1;
 
     this.hero_sprite_width = 16;
     this.hero_sprite_height = 16;
 
-    this.hero_frame_x = 49;
-    this.hero_frame_y = 128;
+    // Initial start position is looking downwards.
+    this.hero_frame_position = 2;
 
+    // w a s d
+    // up, left, down, right
+    this.hero_frame_x = 48;
+    this.hero_frame_y = [162, 145, 126, 108];
+
+    this.hero_animation_frames = [32, 48, 64];
+    // Start on 1.
+    this.hero_animation_num = 1;
+    this.hero_max_animation = 3;
+    this.hero_animation_iterations = this.hero_max_animation;
+
+    // Unknown frames for unknown map tiles.
     this.unknownFrameX = 816;
     this.unknownFrameY = 442;
 
@@ -62,6 +88,8 @@ export default class Game {
 
     // Queue that propagates move events across game refreshes
     this.hero_move_queue = [];
+    this.hero_prev_move = {x: 0, y: 0};
+    this.prev_key = 2;
 
     this.display = display;
 
@@ -81,7 +109,6 @@ export default class Game {
   }
 
   moveEvent(moveId) {
-    this.newTile = true;
     switch(moveId) {
     case "up":
     case "ArrowUp":
@@ -103,6 +130,10 @@ export default class Game {
     case "a":
       this.hero_move_queue.push(this.hero.left);
       break;
+    case " ":
+    case "e":
+      this.hero_move_queue.push(this.hero.interact);
+      break;
     default:
       throw new Error("That key doesn't do anything!");
     }
@@ -111,9 +142,11 @@ export default class Game {
   setMoveEvents() {
 
     // Define up, down, left, right, elements and attach click events to them
-    ["up", "down", "left", "right"].forEach(direction => {
+    ["up", "left", "down", "right"].forEach((direction, i) => {
       document.getElementById(direction).addEventListener("click", () => {
         if(!this.isGamePaused() && !this.isGameStopped()) {
+          this.hero_frame_position = i;
+          this.hero_animation_iterations = 0;
           this.moveEvent(direction);
         }
       });
@@ -124,11 +157,17 @@ export default class Game {
       if(!this.isGamePaused() && !this.isGameStopped()) {
         // I wonder if using function calls like this impacts performance?
         const keyName = e.key;
-        const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+        const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "e", " "];
+        let keyIndex = validKeys.indexOf(keyName);
 
-        if(validKeys.indexOf(keyName) !== -1) {
+        if(keyIndex !== -1) {
           e.preventDefault();
-          this.moveEvent(keyName, 1);
+          // Key index mod 4 because that's how many keys there are.
+          if(keyIndex >= 7) keyIndex = this.prev_key;
+          this.hero_frame_position = keyIndex % 4;
+          this.hero_animation_iterations = 0;
+          this.moveEvent(keyName);
+          this.prev_key = keyIndex;
         }
       }
     });
@@ -181,10 +220,11 @@ export default class Game {
     {
       for (let cellY = minY; cellY <= maxY; ++cellY)
       {
-        let tile = this.map.layers[(cellX * this.map.width) + cellY];
+        let tile = this.map.tiles[(cellX * this.map.width) + cellY];
         tile.visible = true;
       }
     }
+    this.revealMap();
     this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
     // requestAnimationFrame(this.tick.bind(this));
   }
@@ -200,17 +240,17 @@ export default class Game {
    */
   tick() {
     if (this.game_stop) return 0;
+
+    if(this.balloon_flag !== -1) {
+      this.drawBalloon();
+    }
+
     if (!this.game_paused) {
 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.update();
 
-      if(this.newTile) {
-        // Makes sure the player's tile is not constantly checked.
-        this.tileCheck();
-        this.display.update();
-        this.newTile = false;
-      }
+      this.display.update();
 
       this.drawGrid();
       this.drawPlayer();
@@ -220,17 +260,81 @@ export default class Game {
     window.setTimeout(this.tick.bind(this), 1000/this.fps);
   }
 
-  tileCheck() {
+  /**
+   * This function consumes the move events in `hero_move_queue` and executes them sequentially.
+   */
+  update() {
+    this.hero_move_queue.forEach(movement => {
+      if (this.hero.getEnergy() > 1) {
+        let x = movement.x;
+        let y = movement.y;
+        // Movement.flag == 1 means that it's an interaction.
+        if(movement.flag == 1) {
+          x = this.hero_prev_move.x;
+          y = this.hero_prev_move.y;
+        }
+
+        let allowMove = this.map.allowMove(this.hero.x + x, this.hero.y + y, this.hero);
+
+        if(allowMove.allow) {
+          this.hero.move(movement.x, movement.y, allowMove.cost);
+        }
+
+        if(allowMove.object != "None" && movement.flag == 1) {
+          this.tileCheck(allowMove.object, this.hero.x + x, this.hero.y + y);
+        }
+
+        if(!movement.flag) {
+          // Only save previous movement if it wasn't an interaction.
+          this.hero_prev_move = this.hero_move_queue.shift();
+        }
+        else {
+          this.hero_move_queue.shift();
+        }
+
+        this.revealMap();
+      }
+      else {
+        this.stop();
+        this.textPrompt("Oh dear, you are dead!", () => {
+          window.location.reload(true);
+        });
+      }
+    });
+  }
+
+  tileCheck(obj, x, y) {
     /*
       Checks the tile that the hero is on.
     */
-    const item = this.hero.getPlayerLocItem();
-    var invCheck = this.hero.checkInventory(item);
-    if(invCheck === false) {  //item not already in the player's inventory
+    var invCheck = this.hero.checkInventory(obj);
+    if(invCheck === false) {  //obj not already in the player's inventory
       // Pause the game to allow for player to buy things.
-      switch(item) {
+      switch(obj.name) {
 
-      case ROYAL_DIAMONDS:
+      case TREE.name:
+      case BLK_BERRY.name:
+      case BOULDER.name:
+      // TODO: Check if player has tools to break down,
+      // consume appropriate energy by calling a movement on this.hero.x - x (?).
+        this.obstaclePrompt(obj, x, y);
+        break;
+
+      case POWER_BAR.name:
+      case BOAT.name:
+      case BINOCULARS.name:
+      case SHEARS.name:
+      case HATCHET.name:
+      case AXE.name:
+      case WEED_WHACKER.name:
+      case CHAINSAW.name:
+      case CHISEL.name:
+      case SLEDGE.name:
+      case JACKHAMMER.name:
+        this.buyPrompt(obj, x, y);
+        break;
+
+      case ROYAL_DIAMONDS.name:
         this.stop();
         this.textPrompt("You found the Royal Diamonds! You Win!", () => {
         //Reload the game to default
@@ -238,50 +342,93 @@ export default class Game {
         });
         break;
 
-      case BINOCULARS:
-        this.buyPrompt(item);
-
-        break;
-
-      case POWER_BAR:
-        if(this.hero.getMoney() > 0){
-          this.buyPrompt(item);
-        }
-        break;
-
-      case TREASURE:
+      case TREASURE.name:
         console.log("Treasure Chest Found");
         this.textPrompt("You found treasure!");
+        //reset cell so treasure can't be found again
+        this.map.destroyObject(x, y);
         this.hero.findTreasure();
+
+        // NOTE: what is this move call for
+        // This is to move the hero into the treasure chest square once
+        // the treasure is picked up.
+        // this.hero.move(x - this.hero.x, y - this.hero.y, move_cost);
         break;
 
-      case TYPETWO:
+      case TYPE_TWO.name:
         console.log("Type 2 chest found...lose all money");
+
+        // Temp fix for now.
+        this.balloon_flag = 2;
         this.textPrompt("Sorry, all your whiffles have been stolen :(");
         this.hero.loseMoney();
+        this.map.destroyObject(x, y);
         break;
 
-      case BOAT:
-        if(this.hero.getMoney() > 0){
-          this.buyPrompt(item);
-        }
-        break;
-
-      case CHAINSAW:
-        this.hero.addToInventory(item);
-        break;
+      default:
+        throw("Could not find object");
       }
+
     }
+  }
+
+  obstaclePrompt(obj, x, y) {
+    this.game_paused = true;
+    this.balloon_flag = 1;
+
+    let popup = document.getElementById("popup");
+    popup.style["display"] = "flex";
+    const obstacle_text = document.createTextNode(`Would you like to traverse into a ${obj.name}?`);
+    const obstacle_message = document.createElement("div");
+    obstacle_message.appendChild(obstacle_text);
+    const yes_no_box = document.createElement("div");
+    const yes_text = document.createTextNode("Yes");
+    const no_text = document.createTextNode("No");
+    const yes = document.createElement("button");
+    const remove_text = document.createTextNode("Remove Obstacle");
+    const remove = document.createElement("button");
+    yes.appendChild(yes_text);
+    const no = document.createElement("button");
+    no.appendChild(no_text);
+    remove.appendChild(remove_text);
+    yes_no_box.appendChild(yes);
+    yes_no_box.appendChild(no);
+    yes_no_box.append(remove);
+
+    yes.addEventListener("click", () => {
+      this.clearPopupAndUnpause(popup);
+      let interaction = this.hero.obstacleInteraction(obj);
+      console.log(interaction.cost);
+      this.hero.move(x - this.hero.x, y - this.hero.y, interaction.cost);
+    });
+
+    remove.addEventListener("click", () => {
+      this.clearPopupAndUnpause(popup);
+      let interaction = this.hero.obstacleInteraction(obj);
+      if(interaction.hasItem) {
+        // this.hero.move(x - this.hero.x, y - this.hero.y, interaction.cost);
+        this.map.destroyObject(x, y);
+      }
+      else {
+        this.textPrompt("Sorry, you don't have the right tools.");
+      }
+    });
+
+    no.addEventListener("click", this.clearPopupAndUnpause.bind(this));
+
+    popup.appendChild(obstacle_message);
+    popup.appendChild(yes_no_box);
 
   }
 
-  buyPrompt(item) {
+  buyPrompt(item, x, y) {
     this.game_paused = true;
+    this.balloon_flag = 1;
 
     // This giant thing is just creating HTML elements to show up within the popup element.
     let popup = document.getElementById("popup");
     popup.style["display"] = "flex";
-    const buy_text = document.createTextNode(`Would you like to buy ${item}?`);
+    const buy_text = document.createTextNode(`Would you like to buy ${item.name}?`);
     const buy_message = document.createElement("div");
     buy_message.appendChild(buy_text);
     const yes_no_box = document.createElement("div");
@@ -297,16 +444,31 @@ export default class Game {
     if(item === POWER_BAR){
       yes.addEventListener("click", () => {
         this.clearPopupAndUnpause(popup);
-        this.hero.usePowerBar(20);
+        let moneyCost = item.cost;
+        if(this.hero.getMoney() >= moneyCost){
+          this.hero.usePowerBar(20);
+          this.map.destroyObject(x, y);
+        }
+        else {
+          this.textPrompt("Not enough money");
+        }
       });
     }
 
     else {
       yes.addEventListener("click", () => {
         this.clearPopupAndUnpause(popup);
-        this.hero.addToInventory(item);
+        let moneyCost = item.cost;
+        if(this.hero.getMoney() >= moneyCost){
+          this.hero.addToInventory(item, moneyCost);
+          this.map.destroyObject(x, y);
+        }
+        else {
+          this.textPrompt("Not enough money");
+        }
       });
     }
+
 
     no.addEventListener("click", this.clearPopupAndUnpause.bind(this));
 
@@ -319,6 +481,11 @@ export default class Game {
     // Pause the game if the prompt shows up.
     this.game_paused = true;
 
+    // Temp fix for finding type2 treasure.
+    if(this.balloon_flag == -1) {
+      this.balloon_flag = 3;
+    }
+
     let popup = document.getElementById("popup");
     if (popup.innerHTML == "") {
       popup.style["display"] = "flex";
@@ -328,7 +495,9 @@ export default class Game {
       ok_button.appendChild(ok_text);
       popup.appendChild(happy_text);
       popup.appendChild(ok_button);
-      ok_button.addEventListener("click", eventHandler);
+      ok_button.addEventListener("click", () => {
+        eventHandler();
+      });
     }
   }
 
@@ -340,156 +509,161 @@ export default class Game {
     this.game_paused = false;
   }
 
-  /**
-   * This function consumes the move events in `hero_move_queue` and executes them sequentially.
-   */
-  update() {
-    this.hero_move_queue.forEach(movement => {
-      if (this.hero.getEnergy() > 1) {
-        this.hero.move(movement.x, movement.y);
-        this.hero_move_queue.shift();
-
-        let showLeft = this.hero.x - this.hero.visibilityRadius;
-        let showRight = this.hero.x + this.hero.visibilityRadius;
-        let showDown = this.hero.y - this.hero.visibilityRadius;
-        let showUp = this.hero.y + this.hero.visibilityRadius;
+  resetBalloon() {
+    this.balloon_flag = -1;
+    this.balloon_animation_frame = 0;
+    this.balloon_animation_num = 0;
+  }
 
 
-        let minX = Math.max(0, showLeft);
-        let minY = Math.max(0, showDown);
-        let maxX = Math.min(this.map.width - this.hero.visibilityRadius, showRight);
-        let maxY = Math.min(this.map.height - this.hero.visibilityRadius, showUp);
+  //TODO optimize and refactor
+  revealMap() {
+    let showLeft = this.hero.x - this.hero.visibilityRadius;
+    let showRight = this.hero.x + this.hero.visibilityRadius;
+    let showDown = this.hero.y - this.hero.visibilityRadius;
+    let showUp = this.hero.y + this.hero.visibilityRadius;
+
+    let minX = Math.max(0, showLeft);
+    let minY = Math.max(0, showDown);
+    let maxX = Math.min(this.map.width - this.hero.visibilityRadius, showRight);
+    let maxY = Math.min(this.map.height - this.hero.visibilityRadius, showUp);
 
         //This fixes the binoculars issue at the edge of the map.
         //If you don't check whether the hero has binoculars, it breaks wrap around when
         //the here doesn't have them.
-        if (this.hero.visibilityRadius == 2 && maxX >= this.map.width - 3)
-          ++maxX;
-        if (this.hero.visibilityRadius == 2 && maxY >= this.map.height - 3)
-          ++maxY;
+    if (this.hero.visibilityRadius == 2 && maxX >= this.map.width - 3)
+      ++maxX;
+    if (this.hero.visibilityRadius == 2 && maxY >= this.map.height - 3)
+      ++maxY;
 
-        //Basic cell visibility, no wrap around.
-        for (let cellX = minX; cellX <= maxX; ++cellX)
+    //Basic cell visibility, no wrap around.
+    for (let cellX = minX; cellX <= maxX; ++cellX)
+    {
+      for (let cellY = minY; cellY <= maxY; ++cellY)
+      {
+        this.map.showTile(cellX, cellY);
+      }
+    }
+    //Wrap around map off left side (show right)
+    if (showLeft < 0)
+    {
+      let tempX = this.map.width - 1;
+      for (let tempY = minY; tempY <= maxY; ++tempY)
+      {
+        let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+        tile.visible = true;
+      }
+      //wrap around visibility with binoculars
+      if (showLeft == -2)
+      {
+        console.log("broke here");
+        --tempX;
+        console.log(tempX);
+        for (let tempY = minY; tempY <= maxY; ++tempY)
         {
-          for (let cellY = minY; cellY <= maxY; ++cellY)
-          {
-            let tile = this.map.layers[(cellX * this.map.width) + cellY];
-            tile.visible = true;
-          }
-        }
-        //Wrap around map off left side (show right)
-        if (showLeft < 0)
-        {
-          let tempX = this.map.width - 1;   //right side of map
-          for (let tempY = minY; tempY <= maxY; ++tempY)
-          {
-            let tile = this.map.layers[(tempX * this.map.width) + tempY];
-            tile.visible = true;
-          }
-          //wrap around visibility with binoculars
-          if (showLeft == -2)   //if we should see two squares wrapped around
-          {
-            --tempX;
-            for (let tempY = minY; tempY <= maxY; ++tempY)
-            {
-              let tile = this.map.layers[(tempX * this.map.width) + tempY];
-              tile.visible = true;
-            }
-          }
-        }
-        //Wrap around map off right side (show left)
-        if (showRight >= this.map.width)
-        {
-          let tempX = 0;    //left side of map
-          for (let tempY = minY; tempY <= maxY; ++tempY)
-          {
-            let tile = this.map.layers[(tempX * this.map.width) + tempY];
-            tile.visible = true;
-          }
-          //wrap around visibility with binoculars
-          if (showRight == this.map.width + 1)   //if we should see two squares wrapped around
-
-          {
-            ++tempX;
-            for (let tempY = minY; tempY <= maxY; ++tempY)
-            {
-              let tile = this.map.layers[(tempX * this.map.width) + tempY];
-              tile.visible = true;
-            }
-          }
-        }
-        //Wrap around map off bottom (show top)
-        if (showDown < 0)
-        {
-          let tempY = this.map.height - 1;
-          for (let tempX = minX; tempX <= maxX; ++tempX)
-          {
-            let tile = this.map.layers[(tempX * this.map.width) + tempY];
-            tile.visible = true;
-          }
-          //wrap around visibility with binoculars
-          if (showDown == -2)   //if we should see two squares wrapped around
-          {
-            --tempY;
-            for (let tempX = minX; tempX <= maxX; ++tempX)
-            {
-              let tile = this.map.layers[(tempX * this.map.width) + tempY];
-              tile.visible = true;
-            }
-          }
-        }
-        //Wrap around map off top (show bottom)
-        if (showUp >= this.map.height)
-        {
-          let tempY = 0;
-          for (let tempX = minX; tempX <= maxX; ++tempX)
-          {
-            let tile = this.map.layers[(tempX * this.map.width) + tempY];
-            tile.visible = true;
-          }
-          //wrap around visibility with binoculars
-          if (showUp == this.map.height + 1)   //if we should see two squares wrapped around
-          {
-            ++tempY;
-            for (let tempX = minX; tempX <= maxX; ++tempX)
-            {
-              let tile = this.map.layers[(tempX * this.map.width) + tempY];
-              tile.visible = true;
-            }
-          }
+          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+          tile.visible = true;
         }
       }
-      else {
-        this.stop();
-        this.textPrompt("Oh dear, you are dead!", () => {
-          window.location.reload(true);
-        });
+    }
+    //Wrap around map off right side (show left)
+    if (showRight >= this.map.width)
+    {
+      let tempX = 0;
+      for (let tempY = minY; tempY <= maxY; ++tempY)
+      {
+        let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+        tile.visible = true;
       }
-    });
+      //wrap around visibility with binoculars
+      if (showRight == this.map.width + 1)
+      {
+        ++tempX;
+        for (let tempY = minY; tempY <= maxY; ++tempY)
+        {
+          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+          tile.visible = true;
+        }
+      }
+    }
+    //Wrap around map off bottom (show top)
+    if (showDown < 0)
+    {
+      let tempY = this.map.height - 1;
+      for (let tempX = minX; tempX <= maxX; ++tempX)
+      {
+        let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+        tile.visible = true;
+      }
+      //wrap around visibility with binoculars
+      if (showDown == -2)
+      {
+        --tempY;
+        for (let tempX = minX; tempX <= maxX; ++tempX)
+        {
+          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+          tile.visible = true;
+        }
+      }
+    }
+    //Wrap around map off top (show bottom)
+    if (showUp >= this.map.height)
+    {
+      let tempY = 0;
+      for (let tempX = minX; tempX <= maxX; ++tempX)
+      {
+        let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+        tile.visible = true;
+      }
+      //wrap around visibility with binoculars
+      if (showUp == this.map.height + 1)
+      {
+        ++tempY;
+        for (let tempX = minX; tempX <= maxX; ++tempX)
+        {
+          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+          tile.visible = true;
+        }
+      }
+    }
   }
 
   /**
    * This function draws the 'hero' (a circle for now)
    */
   drawPlayer() {
-    /*
-    this.ctx.beginPath();
-    this.ctx.arc(
-      (this.hero.x * this.map.tile_size) + (this.hero.width / 2),
-      (this.hero.y * this.map.tile_size) + (this.hero.height / 2),
-      31,
-      0,
-      2 * Math.PI,
-      false
-    );
-    this.ctx.fillStyle = "black";
-    this.ctx.fill();
-    this.ctx.stroke();
-    */
     let hero_x = (this.hero.x * this.map.tile_size);
     let hero_y = (this.hero.y * this.map.tile_size);
-    this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y,
-      this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
+
+    // Prevents hero moving animation from constantly occurring.
+    if(this.hero_animation_iterations < (this.hero_max_animation)) {
+      this.hero_animation_iterations += 1;
+      this.hero_animation_num = (this.hero_animation_num + 1) % this.hero_max_animation;
+      // Hero frame position is tied to the movement events.
+      this.ctx.drawImage(this.hero_sprite, this.hero_animation_frames[this.hero_animation_num], this.hero_frame_y[this.hero_frame_position],
+        this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
+    }
+    else {
+      this.ctx.drawImage(this.hero_sprite, this.hero_frame_x, this.hero_frame_y[this.hero_frame_position],
+        this.hero_sprite_width, this.hero_sprite_height, hero_x, hero_y, this.tileSize, this.tileSize);
+    }
+  }
+
+  drawBalloon() {
+    let hero_x = (this.hero.x * this.map.tile_size);
+    let hero_y = (this.hero.y * this.map.tile_size);
+    if(this.balloon_animation_num < (this.balloon_animation_max)) {
+      this.ctx.drawImage(this.balloon_sprite, this.balloon_animations[this.balloon_animation_frame], this.balloon_type[this.balloon_flag], this.tileSize, this.tileSize,
+        hero_x, hero_y + this.tileSize, this.tileSize, this.tileSize);
+
+      this.balloon_animation_num += 1;
+      this.balloon_animation_frame = (this.balloon_animation_frame + 1) % this.balloon_animation_max;
+    }
+    else {
+      this.ctx.drawImage(this.balloon_sprite, this.balloon_animations[this.balloon_animation_max - 1], this.balloon_type[this.balloon_flag], this.tileSize, this.tileSize,
+        hero_x, hero_y + this.tileSize, this.tileSize, this.tileSize);
+      this.resetBalloon();
+    }
   }
 
   /**
@@ -502,11 +676,11 @@ export default class Game {
     {
       for (let cellY = 0; cellY < this.map.width; ++cellY)
       {
-        let visible = this.map.layers[(cellX * this.map.width) + cellY].visible;
+        let visible = this.map.tiles[(cellX * this.map.width) + cellY].visible;
         let toDrawX = this.unknownFrameX;
         let toDrawY = this.unknownFrameY;
         if (visible) {
-          let terrain = this.map.layers[(cellX * this.map.width) + cellY].terrain;
+          let terrain = this.map.tiles[(cellX * this.map.width) + cellY].terrain;
           toDrawX = terrain.frameX;
           toDrawY = terrain.frameY;
         }
@@ -514,33 +688,41 @@ export default class Game {
         (cellX * this.map.tile_size) + 1, (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
         
         // Draw items here
-        if (visible) {
-          let type = this.map.layers[(cellX * this.map.width) + cellY].name;
-          switch(type) {
-            case ROYAL_DIAMONDS:
-              this.ctx.drawImage(this.diamond_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+        let object = this.map.tiles[(cellX * this.map.width) + cellY].object;
+        if (visible && object != undefined) {
+          // TODO: possible put sprite stuff into items.js?
+          switch(object.name) {
+          case BOULDER.name:
+          case TREE.name:
+          case BLK_BERRY.name:
+            this.ctx.drawImage(this.terrain_sprite, object.frameX, object.frameY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1, 
               (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
-              break;
-            case BINOCULARS:
-              this.ctx.drawImage(this.binoculars_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+            break;
+          case ROYAL_DIAMONDS.name:
+            this.ctx.drawImage(this.diamond_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
               (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
-              break;
-            case POWER_BAR:
-              this.ctx.drawImage(this.powerbar_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
-              (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
-              break;
-            case TREASURE:
-              this.ctx.drawImage(this.treasure_sprite, 0, 0, 64, 64, (cellX * this.map.tile_size) + 1, 
-              (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
-              break;
-            case BOAT:
-              this.ctx.drawImage(this.boat_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
-              (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
-              break;
-            case CHAINSAW:
-              this.ctx.drawImage(this.chainsaw_sprite, 0, 0, 64, 64, (cellX * this.map.tile_size) + 1, 
-              (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
-              break;
+            break;
+          case BINOCULARS.name:
+            this.ctx.drawImage(this.binoculars_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+            (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+            break;
+          case POWER_BAR.name:
+            this.ctx.drawImage(this.powerbar_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+            (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+            break;
+          case TREASURE.name:
+          case TYPE_TWO.name:
+            this.ctx.drawImage(this.treasure_sprite, 0, 0, 64, 64, (cellX * this.map.tile_size) + 1, 
+            (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+            break;
+          case BOAT.name:
+            this.ctx.drawImage(this.boat_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+            (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+            break;
+          case CHAINSAW.name:
+            this.ctx.drawImage(this.chainsaw_sprite, 0, 0, 64, 64, (cellX * this.map.tile_size) + 1, 
+            (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+            break;
           }
         }
       }

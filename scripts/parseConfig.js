@@ -1,12 +1,11 @@
 "use strict";
+import Map from "./map";
 
 let TERRAIN_MAP = require("./data/terrainMap").TERRAIN_MAP;
 const items = require("./data/items");
 
-
 const NUM_REGEX = /(\d+)/;
 const COORD_REGEX = /(\d+),\s*(\d+)/;
-const MAP_ITEM_REGEX = /(\d+),\s*(\d+),\s*(\d+),\s*(\d+),\s*([\w\s]+)/;
 
 const DEFAULT_CONFIG =
 `Sample Frupal Game Map
@@ -15,24 +14,27 @@ const DEFAULT_CONFIG =
 12,12
 50
 1000
-Axe
 Shears
 Pretty Rock
 #####################
 12, 12, 1, 1, None
+11, 10, 1, 1, ${items.AXE.name}
 14, 13, 0, 2, None
 15, 12, 0, 2, None
-13, 12, 0, 1, Tree
-15, 13, 0, 6, ${items.ROYAL_DIAMONDS}
-11, 11, 0, 1, ${items.BINOCULARS}
-15, 16, 0, 4, Bog
-5, 5, 1, 0, ${items.POWER_BAR}
-10, 10, 0, 0, ${items.TREASURE}
-10, 11, 0, 0, ${items.TYPETWO}
-17, 10, 0, 0, ${items.BOAT}
+13, 12, 0, 1, ${items.TREE.name}
+15, 13, 0, 6, ${items.ROYAL_DIAMONDS.name}
+11, 11, 0, 1, ${items.BINOCULARS.name}
+15, 16, 0, 4, None
+5, 5, 1, 0, ${items.POWER_BAR.name}
+10, 10, 0, 0, ${items.TREASURE.name}
+10, 11, 0, 0, ${items.TYPE_TWO.name}
+17, 10, 0, 0, ${items.BOAT.name}
 14, 12, 0, 2, None
-9, 9, 0, 1, ${items.TREASURE}`;
+10, 15, 0, 1, ${items.BOULDER.name}
+10, 16, 0, 1, ${items.BLK_BERRY.name}
+9, 9, 0, 1, ${items.TREASURE.name}`;
 
+// x,y,visibility,terrain id,name;
 /**
  *
  * This function expects `game_config` to be in the following format:
@@ -57,9 +59,6 @@ Pretty Rock
  */
 function parse(game_config) {
   const GAME = {};
-  GAME.map = {};
-  GAME.map.tile_size = 16; // Magic for now
-  GAME.map.objects = [];
   GAME.player = {};
   GAME.player.items = {};
 
@@ -70,12 +69,9 @@ function parse(game_config) {
   // Unpack and truncate first three items
   let [game_title, board_size, first_delimiter] = split_map_file.splice(0, 3);
 
-  GAME.board_size = +board_size;
-
   GAME.title = game_title;
-  GAME.map.width = GAME.map.height = +board_size;
-  // Control layer
-  GAME.map.layers = new Array(GAME.map.width * GAME.map.width);
+  GAME.map = new Map(+board_size, +board_size);
+  GAME.board_size = +board_size;
 
   let delimiter = first_delimiter.charAt(0);
 
@@ -107,82 +103,11 @@ function parse(game_config) {
 
   // Remove closing delimiter
   split_map_file.splice(0, 1);
+  GAME.split_map_file = split_map_file;
 
-  // Loop through map items after the delimiter
-  split_map_file.forEach(map_item => {
-
-    if(!MAP_ITEM_REGEX.test(map_item)) {
-      throw Error(`'${map_item}' is not a valid syntax for a map items`);
-    }
-
-    let [, x, y, visibility, terrain, name] = map_item.match(MAP_ITEM_REGEX) || [];
-
-    if (+x > board_size || +y > board_size) {
-      throw Error(`Position of ${name} at (${x}, ${y}) is out of bounds.`);
-    }
-
-    if (!TERRAIN_MAP[terrain]) {
-      throw Error(`${TERRAIN_MAP[terrain]} is not a valid terrain value.`);
-    }
-
-    GAME.map.objects.push({
-      x: ((+x) - 1),
-      y: ((+y) - 1),
-      visible: Boolean(+visibility),
-      terrain: TERRAIN_MAP[terrain],
-      name: name === "None" ? "" : name
-    });
-  });
+  GAME.map.initObjects(split_map_file);
 
   return GAME;
-}
-
-function setGameData(gameData) {
-
-  let obstacle_layer = new Array((gameData.board_size) * (gameData.board_size));
-
-  for (let i = 0; i < obstacle_layer.length; ++i)
-  {
-    obstacle_layer[i] = {
-      x: undefined,
-      y: undefined,
-      visible: false,
-      terrain: TERRAIN_MAP[0],
-      name: ""
-    };
-  }
-
-  for(let i = 0; i < gameData.map.objects.length; ++i) {
-    let index = (gameData.map.objects[i].x * gameData.map.width) + gameData.map.objects[i].y;
-    obstacle_layer[index] = gameData.map.objects[i];
-  }
-  gameData.map.layers = obstacle_layer;
-
-
-  // Perform checks
-
-  // TODO: Add error checking to ensure jewels aren't at player starting location
-
-  // Throw if player's starting location is off the map
-  if(gameData.player.pos.x > gameData.map.width || gameData.player.pos.y > gameData.map.height) {
-    throw Error(`Starting position of (${gameData.player.pos.x}, ${gameData.player.pos.y}) is out of bounds.`);
-  }
-
-  let contains_diamonds = gameData.map.objects.filter(board_object => {
-    return board_object.name === "Royal Diamonds";
-  }).length;
-
-  // Throw if more than 1 diamonds
-  if(contains_diamonds !== 1) {
-    throw Error("The map can only have one royal diamonds item.");
-  }
-
-  // Throw if no diamonds
-  if(!contains_diamonds) {
-    throw Error("The map does not contain the royal diamonds.");
-  }
-  // console.log("GAME DATA ", gameData);
-  return gameData;
 }
 
 module.exports = {
