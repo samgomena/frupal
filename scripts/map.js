@@ -115,7 +115,7 @@ class Map {
     if (y < 0) {
       y = this.height;
     }
-    if (y > this.height) {
+    if (y >= this.height) {
       y = 0;
     }
     return this.tiles[(x * this.width) + y];
