@@ -23,8 +23,12 @@ let hero = new Person(hero_init, map);
 let display = new Display(hero, map);
 
 let game = new Game(context, map, hero, display);
-game.run();
+// game.run();
 
+let start = document.getElementById("start");
+start.addEventListener("click", () => {
+  game.run();
+});
 
 /**
  * This function sets the windows title element to `title`
