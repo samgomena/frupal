@@ -280,7 +280,7 @@ export default class Game {
         }
 
         if(allowMove.object != "None" && movement.flag == 1) {
-          this.tileCheck(allowMove.object, this.hero.x + x, this.hero.y + y, allowMove.cost);
+          this.tileCheck(allowMove.object, this.hero.x + x, this.hero.y + y);
         }
 
         this.hero_prev_move = this.hero_move_queue.shift();
@@ -296,7 +296,7 @@ export default class Game {
     });
   }
 
-  tileCheck(obj, x, y, move_cost) {
+  tileCheck(obj, x, y) {
     /*
       Checks the tile that the hero is on.
     */
