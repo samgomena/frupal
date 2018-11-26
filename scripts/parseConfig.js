@@ -17,22 +17,44 @@ const DEFAULT_CONFIG =
 Shears
 Pretty Rock
 #####################
-12, 12, 1, 1, None
-11, 10, 1, 1, ${items.AXE.name}
+3, 4, 0, 1, None
+3, 5, 0, 1, None
+3, 6, 0, 1, None
+3, 7, 0, 1, None
+4, 4, 0, 1, None
+4, 5, 0, 1, None
+4, 6, 0, 1, ${items.TREE.name}
+4, 7, 0, 1, None
+5, 4, 0, 1, None
+5, 5, 0, 1, None
+5, 6, 0, 1, None
+5, 7, 0, 1, None
+6, 4, 0, 1, None
+6, 5, 0, 1, None
+6, 6, 0, 1, None
+6, 7, 0, 1, None
 14, 13, 0, 2, None
 15, 12, 0, 2, None
 13, 12, 0, 1, ${items.TREE.name}
 15, 13, 0, 6, ${items.ROYAL_DIAMONDS.name}
 11, 11, 0, 1, ${items.BINOCULARS.name}
 15, 16, 0, 4, None
-5, 5, 1, 0, ${items.POWER_BAR.name}
+15, 5, 0, 0, ${items.POWER_BAR.name}
 10, 10, 0, 0, ${items.TREASURE.name}
 10, 11, 0, 0, ${items.TYPE_TWO.name}
 17, 10, 0, 0, ${items.BOAT.name}
 14, 12, 0, 2, None
-10, 15, 0, 1, ${items.BOULDER.name}
-10, 16, 0, 1, ${items.BLK_BERRY.name}
-9, 9, 0, 1, ${items.TREASURE.name}`;
+10, 15, 0, 0, ${items.BOULDER.name}
+10, 16, 0, 0, ${items.BLK_BERRY.name}
+9, 9, 0, 0, ${items.TREASURE.name}
+19, 9, 0, 0, ${items.SHEARS.name}
+21, 7, 0, 0, ${items.HATCHET.name}
+21, 1, 0, 0, ${items.AXE.name}
+13, 7, 0, 0, ${items.WEED_WHACKER.name}
+9, 1, 0, 0, ${items.CHAINSAW.name}
+8, 17, 0, 0, ${items.CHISEL.name}
+24, 1, 0, 0, ${items.SLEDGE.name}
+23, 3, 0, 0, ${items.JACKHAMMER.name}`;
 
 // x,y,visibility,terrain id,name;
 /**
