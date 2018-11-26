@@ -35,7 +35,7 @@ class Display {
     const money = this.hero.getMoney();
     const energy = this.hero.getEnergy();
     let item = this.hero.getPlayerLocItem();
-    //const inventory = this.hero.getPlayerInventory();
+    const inventory = this.hero.getPlayerInventory();
 
     const locationText = `Current Location: (${location.x + 1}, ${location.y + 1})`;
     const moneyText = `Whiffles: ${money}`;
@@ -45,7 +45,7 @@ class Display {
       item = item.name;
     }
     const itemText = `Item: ${item}`;
-    //const invText = `Inventory: ${inventory.toString()}`;
+    const invText = `Inventory: ${inventory.toString()}`;
 
     try {
       this.lNode.replaceData(0, 50, locationText);
@@ -53,7 +53,7 @@ class Display {
       this.mNode.replaceData(0, 50, moneyText);
       this.tNode.replaceData(0, 50, terrainText);
       this.iNode.replaceData(0, 50, itemText);
-      //this.inNode.replaceData(0, 50, invText);
+      this.inNode.replaceData(0, 50, invText);
     } catch (err) {
       // Makes sure duplicates are not created during HMR
       this.displayEl.innerHTML = "";

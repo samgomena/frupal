@@ -249,9 +249,7 @@ export default class Game {
 
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.update();
-
       this.display.update();
-
       this.drawGrid();
       this.drawPlayer();
     }
