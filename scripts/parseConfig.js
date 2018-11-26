@@ -29,13 +29,27 @@ Pretty Rock
 5, 5, 0, 1, None
 5, 6, 0, 1, None
 5, 7, 0, 1, None
+5, 22, 0, 2, None
+5, 23, 0, 2, None
+6, 22, 0, 2, None
+6, 23, 0, 2, None
+6, 24, 0, 2, None
 6, 4, 0, 1, None
 6, 5, 0, 1, None
 6, 6, 0, 1, None
 6, 7, 0, 1, None
+7, 4, 0, 2, None
+7, 5, 0, 2, None
+8, 4, 0, 2, None
+8, 5, 0, 2, None
+8, 6, 0, 2, None
 8, 17, 0, 0, ${items.CHISEL.name}
 9, 1, 0, 0, ${items.CHAINSAW.name}
+9, 5, 0, 2, None
+9, 6, 0, 2, None
 9, 9, 0, 0, ${items.TREASURE.name}
+10, 5, 0, 2, None
+10, 6, 0, 2, None
 10, 10, 0, 0, ${items.TREASURE.name}
 10, 11, 0, 0, ${items.TYPE_TWO.name}
 10, 15, 0, 0, ${items.BOULDER.name}
@@ -44,7 +58,7 @@ Pretty Rock
 10, 18, 0, 2, None
 10, 19, 0, 2, None
 10, 20, 0, 0, ${items.BLK_BERRY.name}
-11, 11, 0, 1, ${items.BINOCULARS.name}
+11, 11, 0, 0, ${items.BINOCULARS.name}
 11, 14, 0, 2, None
 11, 15, 0, 2, None
 11, 16, 0, 2, None
@@ -75,18 +89,27 @@ Pretty Rock
 18, 12, 0, 2, None
 19, 9, 0, 0, ${items.SHEARS.name}
 19, 11, 0, 2, None
+19, 19, 0, 2, None
+19, 20, 0, 2, None
+19, 21, 0, 2, None
 20, 11, 0, 2, None
+20, 19, 0, 2, None
+20, 20, 0, 2, None
+20, 21, 0, 2, None
 21, 1, 0, 0, ${items.AXE.name}
 21, 7, 0, 0, ${items.HATCHET.name}
 21, 10, 0, 2, None
 21, 11, 0, 2, None
 21, 12, 0, 2, None
+21, 20, 0, 2, None
+21, 21, 0, 2, None
 22, 9, 0, 2, None
 22, 10, 0, 2, None
 22, 11, 0, 2, None
 22, 12, 0, 2, None
 22, 13, 0, 2, None
-23, 3, 0, 0, ${items.JACKHAMMER.name}`;
+22, 20, 0, 2, None
+23, 3, 0, 0, ${items.JACKHAMMER.name}
 23, 8, 0, 2, None
 23, 9, 0, 2, None
 23, 10, 0, 2, None
@@ -104,7 +127,7 @@ Pretty Rock
 25, 9, 0, 2, None
 25, 10, 0, 2, None
 25, 11, 0, 2, None
-25, 12, 0, 2, None
+25, 12, 0, 2, None`;
 
 // x,y,visibility,terrain id,name;
 /**

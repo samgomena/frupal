@@ -224,6 +224,21 @@ export default class Game {
         tile.visible = true;
       }
     }
+    // MAP TESTING CODE MAKES ENTIRE MAP VISIBLE
+    /*
+    minX = 0;
+    minY = 0;
+    maxX = 24;
+    maxY = 24;
+    for (let cellX = minX; cellX <= maxX; ++cellX)
+    {
+      for (let cellY = minY; cellY <= maxY; ++cellY)
+      {
+        let tile = this.map.tiles[(cellX * this.map.width) + cellY];
+        tile.visible = true;
+      }
+    }
+    */
     this.revealMap();
     this.game_loop = window.setTimeout(this.tick.bind(this), 1000/this.fps);
     // requestAnimationFrame(this.tick.bind(this));
