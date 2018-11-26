@@ -2,14 +2,14 @@
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE,
   TYPE_TWO, BOAT, CHAINSAW, SHEARS, HATCHET, AXE, SLEDGE, JACKHAMMER, CHISEL, WEED_WHACKER, TREE, BLK_BERRY, BOULDER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
-import balloons from "../assets/balloons.png";
+import balloons from "../assets/items/balloons.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
-import diamond_image from "../assets/diamond.png";
-import powerbar_image from "../assets/bar.png";
-import binoculars_image from "../assets/binoculars.png";
-import boat_image from "../assets/boat.png";
-import treasure_image from "../assets/treasure.png";
-import chainsaw_image from "../assets/chainsaw.png";
+import diamond_image from "../assets/items/diamond.png";
+import powerbar_image from "../assets/items/bar.png";
+import binoculars_image from "../assets/items/binoculars.png";
+import boat_image from "../assets/items/boat.png";
+import treasure_image from "../assets/items/treasure.png";
+import chainsaw_image from "../assets/items/chainsaw.png";
 
 // import { loseGame } from "./endGame";
 /**
