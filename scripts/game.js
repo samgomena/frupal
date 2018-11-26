@@ -268,6 +268,7 @@ export default class Game {
       if (this.hero.getEnergy() > 1) {
         let x = movement.x;
         let y = movement.y;
+        // Movement.flag == 1 means that it's an interaction.
         if(movement.flag == 1) {
           x = this.hero_prev_move.x;
           y = this.hero_prev_move.y;
@@ -283,7 +284,13 @@ export default class Game {
           this.tileCheck(allowMove.object, this.hero.x + x, this.hero.y + y);
         }
 
-        this.hero_prev_move = this.hero_move_queue.shift();
+        if(!movement.flag) {
+          // Only save previous movement if it wasn't an interaction.
+          this.hero_prev_move = this.hero_move_queue.shift();
+        }
+        else {
+          this.hero_move_queue.shift();
+        }
 
         this.revealMap();
       }
@@ -759,6 +766,7 @@ export default class Game {
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
           case TREASURE.name:
+          case TYPE_TWO.name:
             this.ctx.drawImage(this.treasure_sprite, 0, 0, 64, 64, (cellX * this.map.tile_size) + 1, 
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
