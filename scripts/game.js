@@ -278,6 +278,8 @@ export default class Game {
 
         if(allowMove.allow) {
           this.hero.move(movement.x, movement.y, allowMove.cost);
+        } else {
+            this.hero.consumeEnergy(allowMove.cost);
         }
 
         if(allowMove.object != "None" && movement.flag == 1) {
