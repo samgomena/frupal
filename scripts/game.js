@@ -562,7 +562,7 @@ export default class Game {
           let tempX = this.map.width - 1;   //right side of map
           for (let tempY = minY; tempY <= maxY; ++tempY)
           {
-            let tile = this.map.tile[(tempX * this.map.width) + tempY];
+            let tile = this.map.tiles[(tempX * this.map.width) + tempY];
             tile.visible = true;
           }
           //wrap around visibility with binoculars

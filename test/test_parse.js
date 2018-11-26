@@ -2,6 +2,7 @@
 let assert = require("assert");
 let TERRAIN_MAP = require("../scripts/data/terrainMap").TERRAIN_MAP;
 let config = require("../scripts/parseConfig");
+import Map from "../scripts/map";
 
 function getRandomArbitrary(min, max) {
   return Math.floor(Math.random() * (max - min) + min);
@@ -53,11 +54,11 @@ describe("Verify `parse`", function() {
   it("Verify `parse` functionality", function(done) {
     // Neither of these should throw
     let parse_data = config.parse(game_config);
+    let map = parse_data.map;
 
     assert.strictEqual(parse_data.board_size, map_size);
     assert.deepStrictEqual([parse_data.map.width, parse_data.map.height], [map_size, map_size]);
-    assert(parse_data.map.layers instanceof Array);
-    assert(parse_data.player.pos instanceof Object);
+    assert(map.tiles instanceof Array);
 
     done();
   });
