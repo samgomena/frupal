@@ -9,9 +9,16 @@ class Display {
     if(this.displayEl.innerHTML == "") {
       this.createNodes();
     }
+
+    if(this.inv_display.innerHTML == ""){
+      this.createInvNode();
+    }
   }
 
-
+  //displays inventory when button is clicked
+  display_inventory() {
+    createInvNode();
+  }
 
   //return true to continue game
   update() {
@@ -52,7 +59,7 @@ class Display {
   createInvNode() {
     const inventory = this.hero.getPlayerInventory();
     this.inNode = document.createTextNode(`Inventory: ${inventory.toString()}`);
-    this.displayEl.appendChild(this.inNode);
+    this.inv_display.appendChild(this.inNode);
   }
 
   createNodes() {

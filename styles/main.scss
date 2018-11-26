@@ -81,3 +81,11 @@ canvas {
   width: 150px;
   z-index: 99;
 }
+
+#inv_display {
+  display: none;
+  background: #efefef;
+  border: 1px solid black;
+  width: 50%;
+  height: 200px;
+}
