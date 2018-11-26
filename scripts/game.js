@@ -166,7 +166,7 @@ export default class Game {
         if(keyIndex !== -1) {
           e.preventDefault();
           // Key index mod 4 because that's how many keys there are.
-          if(keyIndex >= 7) keyIndex = this.prev_key;
+          if(keyIndex > 7) keyIndex = this.prev_key;
           this.hero_frame_position = keyIndex % 4;
           this.hero_animation_iterations = 0;
           this.moveEvent(keyName);
