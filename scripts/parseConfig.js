@@ -30,8 +30,11 @@ Pretty Rock
 10, 11, 0, 0, ${items.TYPE_TWO.name}
 17, 10, 0, 0, ${items.BOAT.name}
 14, 12, 0, 2, None
+10, 15, 0, 1, ${items.BOULDER.name}
+10, 16, 0, 1, ${items.BLK_BERRY.name}
 9, 9, 0, 1, ${items.TREASURE.name}`;
 
+// x,y,visibility,terrain id,name;
 /**
  *
  * This function expects `game_config` to be in the following format:

@@ -153,7 +153,12 @@ class Map {
           terrain: TERRAIN_MAP[terrain]
         };
       } else {
-        object = items[object.toUpperCase().replace(" ", "_")];
+        if(object == items.BLK_BERRY.name) {
+          object = items.BLK_BERRY;
+        }
+        else {
+          object = items[object.toUpperCase().replace(" ", "_")];
+        }
         tile = {
           visible: Boolean(+visibility),
           terrain: TERRAIN_MAP[terrain],

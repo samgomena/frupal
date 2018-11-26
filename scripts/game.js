@@ -740,6 +740,12 @@ export default class Game {
         if (visible && object != undefined) {
           // TODO: possible put sprite stuff into items.js?
           switch(object.name) {
+          case BOULDER.name:
+          case TREE.name:
+          case BLK_BERRY.name:
+            this.ctx.drawImage(this.terrain_sprite, object.frameX, object.frameY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1, 
+              (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+            break;
           case ROYAL_DIAMONDS.name:
             this.ctx.drawImage(this.diamond_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
               (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
