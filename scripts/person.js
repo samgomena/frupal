@@ -93,6 +93,7 @@ class Person {
     let cost = obstacle.noTools;
     for(let i = 0; i < numTools; ++i) {
       if(this.checkInventory(itemsToCheck[i])) {
+        // TODO: Remove item from inventory on use
         cost = obstacle.reducedCost;
         hasItem = true;
       }
