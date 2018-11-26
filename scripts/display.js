@@ -3,21 +3,29 @@ class Display {
     // TODO: Make display render inside the game display (Upper right corner).
     this.map = map;
     this.hero = person;
-    this.inv_display = document.getElementById("invDisplay");
+    this.inv_items = document.getElementById("invItems");
     this.displayEl = document.getElementById("display");
     // Location, Energy, Money nodes.
     if(this.displayEl.innerHTML == "") {
       this.createNodes();
     }
 
-    if(this.inv_display.innerHTML == ""){
+    if(this.inv_items.innerHTML == ""){
       this.createInvNode();
-    }
-  }
+      let showButton = document.getElementById("invShow");
+      let hideButton = document.getElementById("invHide");
+      showButton.addEventListener("click", () => {
+        showButton.style["display"] = "none";
+        hideButton.style["display"] = "block";
+        this.inv_items.style["display"] = "block";
+      });
 
-  //displays inventory when button is clicked
-  display_inventory() {
-    createInvNode();
+      hideButton.addEventListener("click", () => {
+        showButton.style["display"] = "block";
+        hideButton.style["display"] = "none";
+        this.inv_items.style["display"] = "none";
+      });
+    }
   }
 
   //return true to continue game
@@ -59,7 +67,7 @@ class Display {
   createInvNode() {
     const inventory = this.hero.getPlayerInventory();
     this.inNode = document.createTextNode(`Inventory: ${inventory.toString()}`);
-    this.inv_display.appendChild(this.inNode);
+    this.inv_items.appendChild(this.inNode);
   }
 
   createNodes() {
