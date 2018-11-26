@@ -3,14 +3,30 @@ class Display {
     // TODO: Make display render inside the game display (Upper right corner).
     this.map = map;
     this.hero = person;
+    this.inv_items = document.getElementById("invItems");
     this.displayEl = document.getElementById("display");
     // Location, Energy, Money nodes.
     if(this.displayEl.innerHTML == "") {
       this.createNodes();
     }
+
+    if(this.inv_items.innerHTML == ""){
+      this.createInvNode();
+      let showButton = document.getElementById("invShow");
+      let hideButton = document.getElementById("invHide");
+      showButton.addEventListener("click", () => {
+        showButton.style["display"] = "none";
+        hideButton.style["display"] = "block";
+        this.inv_items.style["display"] = "block";
+      });
+
+      hideButton.addEventListener("click", () => {
+        showButton.style["display"] = "block";
+        hideButton.style["display"] = "none";
+        this.inv_items.style["display"] = "none";
+      });
+    }
   }
-
-
 
   //return true to continue game
   update() {
@@ -48,16 +64,22 @@ class Display {
     return true;
   }
 
+  createInvNode() {
+    const inventory = this.hero.getPlayerInventory();
+    this.inNode = document.createTextNode(`Inventory: ${inventory.toString()}`);
+    this.inv_items.appendChild(this.inNode);
+  }
+
   createNodes() {
     const terrain = this.hero.getPlayerLocInfo();
     const item = this.hero.getPlayerLocItem();
-    const inventory = this.hero.getPlayerInventory(); 
+    //const inventory = this.hero.getPlayerInventory();
     this.lNode = document.createTextNode(`Current Location: (${this.hero.x}, ${this.hero.y})`);
     this.eNode = document.createTextNode("Energy: 100");
     this.mNode = document.createTextNode("Whiffles: 100");
     this.tNode = document.createTextNode(`Terrain: ${terrain}`);
     this.iNode = document.createTextNode(`Item: ${item}`);
-    this.inNode = document.createTextNode(`Inventory: ${inventory.toString()}`);
+    //this.inNode = document.createTextNode(`Inventory: ${inventory.toString()}`);
 
     this.displayEl.appendChild(this.lNode);
     this.displayEl.appendChild(document.createElement("br"));
@@ -68,8 +90,8 @@ class Display {
     this.displayEl.appendChild(this.tNode);
     this.displayEl.appendChild(document.createElement("br"));
     this.displayEl.appendChild(this.iNode);
-    this.displayEl.appendChild(document.createElement("br"));
-    this.displayEl.appendChild(this.inNode);
+    //this.displayEl.appendChild(document.createElement("br"));
+    //this.displayEl.appendChild(this.inNode);
 
   }
 }

@@ -81,3 +81,26 @@ canvas {
   width: 150px;
   z-index: 99;
 }
+
+.inv-display {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  button {
+    margin: 10px 0;
+  }
+}
+
+#invItems {
+  display: none;
+  background: #efefef;
+  border: 1px solid black;
+  width: 50%;
+  height: 200px;
+}
+
+#invHide {
+  display: none;
+}
