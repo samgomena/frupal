@@ -361,9 +361,11 @@ export default class Game {
         let maxY = Math.min(this.map.height - this.hero.visibilityRadius, showUp);
 
         //This fixes the binoculars issue at the edge of the map.
-        if (maxX >= this.map.width - 3)
+        //If you don't check whether the hero has binoculars, it breaks wrap around when
+        //the here doesn't have them.
+        if (this.hero.visibilityRadius == 2 && maxX >= this.map.width - 3)
           ++maxX;
-        if (maxY >= this.map.height - 3)
+        if (this.hero.visibilityRadius == 2 && maxY >= this.map.height - 3)
           ++maxY;
 
         //Basic cell visibility, no wrap around.
@@ -378,14 +380,14 @@ export default class Game {
         //Wrap around map off left side (show right)
         if (showLeft < 0)
         {
-          let tempX = this.map.width - 1;
+          let tempX = this.map.width - 1;   //right side of map
           for (let tempY = minY; tempY <= maxY; ++tempY)
           {
             let tile = this.map.layers[(tempX * this.map.width) + tempY];
             tile.visible = true;
           }
           //wrap around visibility with binoculars
-          if (showLeft == -2)
+          if (showLeft == -2)   //if we should see two squares wrapped around
           {
             --tempX;
             for (let tempY = minY; tempY <= maxY; ++tempY)
@@ -398,14 +400,15 @@ export default class Game {
         //Wrap around map off right side (show left)
         if (showRight >= this.map.width)
         {
-          let tempX = 0;
+          let tempX = 0;    //left side of map
           for (let tempY = minY; tempY <= maxY; ++tempY)
           {
             let tile = this.map.layers[(tempX * this.map.width) + tempY];
             tile.visible = true;
           }
           //wrap around visibility with binoculars
-          if (showRight == this.map.width + 1)
+          if (showRight == this.map.width + 1)   //if we should see two squares wrapped around
+
           {
             ++tempX;
             for (let tempY = minY; tempY <= maxY; ++tempY)
@@ -425,7 +428,7 @@ export default class Game {
             tile.visible = true;
           }
           //wrap around visibility with binoculars
-          if (showDown == -2)
+          if (showDown == -2)   //if we should see two squares wrapped around
           {
             --tempY;
             for (let tempX = minX; tempX <= maxX; ++tempX)
@@ -445,7 +448,7 @@ export default class Game {
             tile.visible = true;
           }
           //wrap around visibility with binoculars
-          if (showLeft == -2)
+          if (showUp == this.map.height + 1)   //if we should see two squares wrapped around
           {
             ++tempY;
             for (let tempX = minX; tempX <= maxX; ++tempX)
