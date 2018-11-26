@@ -2,6 +2,12 @@
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, TYPETWO, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
+import diamond_image from "../assets/diamond.png";
+import powerbar_image from "../assets/bar.png";
+import binoculars_image from "../assets/binoculars.png";
+import boat_image from "../assets/boat.png";
+import treasure_image from "../assets/treasure.png";
+import chainsaw_image from "../assets/chainsaw.png";
 
 // import { loseGame } from "./endGame";
 /**
@@ -15,6 +21,19 @@ export default class Game {
     this.map = map;
     this.newTile = true;
     this.tileSize = 16;
+
+    this.diamond_sprite = new Image();
+    this.diamond_sprite.src = diamond_image;
+    this.powerbar_sprite = new Image();
+    this.powerbar_sprite.src = powerbar_image;
+    this.binoculars_sprite = new Image();
+    this.binoculars_sprite.src = binoculars_image;
+    this.boat_sprite = new Image();
+    this.boat_sprite.src = boat_image;
+    this.treasure_sprite = new Image();
+    this.treasure_sprite.src = treasure_image;
+    this.chainsaw_sprite = new Image();
+    this.chainsaw_sprite.src = chainsaw_image;
 
     this.terrain_sprite = new Image();
     this.terrain_sprite.src = terrain_image;
@@ -490,6 +509,37 @@ export default class Game {
         }
         this.ctx.drawImage(this.terrain_sprite, toDrawX, toDrawY, this.sprite_width, this.sprite_height,
         (cellX * this.map.tile_size) + 1, (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+        
+        // Draw items here
+        if (visible) {
+          let type = this.map.layers[(cellX * this.map.width) + cellY].name;
+          switch(type) {
+            case ROYAL_DIAMONDS:
+              this.ctx.drawImage(this.diamond_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+              (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+              break;
+            case BINOCULARS:
+              this.ctx.drawImage(this.binoculars_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+              (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+              break;
+            case POWER_BAR:
+              this.ctx.drawImage(this.powerbar_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+              (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+              break;
+            case TREASURE:
+              this.ctx.drawImage(this.treasure_sprite, 0, 0, 64, 64, (cellX * this.map.tile_size) + 1, 
+              (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+              break;
+            case BOAT:
+              this.ctx.drawImage(this.boat_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+              (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+              break;
+            case CHAINSAW:
+              this.ctx.drawImage(this.chainsaw_sprite, 0, 0, 64, 64, (cellX * this.map.tile_size) + 1, 
+              (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+              break;
+          }
+        }
       }
     }
   }
