@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "./node_modules/mocha/bin/mocha -r esm 'test/*.js'",
     "serve": "parcel serve index.html --port 8080",
     "build": "parcel build index.html --public-url ./",
     "build:pub": "parcel watch index.html --public-url ./ --out-dir /dist"
@@ -22,10 +22,18 @@
   "homepage": "https://github.com/AaronCs/frupal#readme",
   "devDependencies": {
     "cssnano": "^4.1.7",
+    "esm": "^3.0.84",
+    "karma": "^3.1.1",
+    "karma-chrome-launcher": "^2.2.0",
+    "karma-firefox-launcher": "^1.1.0",
+    "karma-mocha": "^1.3.0",
+    "mocha": "^5.2.0",
     "node-sass": "^4.9.4",
+    "sass": "^1.15.1",
     "sass-lint": "^1.12.1"
   },
   "dependencies": {
+    "deasync": "^0.1.14",
     "parcel": "^1.10.3"
   },
   "sasslintConfig": "./.sass-lint.yml"
