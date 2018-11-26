@@ -1,8 +1,16 @@
 export const ROYAL_DIAMONDS = {name: "Royal Diamonds"};
 export const BINOCULARS = { name :"Binoculars", cost: 50};
 export const POWER_BAR = { name: "Power Bar", cost: 1};
-export const TREASURE = {name: "Treasure"};
-export const TYPE_TWO = {name: "Type Two"}; // Chest
+export const TREASURE = {
+  name: "Treasure",
+  frameX: 646,
+  frameY: 170
+};
+export const TYPE_TWO = {
+  name: "Type Two",
+  frameX: 646,
+  frameY: 170
+}; // Chest
 export const BOAT = { name: "Boat", cost: 100 };
 
 /**  tools  **/
