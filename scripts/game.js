@@ -160,13 +160,13 @@ export default class Game {
       if(!this.isGamePaused() && !this.isGameStopped()) {
         // I wonder if using function calls like this impacts performance?
         const keyName = e.key;
-        const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "e", " "];
+        const validKeys = ["w", "a", "s", "d", "ArrowUp", "ArrowLeft", "ArrowDown", "ArrowRight", "e", " "];
         let keyIndex = validKeys.indexOf(keyName);
 
         if(keyIndex !== -1) {
           e.preventDefault();
           // Key index mod 4 because that's how many keys there are.
-          if(keyIndex >= 7) keyIndex = this.prev_key;
+          if(keyIndex > 7) keyIndex = this.prev_key;
           this.hero_frame_position = keyIndex % 4;
           this.hero_animation_iterations = 0;
           this.moveEvent(keyName);
