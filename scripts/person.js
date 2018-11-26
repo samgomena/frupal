@@ -1,4 +1,5 @@
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, 
+  TREASURE, BOAT, CHAINSAW, WEED_WHACKER, TREE, BOULDER, BLK_BERRY } from "./data/items";
 
 class Person {
   constructor(hero_init, map) {
@@ -22,6 +23,7 @@ class Person {
     this.down = { x: 0, y: 1 };
     this.left = { x: -1, y: 0 };
     this.right = { x: 1, y: 0 };
+    this.interact = {x: 0, y: 0, flag: 1};
 
     this.mapX = this.x * this.map.width;
     this.mapY = this.y;
@@ -79,6 +81,22 @@ class Person {
 
   hasBoat() {
     this.boat = true;
+  }
+
+  obstacleInteractionCost(obstacle) {
+    const obstacles = [TREE, BLK_BERRY, BOULDER];
+    const numTools = obstacle.rightTools.length;
+    const itemsToCheck = obstacles.filter((obj) => {
+      return obj.name == obstacle.name;
+    })[0].rightTools;
+    console.log(itemsToCheck);
+    let cost = obstacle.noTools;
+    for(let i = 0; i < numTools; ++i) {
+      if(this.checkInventory(itemsToCheck[i])) {
+        cost = obstacle.reducedCost;
+      }
+    }
+    return cost;
   }
 
   boatStatus() {

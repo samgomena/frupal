@@ -18,13 +18,16 @@ class Display {
     const terrain = this.hero.getPlayerLocInfo();
     const money = this.hero.getMoney();
     const energy = this.hero.getEnergy();
-    const item = this.hero.getPlayerLocItem();
+    let item = this.hero.getPlayerLocItem();
     const inventory = this.hero.getPlayerInventory();
 
     const locationText = `Current Location: (${location.x + 1}, ${location.y + 1})`;
     const moneyText = `Whiffles: ${money}`;
     const energyText = `Energy: ${energy}`;
     const terrainText = `Terrain: ${terrain}`;
+    if (item !== "None") {
+      item = item.name;
+    }
     const itemText = `Item: ${item}`;
     const invText = `Inventory: ${inventory.toString()}`;
 

@@ -69,6 +69,8 @@ export default class Game {
 
     // Queue that propagates move events across game refreshes
     this.hero_move_queue = [];
+    this.hero_prev_move = {x: 0, y: 0};
+    this.prev_key = 2;
 
     this.display = display;
 
@@ -109,6 +111,10 @@ export default class Game {
     case "a":
       this.hero_move_queue.push(this.hero.left);
       break;
+    case " ":
+    case "e":
+      this.hero_move_queue.push(this.hero.interact);
+      break;
     default:
       throw new Error("That key doesn't do anything!");
     }
@@ -132,15 +138,17 @@ export default class Game {
       if(!this.isGamePaused() && !this.isGameStopped()) {
         // I wonder if using function calls like this impacts performance?
         const keyName = e.key;
-        const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"];
+        const validKeys = ["w", "a", "s", "d", "ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown", "e", " "];
         let keyIndex = validKeys.indexOf(keyName);
 
         if(keyIndex !== -1) {
           e.preventDefault();
           // Key index mod 4 because that's how many keys there are.
+          if(keyIndex >= 7) keyIndex = this.prev_key;
           this.hero_frame_position = keyIndex % 4;
           this.hero_animation_iterations = 0;
-          this.moveEvent(keyName, 1);
+          this.moveEvent(keyName);
+          this.prev_key = keyIndex;
         }
       }
     });
@@ -239,14 +247,24 @@ export default class Game {
   update() {
     this.hero_move_queue.forEach(movement => {
       if (this.hero.getEnergy() > 1) {
-        let allowMove = this.map.allowMove(this.hero.x + movement.x, this.hero.y + movement.y, this.hero);
+        let x = movement.x;
+        let y = movement.y;
+        if(movement.flag == 1) {
+          x = this.hero_prev_move.x;
+          y = this.hero_prev_move.y;
+        }
+
+        let allowMove = this.map.allowMove(this.hero.x + x, this.hero.y + y, this.hero);
+
         if(allowMove.allow) {
           this.hero.move(movement.x, movement.y, allowMove.cost);
         }
-        if(allowMove.object != "None") {
-          this.tileCheck(allowMove.object, this.hero.x + movement.x, this.hero.y + movement.y, allowMove.cost);
+
+        if(allowMove.object != "None" && movement.flag == 1) {
+          this.tileCheck(allowMove.object, this.hero.x + x, this.hero.y + y, allowMove.cost);
         }
-        this.hero_move_queue.shift();
+
+        this.hero_prev_move = this.hero_move_queue.shift();
 
         this.revealMap();
       }
@@ -306,6 +324,8 @@ export default class Game {
         this.hero.findTreasure();
 
         // NOTE: what is this move call for
+        // This is to move the hero into the treasure chest square once
+        // the treasure is picked up.
         this.hero.move(x - this.hero.x, y - this.hero.y, move_cost);
         break;
 
@@ -332,27 +352,41 @@ export default class Game {
 
     let popup = document.getElementById("popup");
     popup.style["display"] = "flex";
-    const remove_text = document.createTextNode(`Would you like to remove ${obj}?`);
-    const remove_message = document.createElement("div");
-    remove_message.appendChild(remove_text);
+    const obstacle_text = document.createTextNode(`Would you like to traverse into a ${obj.name}?`);
+    const obstacle_message = document.createElement("div");
+    obstacle_message.appendChild(obstacle_text);
     const yes_no_box = document.createElement("div");
     const yes_text = document.createTextNode("Yes");
     const no_text = document.createTextNode("No");
     const yes = document.createElement("button");
+    const remove_text = document.createTextNode("Remove Obstacle");
+    const remove = document.createElement("button");
     yes.appendChild(yes_text);
     const no = document.createElement("button");
     no.appendChild(no_text);
+    remove.appendChild(remove_text);
     yes_no_box.appendChild(yes);
     yes_no_box.appendChild(no);
+    yes_no_box.append(remove);
 
     yes.addEventListener("click", () => {
       this.clearPopupAndUnpause(popup);
+      let cost = this.hero.obstacleInteractionCost(obj);
+      // FIXME: Fix this.
+      console.log(x - this.hero.x);
+      this.hero.move(x - this.hero.x, y - this.hero.y, cost);
+    });
+
+    remove.addEventListener("click", () => {
+      this.clearPopupAndUnpause(popup);
+      let cost = this.hero.obstacleInteractionCost(obj);
+      this.hero.move(x - this.hero.x, y - this.hero.y, cost);
       this.map.destroyObject(x, y);
     });
 
     no.addEventListener("click", this.clearPopupAndUnpause.bind(this));
 
-    popup.appendChild(remove_message);
+    popup.appendChild(obstacle_message);
     popup.appendChild(yes_no_box);
 
   }
