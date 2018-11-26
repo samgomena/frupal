@@ -371,17 +371,22 @@ export default class Game {
 
     yes.addEventListener("click", () => {
       this.clearPopupAndUnpause(popup);
-      let cost = this.hero.obstacleInteractionCost(obj);
+      let interaction = this.hero.obstacleInteraction(obj);
       // FIXME: Fix this.
       console.log(x - this.hero.x);
-      this.hero.move(x - this.hero.x, y - this.hero.y, cost);
+      this.hero.move(x - this.hero.x, y - this.hero.y, interaction.cost);
     });
 
     remove.addEventListener("click", () => {
       this.clearPopupAndUnpause(popup);
-      let cost = this.hero.obstacleInteractionCost(obj);
-      this.hero.move(x - this.hero.x, y - this.hero.y, cost);
-      this.map.destroyObject(x, y);
+      let interaction = this.hero.obstacleInteraction(obj);
+      if(interaction.hasItem) {
+        this.hero.move(x - this.hero.x, y - this.hero.y, interaction.cost);
+        this.map.destroyObject(x, y);
+      }
+      else {
+        this.textPrompt("Sorry, you don't have the right tools.");
+      }
     });
 
     no.addEventListener("click", this.clearPopupAndUnpause.bind(this));

@@ -83,20 +83,24 @@ class Person {
     this.boat = true;
   }
 
-  obstacleInteractionCost(obstacle) {
+  obstacleInteraction(obstacle) {
     const obstacles = [TREE, BLK_BERRY, BOULDER];
     const numTools = obstacle.rightTools.length;
     const itemsToCheck = obstacles.filter((obj) => {
       return obj.name == obstacle.name;
     })[0].rightTools;
-    console.log(itemsToCheck);
+    let hasItem = false;
     let cost = obstacle.noTools;
     for(let i = 0; i < numTools; ++i) {
       if(this.checkInventory(itemsToCheck[i])) {
         cost = obstacle.reducedCost;
+        hasItem = true;
       }
     }
-    return cost;
+    return {
+      cost: cost,
+      hasItem: hasItem
+    };
   }
 
   boatStatus() {

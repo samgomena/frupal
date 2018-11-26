@@ -14,11 +14,11 @@ const DEFAULT_CONFIG =
 12,12
 50
 1000
-Axe
 Shears
 Pretty Rock
 #####################
 12, 12, 1, 1, None
+11, 10, 1, 1, ${items.AXE.name}
 14, 13, 0, 2, None
 15, 12, 0, 2, None
 13, 12, 0, 1, ${items.TREE.name}
