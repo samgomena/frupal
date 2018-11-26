@@ -14,7 +14,6 @@ const DEFAULT_CONFIG =
 12,12
 50
 1000
-Shears
 Pretty Rock
 #####################
 2, 3, 0, 1, None
