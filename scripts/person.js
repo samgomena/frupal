@@ -90,7 +90,7 @@ class Person {
       return obj.name == obstacle.name;
     })[0].rightTools;
     let hasItem = false;
-    let cost = obstacle.noTools;
+    let cost = obstacle.noToolsCost;
     for(let i = 0; i < numTools; ++i) {
       if(this.checkInventory(itemsToCheck[i])) {
         // TODO: Remove item from inventory on use
