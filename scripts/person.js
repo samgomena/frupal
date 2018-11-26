@@ -70,8 +70,12 @@ class Person {
     };
   }
 
-  isDead() {
+  died() {
     this.dead = true;
+  }
+
+  isDead() {
+    return this.dead;
   }
 
   // Not sure which one to remove, lol

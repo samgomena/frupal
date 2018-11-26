@@ -79,6 +79,9 @@ export default class Game {
     this.unknownFrameX = 816;
     this.unknownFrameY = 442;
 
+    this.crateX = 561;
+    this.crateY = 187;
+
     this.game_paused = false;
 
     // Setting fps > 10 causes serious overallocation of resources
@@ -246,12 +249,9 @@ export default class Game {
     }
 
     if (!this.game_paused) {
-
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.update();
-
       this.display.update();
-
       this.drawGrid();
       this.drawPlayer();
     }
@@ -712,7 +712,7 @@ export default class Game {
             break;
           case TREASURE.name:
           case TYPE_TWO.name:
-            this.ctx.drawImage(this.treasure_sprite, 0, 0, 64, 64, (cellX * this.map.tile_size) + 1, 
+            this.ctx.drawImage(this.terrain_sprite, object.frameX, object.frameY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1, 
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
           case BOAT.name:
@@ -721,6 +721,10 @@ export default class Game {
             break;
           case CHAINSAW.name:
             this.ctx.drawImage(this.chainsaw_sprite, 0, 0, 64, 64, (cellX * this.map.tile_size) + 1, 
+            (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
+            break;
+          default:
+            this.ctx.drawImage(this.terrain_sprite, this.crateX, this.crateY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1, 
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
           }
