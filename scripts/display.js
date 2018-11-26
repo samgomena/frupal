@@ -29,7 +29,7 @@ class Display {
     if (item !== "None") {
       item = item.name;
     }
-    //const itemText = `Item: ${item}`;
+    const itemText = `Item: ${item}`;
     //const invText = `Inventory: ${inventory.toString()}`;
 
     try {
@@ -37,7 +37,7 @@ class Display {
       this.eNode.replaceData(0, 50, energyText);
       this.mNode.replaceData(0, 50, moneyText);
       this.tNode.replaceData(0, 50, terrainText);
-      //this.iNode.replaceData(0, 50, itemText);
+      this.iNode.replaceData(0, 50, itemText);
       //this.inNode.replaceData(0, 50, invText);
     } catch (err) {
       // Makes sure duplicates are not created during HMR
@@ -63,7 +63,7 @@ class Display {
     this.eNode = document.createTextNode("Energy: 100");
     this.mNode = document.createTextNode("Whiffles: 100");
     this.tNode = document.createTextNode(`Terrain: ${terrain}`);
-    //this.iNode = document.createTextNode(`Item: ${item}`);
+    this.iNode = document.createTextNode(`Item: ${item}`);
     //this.inNode = document.createTextNode(`Inventory: ${inventory.toString()}`);
 
     this.displayEl.appendChild(this.lNode);
@@ -73,8 +73,8 @@ class Display {
     this.displayEl.appendChild(this.mNode);
     this.displayEl.appendChild(document.createElement("br"));
     this.displayEl.appendChild(this.tNode);
-    //this.displayEl.appendChild(document.createElement("br"));
-    //this.displayEl.appendChild(this.iNode);
+    this.displayEl.appendChild(document.createElement("br"));
+    this.displayEl.appendChild(this.iNode);
     //this.displayEl.appendChild(document.createElement("br"));
     //this.displayEl.appendChild(this.inNode);
 
