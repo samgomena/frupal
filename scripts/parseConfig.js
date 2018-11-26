@@ -17,10 +17,15 @@ const DEFAULT_CONFIG =
 Shears
 Pretty Rock
 #####################
+2, 3, 0, 1, None
+2, 4, 0, 1, None
+2, 5, 0, 1, None
+3, 3, 0, 1, None
 3, 4, 0, 1, None
 3, 5, 0, 1, None
 3, 6, 0, 1, None
 3, 7, 0, 1, None
+4, 3, 0, 1, None
 4, 4, 0, 1, None
 4, 5, 0, 1, None
 4, 6, 0, 1, ${items.TREE.name}
@@ -31,18 +36,21 @@ Pretty Rock
 5, 7, 0, 1, None
 5, 22, 0, 2, None
 5, 23, 0, 2, None
-6, 22, 0, 2, None
-6, 23, 0, 2, None
-6, 24, 0, 2, None
-6, 4, 0, 1, None
+6, 4, 0, 1, ${items.TREE.name}
 6, 5, 0, 1, None
 6, 6, 0, 1, None
 6, 7, 0, 1, None
+6, 22, 0, 2, None
+6, 23, 0, 2, None
+6, 24, 0, 2, None
 7, 4, 0, 2, None
 7, 5, 0, 2, None
+7, 6, 0, 1, None
+7, 7, 0, 1, None
 8, 4, 0, 2, None
 8, 5, 0, 2, None
 8, 6, 0, 2, None
+8, 7, 0, 1, None
 8, 17, 0, 0, ${items.CHISEL.name}
 9, 1, 0, 0, ${items.CHAINSAW.name}
 9, 5, 0, 2, None
