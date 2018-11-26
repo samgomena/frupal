@@ -2,7 +2,7 @@
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE,
   TYPE_TWO, BOAT, CHAINSAW, SHEARS, HATCHET, AXE, SLEDGE, JACKHAMMER, CHISEL, WEED_WHACKER, TREE, BLK_BERRY, BOULDER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
-import balloons from "../assets/items/balloons.png";
+import balloons from "../assets/balloons.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
 import diamond_image from "../assets/items/diamond.png";
 import powerbar_image from "../assets/items/bar.png";
@@ -521,10 +521,12 @@ export default class Game {
     let maxX = Math.min(this.map.width - this.hero.visibilityRadius, showRight);
     let maxY = Math.min(this.map.height - this.hero.visibilityRadius, showUp);
 
-    //This fixes the binoculars issue at the edge of the map.
-    if (maxX >= this.map.width - 3)
+        //This fixes the binoculars issue at the edge of the map.
+        //If you don't check whether the hero has binoculars, it breaks wrap around when
+        //the here doesn't have them.
+    if (this.hero.visibilityRadius == 2 && maxX >= this.map.width - 3)
       ++maxX;
-    if (maxY >= this.map.height - 3)
+    if (this.hero.visibilityRadius == 2 && maxY >= this.map.height - 3)
       ++maxY;
 
     //Basic cell visibility, no wrap around.
@@ -550,8 +552,22 @@ export default class Game {
         --tempX;
         for (let tempY = minY; tempY <= maxY; ++tempY)
         {
-          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
-          tile.visible = true;
+          let tempX = this.map.width - 1;   //right side of map
+          for (let tempY = minY; tempY <= maxY; ++tempY)
+          {
+            let tile = this.map.tile[(tempX * this.map.width) + tempY];
+            tile.visible = true;
+          }
+          //wrap around visibility with binoculars
+          if (showLeft == -2)   //if we should see two squares wrapped around
+          {
+            --tempX;
+            for (let tempY = minY; tempY <= maxY; ++tempY)
+            {
+              let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+              tile.visible = true;
+            }
+          }
         }
       }
     }
@@ -570,8 +586,23 @@ export default class Game {
         ++tempX;
         for (let tempY = minY; tempY <= maxY; ++tempY)
         {
-          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
-          tile.visible = true;
+          let tempX = 0;    //left side of map
+          for (let tempY = minY; tempY <= maxY; ++tempY)
+          {
+            let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+            tile.visible = true;
+          }
+          //wrap around visibility with binoculars
+          if (showRight == this.map.width + 1)   //if we should see two squares wrapped around
+
+          {
+            ++tempX;
+            for (let tempY = minY; tempY <= maxY; ++tempY)
+            {
+              let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+              tile.visible = true;
+            }
+          }
         }
       }
     }
@@ -590,8 +621,22 @@ export default class Game {
         --tempY;
         for (let tempX = minX; tempX <= maxX; ++tempX)
         {
-          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
-          tile.visible = true;
+          let tempY = this.map.height - 1;
+          for (let tempX = minX; tempX <= maxX; ++tempX)
+          {
+            let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+            tile.visible = true;
+          }
+          //wrap around visibility with binoculars
+          if (showDown == -2)   //if we should see two squares wrapped around
+          {
+            --tempY;
+            for (let tempX = minX; tempX <= maxX; ++tempX)
+            {
+              let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+              tile.visible = true;
+            }
+          }
         }
       }
     }
@@ -610,8 +655,22 @@ export default class Game {
         ++tempY;
         for (let tempX = minX; tempX <= maxX; ++tempX)
         {
-          let tile = this.map.tiles[(tempX * this.map.width) + tempY];
-          tile.visible = true;
+          let tempY = 0;
+          for (let tempX = minX; tempX <= maxX; ++tempX)
+          {
+            let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+            tile.visible = true;
+          }
+          //wrap around visibility with binoculars
+          if (showUp == this.map.height + 1)   //if we should see two squares wrapped around
+          {
+            ++tempY;
+            for (let tempX = minX; tempX <= maxX; ++tempX)
+            {
+              let tile = this.map.tiles[(tempX * this.map.width) + tempY];
+              tile.visible = true;
+            }
+          }
         }
       }
     }
