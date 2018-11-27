@@ -125,7 +125,7 @@ class Person {
 
   addToInventory(item, cost) {
     // Can turn this into the actual object later for displaying image
-    this.inventory.push(item.name);
+    this.inventory.push(item);
     this.money -= cost;
     this.inventoryLength += 1;
 

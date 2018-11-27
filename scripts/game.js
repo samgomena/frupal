@@ -301,9 +301,7 @@ export default class Game {
           this.hero.consumeEnergy(allowMove.cost);
         }
 
-        console.log("Blah");
         if(movement.flag == 1 && allowMove.object != "None") {
-          console.log("blah");
           this.tileCheck(allowMove.object, this.hero.x, this.hero.y);
         }
 
