@@ -50,3 +50,10 @@ export const BLK_BERRY = {
   frameX: 408,
   frameY: 187
 };
+
+export const PRETTY_ROCK = {
+  name: "Pretty Rock",
+  desc: "LOOK AT HOW PRETTY THIS ROCK IS.",
+  cost: 999
+};
+

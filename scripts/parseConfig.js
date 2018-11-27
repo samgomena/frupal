@@ -12,9 +12,9 @@ const DEFAULT_CONFIG =
 25
 #####################
 12,12
-50
+5000
 1000
-Pretty Rock
+${items.PRETTY_ROCK.name}
 #####################
 1, 2, 0, 0, ${items.AXE.name}
 2, 3, 0, 1, None
@@ -254,8 +254,9 @@ function parse(game_config) {
     let player_item = split_map_file.splice(0, 1)[0];
     // Update player's tool object with tool count
     GAME.player.items.hasOwnProperty(player_item) ? GAME.player.items[player_item]++ : GAME.player.items[player_item] = 1;
-
-    GAME.player.inventory.push(player_item);
+    // THE STUPID PRETTY ROCK IS BREAKING EVERYTHING SO THIS FIXES THE STUPID ROCK
+    const arr_items = Object.keys(items).map(key => items[key]);
+    GAME.player.inventory.push(arr_items.find((obj) => player_item === obj.name));
   }
 
   // Remove closing delimiter
