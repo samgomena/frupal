@@ -445,7 +445,13 @@ export default class Game {
     // This giant thing is just creating HTML elements to show up within the popup element.
     let popup = document.getElementById("popup");
     popup.style["display"] = "flex";
-    const buy_text = document.createTextNode(`Would you like to buy ${item.name} for ${item.cost} whiffles?`);
+    if(item === POWER_BAR){
+        const buy_text = document.createTextNode(`Would you like to buy ${item.name} for ${item.cost} whiffles to gain 20 energy points?`);
+    }
+    else {
+      const buy_text = document.createTextNode(`Would you like to buy ${item.name} for ${item.cost} whiffles?`);
+    }
+
     const buy_message = document.createElement("div");
     buy_message.appendChild(buy_text);
     const yes_no_box = document.createElement("div");
