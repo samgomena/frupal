@@ -12,6 +12,7 @@ function createOverlay() {
   start.addEventListener("click", function(){
     document.getElementById("menu").style.display = "none";
     document.getElementsByClassName("game")[0].style.display = "block";
+    document.getElementsByClassName("game-window")[0].style.display = "flex";
   });
 
   options.innerHTML = "Options";

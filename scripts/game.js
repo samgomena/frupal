@@ -135,6 +135,7 @@ export default class Game {
       break;
     case " ":
     case "e":
+    case "interact":
       this.hero_move_queue.push(this.hero.interact);
       break;
     default:
@@ -145,7 +146,7 @@ export default class Game {
   setMoveEvents() {
 
     // Define up, down, left, right, elements and attach click events to them
-    ["up", "left", "down", "right"].forEach((direction, i) => {
+    ["up", "left", "down", "right", "interact"].forEach((direction, i) => {
       document.getElementById(direction).addEventListener("click", () => {
         if(!this.isGamePaused() && !this.isGameStopped()) {
           this.hero_frame_position = i;
@@ -294,7 +295,7 @@ export default class Game {
         if(allowMove.allow) {
           this.hero.move(movement.x, movement.y, allowMove.cost);
         } else {
-            this.hero.consumeEnergy(allowMove.cost);
+          this.hero.consumeEnergy(allowMove.cost);
         }
 
         if(allowMove.object != "None" && movement.flag == 1) {
@@ -445,11 +446,12 @@ export default class Game {
     // This giant thing is just creating HTML elements to show up within the popup element.
     let popup = document.getElementById("popup");
     popup.style["display"] = "flex";
+    let buy_text;
     if(item === POWER_BAR){
-        const buy_text = document.createTextNode(`Would you like to buy ${item.name} for ${item.cost} whiffles to gain 20 energy points?`);
+      buy_text = document.createTextNode(`Would you like to buy ${item.name} for ${item.cost} whiffles to gain 20 energy points?`);
     }
     else {
-      const buy_text = document.createTextNode(`Would you like to buy ${item.name} for ${item.cost} whiffles?`);
+      buy_text = document.createTextNode(`Would you like to buy ${item.name} for ${item.cost} whiffles?`);
     }
 
     const buy_message = document.createElement("div");
