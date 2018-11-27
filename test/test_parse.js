@@ -21,7 +21,7 @@ function defineConfig(map_size, delim, starting_location, energy, money, item) {
     ${energy}
     ${money}
     ${delim}
-    5, 5, 0, 4, Royal Diamonds`;
+    ${getRandomArbitrary(1, starting_location)}, ${getRandomArbitrary(1, starting_location)}, 0, 4, Royal Diamonds`;
   // ${item}`;
 }
 
@@ -31,7 +31,7 @@ describe("Verify `parse`", function() {
   let game_config;
 
   beforeEach("Before", function () {
-    map_size = getRandomArbitrary(0, 50);
+    map_size = getRandomArbitrary(25, 25);
     delim = getRandomChoice("!@#$%^&*-_=+<>/?|`~");
     starting_location = getRandomArbitrary(1, map_size);
     energy = getRandomArbitrary(0, 1000);
