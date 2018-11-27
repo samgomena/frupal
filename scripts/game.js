@@ -294,27 +294,26 @@ export default class Game {
 
         if(allowMove.allow) {
           this.hero.move(movement.x, movement.y, allowMove.cost);
+          if(allowMove.object != "None") {
+            this.tileCheck(allowMove.object, this.hero.x, this.hero.y);
+          }
         } else {
           this.hero.consumeEnergy(allowMove.cost);
         }
 
-        if(allowMove.object != "None" && movement.flag == 1) {
-          this.tileCheck(allowMove.object, this.hero.x + x, this.hero.y + y);
+        console.log("Blah");
+        if(movement.flag == 1 && allowMove.object != "None") {
+          console.log("blah");
+          this.tileCheck(allowMove.object, this.hero.x, this.hero.y);
         }
 
-        if(!movement.flag) {
-          // Only save previous movement if it wasn't an interaction.
-          this.hero_prev_move = this.hero_move_queue.shift();
-        }
-        else {
-          this.hero_move_queue.shift();
-        }
+        this.hero_move_queue.shift();
 
         this.revealMap();
       }
       else {
         this.stop();
-        this.textPrompt("Oh dear, you are dead!", () => {
+        this.textPrompt("Oh dear, you are dead!", 2, () => {
           window.location.reload(true);
         });
       }
@@ -333,8 +332,6 @@ export default class Game {
       case TREE.name:
       case BLK_BERRY.name:
       case BOULDER.name:
-      // TODO: Check if player has tools to break down,
-      // consume appropriate energy by calling a movement on this.hero.x - x (?).
         this.obstaclePrompt(obj, x, y);
         break;
 
@@ -357,12 +354,12 @@ export default class Game {
         this.textPrompt("You found the Royal Diamonds! You Win!", () => {
         //Reload the game to default
           window.location.reload(true);
-        });
+        }, 3);
         break;
 
       case TREASURE.name:
         console.log("Treasure Chest Found");
-        this.textPrompt("You found treasure!");
+        this.textPrompt("You found treasure!", 3);
         //reset cell so treasure can't be found again
         this.map.destroyObject(x, y);
         this.hero.findTreasure();
@@ -376,9 +373,7 @@ export default class Game {
       case TYPE_TWO.name:
         console.log("Type 2 chest found...lose all money");
 
-        // Temp fix for now.
-        this.balloon_flag = 2;
-        this.textPrompt("Sorry, all your whiffles have been stolen :(");
+        this.textPrompt("Sorry, all your whiffles have been stolen :(", 1);
         this.hero.loseMoney();
         this.map.destroyObject(x, y);
         break;
@@ -395,48 +390,24 @@ export default class Game {
     this.balloon_flag = 1;
 
     let popup = document.getElementById("popup");
+    popup.innerHTML = "";
     popup.style["display"] = "flex";
-    const obstacle_text = document.createTextNode(`Would you like to traverse into a ${obj.name}?`);
+    const obstacle_text = document.createTextNode(`You ran into a ${obj.name}`);
     const obstacle_message = document.createElement("div");
     obstacle_message.appendChild(obstacle_text);
-    const yes_no_box = document.createElement("div");
-    const yes_text = document.createTextNode("Yes");
-    const no_text = document.createTextNode("No");
+    const yes_text = document.createTextNode("Nice");
     const yes = document.createElement("button");
-    const remove_text = document.createTextNode("Remove Obstacle");
-    const remove = document.createElement("button");
     yes.appendChild(yes_text);
-    const no = document.createElement("button");
-    no.appendChild(no_text);
-    remove.appendChild(remove_text);
-    yes_no_box.appendChild(yes);
-    yes_no_box.appendChild(no);
-    yes_no_box.append(remove);
 
     yes.addEventListener("click", () => {
       this.clearPopupAndUnpause(popup);
       let interaction = this.hero.obstacleInteraction(obj);
       console.log(interaction.cost);
-      this.hero.move(x - this.hero.x, y - this.hero.y, interaction.cost);
+      this.map.destroyObject(x, y);
+      this.hero.consumeEnergy(interaction.cost);
     });
-
-    remove.addEventListener("click", () => {
-      this.clearPopupAndUnpause(popup);
-      let interaction = this.hero.obstacleInteraction(obj);
-      if(interaction.hasItem) {
-        // this.hero.move(x - this.hero.x, y - this.hero.y, interaction.cost);
-        this.map.destroyObject(x, y);
-      }
-      else {
-        this.textPrompt("Sorry, you don't have the right tools.");
-      }
-    });
-
-    no.addEventListener("click", this.clearPopupAndUnpause.bind(this));
-
     popup.appendChild(obstacle_message);
-    popup.appendChild(yes_no_box);
-
+    popup.appendChild(yes);
   }
 
   buyPrompt(item, x, y) {
@@ -445,6 +416,7 @@ export default class Game {
 
     // This giant thing is just creating HTML elements to show up within the popup element.
     let popup = document.getElementById("popup");
+    popup.innerHTML = "";
     popup.style["display"] = "flex";
     let buy_text;
     if(item === POWER_BAR){
@@ -475,7 +447,7 @@ export default class Game {
           this.map.destroyObject(x, y);
         }
         else {
-          this.textPrompt("Not enough money");
+          this.textPrompt("Not enough money", 2);
         }
       });
     }
@@ -489,7 +461,7 @@ export default class Game {
           this.map.destroyObject(x, y);
         }
         else {
-          this.textPrompt("Not enough money");
+          this.textPrompt("Not enough money", 2);
         }
       });
     }
@@ -502,13 +474,13 @@ export default class Game {
 
   }
 
-  textPrompt(text, eventHandler=this.clearPopupAndUnpause.bind(this)) {
+  textPrompt(text, balloon_flag, eventHandler=this.clearPopupAndUnpause.bind(this)) {
     // Pause the game if the prompt shows up.
     this.game_paused = true;
 
     // Temp fix for finding type2 treasure.
     if(this.balloon_flag == -1) {
-      this.balloon_flag = 3;
+      this.balloon_flag = balloon_flag;
     }
 
     let popup = document.getElementById("popup");
