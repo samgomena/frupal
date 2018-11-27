@@ -445,7 +445,7 @@ export default class Game {
     // This giant thing is just creating HTML elements to show up within the popup element.
     let popup = document.getElementById("popup");
     popup.style["display"] = "flex";
-    const buy_text = document.createTextNode(`Would you like to buy ${item.name}?`);
+    const buy_text = document.createTextNode(`Would you like to buy ${item.name} for ${item.cost} whiffles?`);
     const buy_message = document.createElement("div");
     buy_message.appendChild(buy_text);
     const yes_no_box = document.createElement("div");
@@ -703,7 +703,7 @@ export default class Game {
         }
         this.ctx.drawImage(this.terrain_sprite, toDrawX, toDrawY, this.sprite_width, this.sprite_height,
         (cellX * this.map.tile_size) + 1, (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
-        
+
         // Draw items here
         let object = this.map.tiles[(cellX * this.map.width) + cellY].object;
         if (visible && object != undefined) {
@@ -712,36 +712,36 @@ export default class Game {
           case BOULDER.name:
           case TREE.name:
           case BLK_BERRY.name:
-            this.ctx.drawImage(this.terrain_sprite, object.frameX, object.frameY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1, 
+            this.ctx.drawImage(this.terrain_sprite, object.frameX, object.frameY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1,
               (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
           case ROYAL_DIAMONDS.name:
-            this.ctx.drawImage(this.diamond_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+            this.ctx.drawImage(this.diamond_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1,
               (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
           case BINOCULARS.name:
-            this.ctx.drawImage(this.binoculars_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+            this.ctx.drawImage(this.binoculars_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1,
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
           case POWER_BAR.name:
-            this.ctx.drawImage(this.powerbar_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+            this.ctx.drawImage(this.powerbar_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1,
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
           case TREASURE.name:
           case TYPE_TWO.name:
-            this.ctx.drawImage(this.terrain_sprite, object.frameX, object.frameY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1, 
+            this.ctx.drawImage(this.terrain_sprite, object.frameX, object.frameY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1,
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
           case BOAT.name:
-            this.ctx.drawImage(this.boat_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1, 
+            this.ctx.drawImage(this.boat_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1,
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
           case CHAINSAW.name:
-            this.ctx.drawImage(this.chainsaw_sprite, 0, 0, 64, 64, (cellX * this.map.tile_size) + 1, 
+            this.ctx.drawImage(this.chainsaw_sprite, 0, 0, 64, 64, (cellX * this.map.tile_size) + 1,
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
           default:
-            this.ctx.drawImage(this.terrain_sprite, this.crateX, this.crateY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1, 
+            this.ctx.drawImage(this.terrain_sprite, this.crateX, this.crateY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1,
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
           }
