@@ -16,14 +16,18 @@ const DEFAULT_CONFIG =
 1000
 Pretty Rock
 #####################
+1, 2, 0, 0, ${items.AXE.name}
 2, 3, 0, 1, None
 2, 4, 0, 1, None
 2, 5, 0, 1, None
+2, 24, 0, 0, ${items.BOULDER.name}
 3, 3, 0, 1, None
 3, 4, 0, 1, None
 3, 5, 0, 1, None
 3, 6, 0, 1, None
 3, 7, 0, 1, None
+3, 10, 0, 0, ${items.HATCHET.name}
+3, 22, 0, 0, ${items.BOULDER.name}
 4, 3, 0, 1, None
 4, 4, 0, 1, None
 4, 5, 0, 1, None
@@ -31,6 +35,7 @@ Pretty Rock
 4, 7, 0, 1, None
 4, 8, 0, 1, None
 4, 16, 0, 0, ${items.TYPE_TWO.name}
+4, 24, 0, 0, ${items.JACKHAMMER.name}
 5, 4, 0, 1, None
 5, 5, 0, 1, None
 5, 6, 0, 1, None
@@ -51,10 +56,12 @@ Pretty Rock
 7, 5, 0, 2, None
 7, 6, 0, 1, None
 7, 7, 0, 1, None
+7, 23, 0, 0, ${items.BOULDER.name}
 8, 4, 0, 2, None
 8, 5, 0, 2, None
 8, 6, 0, 2, None
 8, 7, 0, 1, None
+8, 14, 0, 0, ${items.SLEDGE.name}
 8, 16, 0, 4, ${items.BOULDER.name}
 8, 17, 0, 4, None
 8, 19, 0, 0, ${items.CHISEL.name}
@@ -75,11 +82,13 @@ Pretty Rock
 10, 18, 0, 2, None
 10, 19, 0, 2, None
 10, 20, 0, 0, ${items.BLK_BERRY.name}
+10, 25, 0, 0, ${items.SHEARS.name}
 11, 10, 0, 0, ${items.BINOCULARS.name}
 11, 13, 0, 4, ${items.BOULDER.name}
 11, 14, 0, 2, None
 11, 15, 0, 2, None
 11, 16, 0, 2, None
+11, 17, 0, 0, ${items.BOULDER.name}
 11, 19, 0, 2, None
 11, 20, 0, 0, ${items.BLK_BERRY.name}
 12, 13, 0, 4, None
@@ -119,6 +128,7 @@ Pretty Rock
 16, 19, 0, 1, None
 16, 20, 0, 1, None
 17, 12, 0, 2, None
+17, 15, 0, 0, ${items.CHAINSAW.name}
 17, 19, 0, 1, ${items.TREE.name}
 17, 20, 0, 1, None
 17, 21, 0, 1, None
@@ -129,6 +139,7 @@ Pretty Rock
 18, 18, 0, 1, None
 18, 19, 0, 1, None
 18, 20, 0, 1, None
+18, 24, 0, 0, ${items.CHISEL.name}
 19, 9, 0, 0, ${items.SHEARS.name}
 19, 11, 0, 2, None
 19, 12, 0, 4, ${items.BOULDER.name}
@@ -174,6 +185,7 @@ Pretty Rock
 24, 11, 0, 2, None
 24, 12, 0, 2, None
 24, 13, 0, 2, None
+24, 21, 0, 0, ${items.WEED_WHACKER.name}
 25, 9, 0, 2, None
 25, 10, 0, 2, None
 25, 11, 0, 2, None
