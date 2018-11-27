@@ -21,7 +21,7 @@ function defineConfig(map_size, delim, starting_location, energy, money, item) {
     ${energy}
     ${money}
     ${delim}
-    ${getRandomArbitrary(1, starting_location)}, ${getRandomArbitrary(1, starting_location)}, 0, 4, Royal Diamonds`;
+    5, 5, 0, 4, Royal Diamonds`;
   // ${item}`;
 }
 
