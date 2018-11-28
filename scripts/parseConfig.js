@@ -12,7 +12,7 @@ const DEFAULT_CONFIG =
 25
 #####################
 12,12
-10
+1000
 1000
 ${items.PRETTY_ROCK.name}
 #####################
@@ -66,6 +66,7 @@ ${items.PRETTY_ROCK.name}
 8, 17, 0, 4, None
 8, 19, 0, 0, ${items.CHISEL.name}
 9, 1, 0, 0, ${items.CHAINSAW.name}
+9, 2, 0, 0, ${items.CHAINSAW.name}
 9, 5, 0, 2, None
 9, 6, 0, 2, None
 9, 9, 0, 0, ${items.TREASURE.name}

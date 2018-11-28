@@ -17,7 +17,7 @@ import chainsaw_image from "../assets/items/chainsaw.png";
  * game board. It also binds event listeners to the keys responsible for moving the hero around the map.
  */
 export default class Game {
-  constructor(canvas, map, hero, display, fps=5) {
+  constructor(canvas, map, hero, display, fps=30) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.map = map;
@@ -322,8 +322,8 @@ export default class Game {
     /*
       Checks the tile that the hero is on.
     */
-    var invCheck = this.hero.checkInventory(obj);
-    if(invCheck === false) {  //obj not already in the player's inventory
+//    var invCheck = this.hero.checkInventory(obj);
+//    if(invCheck === false) {  //obj not already in the player's inventory
       // Pause the game to allow for player to buy things.
       switch(obj.name) {
 
@@ -380,7 +380,7 @@ export default class Game {
         throw("Could not find object");
       }
 
-    }
+ //   }
   }
 
   obstaclePrompt(obj, x, y) {
