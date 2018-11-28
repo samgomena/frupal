@@ -17,7 +17,7 @@ import chainsaw_image from "../assets/items/chainsaw.png";
  * game board. It also binds event listeners to the keys responsible for moving the hero around the map.
  */
 export default class Game {
-  constructor(canvas, map, hero, display, fps=5) {
+  constructor(canvas, map, hero, display, fps=30) {
     this.canvas = canvas;
     this.ctx = canvas.getContext("2d");
     this.map = map;
