@@ -43,7 +43,7 @@ class Map {
     else if (tile.object) {
       // If there is an object, allow player to buy it.
       return {
-        allow: false,
+        allow: true,
         cost: tile.terrain.cost,
         object: tile.object
       };

@@ -5,6 +5,7 @@ class Display {
     this.hero = person;
     this.inv_items = document.getElementById("invItems");
     this.displayEl = document.getElementById("display");
+    this.currInvLen = 0;
     // Location, Energy, Money nodes.
     if(this.displayEl.innerHTML == "") {
       this.createNodes();
@@ -25,9 +26,54 @@ class Display {
         hideButton.style["display"] = "none";
         this.inv_items.style["display"] = "none";
       });
+
     }
   }
+  updateInventory() {
+    this.inv_items.innerHTML = "";
+    let invHeaderText = document.createTextNode("Inventory");
+    let invHeaderNode = document.createElement("div");
+    // OH MY GAWD AAAAHHHH OKAY OKAY IT'S DONE
+    invHeaderNode.style["text-align"] = "center";
+    invHeaderNode.appendChild(invHeaderText);
 
+    let nameText = document.createTextNode("Name:");
+    let costText = document.createTextNode("Cost:");
+    let nameNode = document.createElement("div");
+    let costNode = document.createElement("div");
+    let headerNode = document.createElement("div");
+    nameNode.appendChild(nameText);
+    costNode.appendChild(costText);
+    headerNode.appendChild(nameNode);
+    headerNode.appendChild(costNode);
+    // RAAAAAAAA IT'S SO GROSS AAAAHHH
+    headerNode.style["display"] = "flex";
+    headerNode.style["flex-direction"] = "row";
+    headerNode.style["justify-content"] = "space-evenly";
+    this.inv_items.appendChild(invHeaderNode);
+    this.inv_items.appendChild(headerNode);
+
+    let inventory = this.hero.getPlayerInventory();
+    this.currInvLen = inventory.length;
+    const invItems = inventory.map(a => a.name);
+    const itemCosts = inventory.map(a => a.cost);
+    for(let i = 0; i < invItems.length; ++i) {
+      let itemName = document.createTextNode(invItems[i]);
+      let itemCost = document.createTextNode(itemCosts[i]);
+      let itemNameNode = document.createElement("div");
+      let itemCostNode = document.createElement("div");
+      let itemNode = document.createElement("div");
+      itemCostNode.appendChild(itemCost);
+      itemNameNode.appendChild(itemName);
+      itemNode.appendChild(itemNameNode);
+      itemNode.appendChild(itemCostNode);
+      // ITEM NODE STYLING BECAUSE I'M LAZY
+      itemNode.style["display"] = "flex";
+      itemNode.style["flex-direction"] = "row";
+      itemNode.style["justify-content"] = "space-evenly";
+      this.inv_items.appendChild(itemNode);
+    }
+  }
   //return true to continue game
   update() {
     const location = this.hero.getPlayerLoc();
@@ -36,6 +82,9 @@ class Display {
     const energy = this.hero.getEnergy();
     let item = this.hero.getPlayerLocItem();
     const inventory = this.hero.getPlayerInventory();
+    if(inventory.length > this.currInvLen) {
+      this.updateInventory();
+    }
 
     const locationText = `Current Location: (${location.x + 1}, ${location.y + 1})`;
     const moneyText = `Whiffles: ${money}`;
@@ -45,7 +94,7 @@ class Display {
       item = item.name;
     }
     const itemText = `Item: ${item}`;
-    const invText = `Inventory: ${inventory.toString()}`;
+    const invText = `Inventory: ${invItems.toString()}`;
 
     try {
       this.lNode.replaceData(0, 50, locationText);

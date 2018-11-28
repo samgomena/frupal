@@ -88,15 +88,17 @@ class Person {
   }
 
   obstacleInteraction(obstacle) {
-    const obstacles = [TREE, BLK_BERRY, BOULDER];
     const numTools = obstacle.rightTools.length;
+
+/*  const obstacles = [TREE, BLK_BERRY, BOULDER];
     const itemsToCheck = obstacles.filter((obj) => {
       return obj.name == obstacle.name;
     })[0].rightTools;
+*/
     let hasItem = false;
     let cost = obstacle.noToolsCost;
     for(let i = 0; i < numTools; ++i) {
-      if(this.checkInventory(itemsToCheck[i])) {
+      if(this.checkInventory(obstacle.rightTools[i])) {
         // TODO: Remove item from inventory on use
         cost = obstacle.reducedCost;
         hasItem = true;
@@ -116,7 +118,7 @@ class Person {
     var len = this.inventory.length;
     for(var i = 0; i < len; ++i)
     {
-      if(itemToCheck == this.inventory[i]) {
+      if(itemToCheck == this.inventory[i].name) {
         return true;
       }
     }
@@ -125,7 +127,7 @@ class Person {
 
   addToInventory(item, cost) {
     // Can turn this into the actual object later for displaying image
-    this.inventory.push(item.name);
+    this.inventory.push(item);
     this.money -= cost;
     this.inventoryLength += 1;
 
