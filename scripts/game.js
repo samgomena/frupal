@@ -149,7 +149,7 @@ export default class Game {
     ["up", "left", "down", "right", "interact"].forEach((direction, i) => {
       document.getElementById(direction).addEventListener("click", () => {
         if(!this.isGamePaused() && !this.isGameStopped()) {
-          this.hero_frame_position = i;
+          this.hero_frame_position = i % 4;
           this.hero_animation_iterations = 0;
           this.moveEvent(direction);
         }
