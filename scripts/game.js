@@ -349,7 +349,7 @@ export default class Game {
 
       case ROYAL_DIAMONDS.name:
         this.stop();
-        this.textPrompt("You found the Royal Diamonds! You Win!", () => {
+        this.textPrompt("You found the Royal Diamonds! You Win!", 2, () => {
         //Reload the game to default
           window.location.reload(true);
         }, 3);
