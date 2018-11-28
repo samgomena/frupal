@@ -322,8 +322,8 @@ export default class Game {
     /*
       Checks the tile that the hero is on.
     */
-    var invCheck = this.hero.checkInventory(obj);
-    if(invCheck === false) {  //obj not already in the player's inventory
+//    var invCheck = this.hero.checkInventory(obj);
+//    if(invCheck === false) {  //obj not already in the player's inventory
       // Pause the game to allow for player to buy things.
       switch(obj.name) {
 
@@ -380,7 +380,7 @@ export default class Game {
         throw("Could not find object");
       }
 
-    }
+ //   }
   }
 
   obstaclePrompt(obj, x, y) {
