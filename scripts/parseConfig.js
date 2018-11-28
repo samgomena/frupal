@@ -12,7 +12,7 @@ const DEFAULT_CONFIG =
 25
 #####################
 12,12
-5000
+10
 1000
 ${items.PRETTY_ROCK.name}
 #####################

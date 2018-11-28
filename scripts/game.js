@@ -281,9 +281,9 @@ export default class Game {
    */
   update() {
     this.hero_move_queue.forEach(movement => {
-      if (this.hero.getEnergy() > 1) {
-        let x = movement.x;
-        let y = movement.y;
+      let x = movement.x;
+      let y = movement.y;
+      if (this.hero.getEnergy() > this.map.getTerrainCost(this.hero.x + x, this.hero.y + y)) {
         // Movement.flag == 1 means that it's an interaction.
         if(movement.flag == 1) {
           x = this.hero_prev_move.x;
@@ -403,6 +403,13 @@ export default class Game {
       console.log(interaction.cost);
       this.map.destroyObject(x, y);
       this.hero.consumeEnergy(interaction.cost);
+      if(this.hero.getEnergy() < 1)
+      {
+        this.stop();
+        this.textPrompt("Oh dear, you are dead!", 2, () => {
+        window.location.reload(true);
+        });
+      }
     });
     popup.appendChild(obstacle_message);
     popup.appendChild(yes);
