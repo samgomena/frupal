@@ -35,7 +35,7 @@ before_deploy:
 deploy:
   provider: script
   skip_cleanup: true
-  script: "npm build && rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/dist gomenas@linux.cs.pdx.edu:~/Documents/frupal/ && [ $? != 0 ]; then exit 1"
+  script: "npm build && rsync -avz -r --delete-after --quiet -e ssh $TRAVIS_BUILD_DIR/dist gomenas@linux.cs.pdx.edu:~/Documents/frupal/ && [ $? != 0 ]; then exit 1"
   on:
     branch: sgomena/dev
 
