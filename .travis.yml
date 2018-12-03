@@ -21,6 +21,11 @@ jobs:
     - stage: "Test"
       name: "Run unit tests with mocha"
 
+      node_js:
+        - node
+        - '9'
+        - '8'
+
       before_script:
         # Start up chrome headless
         - export CHROME_BIN=chromium-browser
@@ -45,6 +50,6 @@ jobs:
         - ssh-add /tmp/travis_deploy_rsa
 
       provider: script
-      script: "rsync -avz -r --delete-after --quiet -e ssh $TRAVIS_BUILD_DIR/dist gomenas@linux.cs.pdx.edu:/u/gomenas/Documents/frupal/ && [ $? != 0 ]; then exit 1"
+      script: "rsync -avz -r --delete-after --quiet -e ssh $TRAVIS_BUILD_DIR/dist gomenas@linux.cs.pdx.edu:/u/gomenas/Documents/frupal/ && if [[ $? != 0 ]]; then exit 1"
 
 
