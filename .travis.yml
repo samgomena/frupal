@@ -1,4 +1,4 @@
-dist: trusty
+dist: xenial
 
 sudo: required
 
@@ -9,33 +9,42 @@ node_js:
   - '9'
   - '8'
 
-cache: node_modules
+install:
+  - "npm install"
 
-addons:
-  ssh_known_hosts: "linux.cs.pdx.edu"
+jobs:
+  include:
+    - stage: "Build"
+      name: "Build with Parcel"
+      script: "npm build"
 
-before_script:
-# Start up chrome headless
-  - export CHROME_BIN=chromium-browser
-  - export DISPLAY=:99.0
-  - sh -e /etc/init.d/xvfb start
+    - stage: "Test"
+      name: "Run unit tests with mocha"
 
-script:
-  - npm run test
+      before_script:
+        # Start up chrome headless
+        - export CHROME_BIN=chromium-browser
+        - export DISPLAY=:99.0
+        - sh -e /etc/init.d/xvfb start
 
-before_deploy:
-  # Unpack ssh key to /tmp so we can connect without a password
-  - openssl aes-256-cbc -K $encrypted_70fbc6f46be6_key -iv $encrypted_70fbc6f46be6_iv -in travis_deploy_rsa.enc -out /tmp/travis_deploy_rsa -d
+      script: "npm test"
 
-  # Add key to ssh keyring
-  - eval "$(ssh-agent -s)"
-  - chmod 600 /tmp/travis_deploy_rsa
-  - ssh-add /tmp/travis_deploy_rsa
+#    - script: ./integration-tests
+#      name: "Integration Tests"     # names the second Tests stage job
 
-deploy:
-  provider: script
-  skip_cleanup: true
-  script: "npm build && rsync -avz -r --delete-after --quiet -e ssh $TRAVIS_BUILD_DIR/dist gomenas@linux.cs.pdx.edu:/u/gomenas/Documents/frupal/ && [ $? != 0 ]; then exit 1"
-  on:
-    branch: sgomena/dev
+    - stage: deploy
+      name: "Deploy to linux.cs.pdx.edu"
+
+      before_deploy:
+        # Unpack ssh key to /tmp so we can connect without a password
+        - openssl aes-256-cbc -K $encrypted_70fbc6f46be6_key -iv $encrypted_70fbc6f46be6_iv -in travis_deploy_rsa.enc -out /tmp/travis_deploy_rsa -d
+
+        # Add key to ssh keyring
+        - eval "$(ssh-agent -s)"
+        - chmod 600 /tmp/travis_deploy_rsa
+        - ssh-add /tmp/travis_deploy_rsa
+
+      provider: script
+      script: "rsync -avz -r --delete-after --quiet -e ssh $TRAVIS_BUILD_DIR/dist gomenas@linux.cs.pdx.edu:/u/gomenas/Documents/frupal/ && [ $? != 0 ]; then exit 1"
+
 
