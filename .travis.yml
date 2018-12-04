@@ -46,6 +46,6 @@ jobs:
         - ssh-add /tmp/travis_deploy_rsa
 
       provider: script
-      script: "rsync -avz -r --delete-after --quiet -e ssh $TRAVIS_BUILD_DIR/dist gomenas@linux.cs.pdx.edu:/u/gomenas/Documents/frupal/"
+      script: "rsync -avz -r --delete-after --quiet -e ssh -o StrictHostKeyChecking=no $TRAVIS_BUILD_DIR/dist gomenas@linux.cs.pdx.edu:/u/gomenas/Documents/frupal/"
 
 
