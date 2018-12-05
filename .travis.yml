@@ -28,10 +28,8 @@ jobs:
 
       script: "npm test"
 
-    - stage: deploy
-      name: "Deploy to linux.cs.pdx.edu"
-
-      before_deploy:
+      # Deploy here for now
+      after_success:
         # Unpack ssh key to /tmp so we can connect without a password
         - openssl aes-256-cbc -K $encrypted_70fbc6f46be6_key -iv $encrypted_70fbc6f46be6_iv -in travis_deploy_rsa.enc -out /tmp/travis_deploy_rsa -d
 
@@ -39,8 +37,23 @@ jobs:
         - eval "$(ssh-agent -s)"
         - chmod 600 /tmp/travis_deploy_rsa
         - ssh-add /tmp/travis_deploy_rsa
+        - rsync -avz -r --delete-after --quiet -e "ssh -o StrictHostKeyChecking=no" $TRAVIS_BUILD_DIR/dist gomenas@linux.cs.pdx.edu:/u/gomenas/Documents/frupal/
 
-      provider: script
-      script: "rsync -avz -r --delete-after --quiet -e \"ssh -o StrictHostKeyChecking=no\" $TRAVIS_BUILD_DIR/dist gomenas@linux.cs.pdx.edu:/u/gomenas/Documents/frupal/"
+
+# TODO: Come back to this once you have a server to cache build on
+#    - stage: deploy
+#      name: "Deploy to linux.cs.pdx.edu"
+#
+#      before_deploy:
+#        # Unpack ssh key to /tmp so we can connect without a password
+#        - openssl aes-256-cbc -K $encrypted_70fbc6f46be6_key -iv $encrypted_70fbc6f46be6_iv -in travis_deploy_rsa.enc -out /tmp/travis_deploy_rsa -d
+#
+#        # Add key to ssh keyring
+#        - eval "$(ssh-agent -s)"
+#        - chmod 600 /tmp/travis_deploy_rsa
+#        - ssh-add /tmp/travis_deploy_rsa
+#
+#      provider: script
+#      script: "rsync -avz -r --delete-after --quiet -e \"ssh -o StrictHostKeyChecking=no\" $TRAVIS_BUILD_DIR/dist gomenas@linux.cs.pdx.edu:/u/gomenas/Documents/frupal/"
 
 
