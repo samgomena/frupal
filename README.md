@@ -12,7 +12,7 @@ Use `a` `w` `s` `d`, `left` `right` `up` `down`, or the `North` `South` `East` `
 Every time you come across an item on the island you will be prompted to interact with it.
 **Note**: You'll have to click the `Nice` button before you can move along.
 
-###### Some possible items you can come across are
+##### Some possible items you can come across are
 * Binoculars
 * A Boat
 * A Chainsaw
@@ -28,9 +28,9 @@ As you move about the island you'll come across obstacles and again, will be pro
 
 ###### Some Possible obstacles you can come across are
 * Water
-* A Boulder
+* Boulder's
 * Blackberry Bushes
-* A Tree
+* Tree's
 
 #### Tips for playing
 
@@ -41,7 +41,7 @@ As you move about the island you'll come across obstacles and again, will be pro
 * Be wary of treasure chests; there's no way to tell between which will take your money and which won't.
 * If you find yourself at the edge of the island, you can (perhaps surprisingly) loop around to the other side.
 
-## The software behind Frupal 
+## The code behind Frupal 
 
 [![Build Status](https://travis-ci.com/samgomena/frupal.svg?token=wrqdxNSxDZXR1zjtheDr&branch=sgomena/dev)](https://travis-ci.com/samgomena/frupal)
 
