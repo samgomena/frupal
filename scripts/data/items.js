@@ -1,23 +1,41 @@
-export const ROYAL_DIAMONDS = {name: "Royal Diamonds"};
-export const BINOCULARS = { name :"Binoculars", cost: 50};
-export const POWER_BAR = { name: "Power Bar", cost: 1};
-export const TREASURE = {
-  name: "Treasure",
-  frameX: 646,
-  frameY: 170
+/**   items   **/
+export const ROYAL_DIAMONDS = {
+  name: "Royal Diamonds",
+  cost: 0,
 };
-export const TYPE_TWO = {
-  name: "Type Two",
+
+export const BINOCULARS = {
+  name: "Binoculars",
+  cost: 50,
+};
+
+export const POWER_BAR = {
+  name: "Power Bar",
+  cost: 1,
+};
+
+export const TYPE_ONE_TREASURE = {
+  name: "Type One Treasure",
   frameX: 646,
-  frameY: 170
-}; // Chest
-export const BOAT = { name: "Boat", cost: 100 };
+  frameY: 170,
+};
+
+export const TYPE_TWO_TREASURE = {
+  name: "Type Two Treasure",
+  frameX: 646,
+  frameY: 170,
+};
+
+export const BOAT = {
+  name: "Boat",
+  cost: 100,
+};
 
 /**  tools  **/
 export const SHEARS = {name: "Shears", cost: 35};
 export const HATCHET = {name: "Hatchet", cost: 15};
 export const AXE = {name: "Axe", cost: 30};
-export const WEED_WHACKER = { name: "Weed Whacker", cost: 25};
+export const WEED_WHACKER = {name: "Weed Whacker", cost: 25};
 export const CHAINSAW = {name: "Chainsaw", cost: 60};
 export const CHISEL = {name: "Chisel", cost: 5};
 export const SLEDGE = {name: "Sledge", cost: 25};
@@ -30,7 +48,7 @@ export const TREE = {
   reducedCost: 5, 
   rightTools: [HATCHET.name, AXE.name, CHAINSAW.name],
   frameX: 221,
-  frameY: 154
+  frameY: 154,
 };
 
 export const BOULDER = {
@@ -39,21 +57,21 @@ export const BOULDER = {
   reducedCost: 8, 
   rightTools: [SLEDGE.name, CHISEL.name, JACKHAMMER.name],
   frameX: 919,
-  frameY: 355
+  frameY: 355,
 };
 
-export const BLK_BERRY = { 
+export const BLACK_BERRY_BUSH = {
   name: "Black Berry Bush", 
   noToolsCost: 4, 
   reducedCost: 2, 
   rightTools: [SHEARS.name, WEED_WHACKER.name],
   frameX: 408,
-  frameY: 187
+  frameY: 187,
 };
 
 export const PRETTY_ROCK = {
   name: "Pretty Rock",
   desc: "LOOK AT HOW PRETTY THIS ROCK IS.",
-  cost: 999
+  cost: 999,
 };
 

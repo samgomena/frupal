@@ -1,5 +1,5 @@
 import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, 
-  TREASURE, BOAT, CHAINSAW, WEED_WHACKER, TREE, BOULDER, BLK_BERRY } from "./data/items";
+  TYPE_ONE_TREASURE, BOAT, CHAINSAW, WEED_WHACKER, TREE, BOULDER, BLACK_BERRY_BUSH } from "./data/items";
 
 class Person {
   constructor(hero_init, map) {
@@ -90,7 +90,7 @@ class Person {
   obstacleInteraction(obstacle) {
     const numTools = obstacle.rightTools.length;
 
-/*  const obstacles = [TREE, BLK_BERRY, BOULDER];
+/*  const obstacles = [TREE, BLACK_BERRY_BUSH, BOULDER];
     const itemsToCheck = obstacles.filter((obj) => {
       return obj.name == obstacle.name;
     })[0].rightTools;
@@ -143,7 +143,7 @@ class Person {
   }
 
   giveItem(item) {
-    // ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE, BOAT, CHAINSAW, WEED_WHACKER
+    // ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TYPE_ONE_TREASURE, BOAT, CHAINSAW, WEED_WHACKER
     // TODO: Might need this for obstacle-tool interaction?
     switch(item) {
     case BINOCULARS.name:

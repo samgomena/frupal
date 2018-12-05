@@ -1,6 +1,6 @@
 "use strict";
-import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TREASURE,
-  TYPE_TWO, BOAT, CHAINSAW, SHEARS, HATCHET, AXE, SLEDGE, JACKHAMMER, CHISEL, WEED_WHACKER, TREE, BLK_BERRY, BOULDER } from "./data/items";
+import { ROYAL_DIAMONDS, BINOCULARS, POWER_BAR, TYPE_ONE_TREASURE,
+  TYPE_TWO_TREASURE, BOAT, CHAINSAW, SHEARS, HATCHET, AXE, SLEDGE, JACKHAMMER, CHISEL, WEED_WHACKER, TREE, BLACK_BERRY_BUSH, BOULDER } from "./data/items";
 import hero_image from "../assets/charsets_12_characters_4thsheet_completed_by_antifarea.png";
 import balloons from "../assets/balloons.png";
 import terrain_image from "../assets/roguelikeSheet_transparent.png";
@@ -328,7 +328,7 @@ export default class Game {
       switch(obj.name) {
 
       case TREE.name:
-      case BLK_BERRY.name:
+      case BLACK_BERRY_BUSH.name:
       case BOULDER.name:
         this.obstaclePrompt(obj, x, y);
         break;
@@ -355,7 +355,7 @@ export default class Game {
         }, 3);
         break;
 
-      case TREASURE.name:
+      case TYPE_ONE_TREASURE.name:
         console.log("Treasure Chest Found");
         this.textPrompt("You found treasure!", 3);
         //reset cell so treasure can't be found again
@@ -368,7 +368,7 @@ export default class Game {
         // this.hero.move(x - this.hero.x, y - this.hero.y, move_cost);
         break;
 
-      case TYPE_TWO.name:
+      case TYPE_TWO_TREASURE.name:
         console.log("Type 2 chest found...lose all money");
 
         this.textPrompt("Sorry, all your whiffles have been stolen :(", 1);
@@ -696,7 +696,7 @@ export default class Game {
           switch(object.name) {
           case BOULDER.name:
           case TREE.name:
-          case BLK_BERRY.name:
+          case BLACK_BERRY_BUSH.name:
             this.ctx.drawImage(this.terrain_sprite, object.frameX, object.frameY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1,
               (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
@@ -712,8 +712,8 @@ export default class Game {
             this.ctx.drawImage(this.powerbar_sprite, 0, 0, 60, 60, (cellX * this.map.tile_size) + 1,
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;
-          case TREASURE.name:
-          case TYPE_TWO.name:
+          case TYPE_ONE_TREASURE.name:
+          case TYPE_TWO_TREASURE.name:
             this.ctx.drawImage(this.terrain_sprite, object.frameX, object.frameY, this.sprite_width, this.sprite_height, (cellX * this.map.tile_size) + 1,
             (cellY * this.map.tile_size) + 1, this.tileSize, this.tileSize);
             break;

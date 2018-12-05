@@ -153,8 +153,8 @@ class Map {
           terrain: TERRAIN_MAP[terrain]
         };
       } else {
-        if(object == items.BLK_BERRY.name) {
-          object = items.BLK_BERRY;
+        if(object == items.BLACK_BERRY_BUSH.name) {
+          object = items.BLACK_BERRY_BUSH;
         }
         else {
           object = items[object.toUpperCase().replace(" ", "_")];
