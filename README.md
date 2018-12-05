@@ -43,7 +43,7 @@ As you move about the island you'll come across obstacles and again, will be pro
 
 ## The code behind Frupal 
 
-[![Build Status](https://travis-ci.com/samgomena/frupal.svg?token=wrqdxNSxDZXR1zjtheDr&branch=sgomena/dev)](https://travis-ci.com/samgomena/frupal)
+[![Build Status](https://travis-ci.com/samgomena/frupal.svg?branch=master)](https://travis-ci.com/samgomena/frupal)
 
 Frupal is an entirely browser based game that utilizes HTML5's [Canvas API](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) and `ES6`.
 It has no runtime dependencies and compiles to approximately 347k minified and gzipped.
